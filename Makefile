@@ -5,12 +5,7 @@
 
 
 UNAME := $(shell uname)
-ifeq (${CI},true)
-BASH_PATH:=/bin/bash
-else
 BASH_PATH:=$(shell which bash)
-endif
-
 ROOT_DIR:=${CURDIR}
 
 # Global .env
@@ -57,6 +52,9 @@ SHELL:=source ${VENV_BIN_ACTIVATE} && ${SHELL}
 endif
 endif
 
+ifeq (${CI},true)
+SHELL:=${BASH_PATH}
+endif
 
 # Removes blank rows - fgrep -v fgrep
 # Replace ":" with "" (nothing)
