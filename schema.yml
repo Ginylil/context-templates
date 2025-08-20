@@ -1,0 +1,43 @@
+# schema.yml
+type: object
+properties:
+  name:
+    type: string
+    description: "The name of the template."
+  filename:
+    type: string
+    description: "The output filename for the generated content."
+  short_description:
+    type: string
+    description: "A brief, one-sentence description of the template's purpose."
+  long_description:
+    type: string
+    description: "A more detailed explanation of what the template does and why it's useful."
+  description:
+    type: string
+    description: "A description of the rule to be applied."
+  when:
+    type: array
+    items:
+      type: string
+    description: "A list of conditions or triggers for when the rule should be applied."
+  then:
+    type: string
+    description: "The steps to be taken when the rule is triggered."
+  examples:
+    type: array
+    items:
+      type: string
+    description: "A list of example prompts or use cases for the template."
+  output_example:
+    type: string
+    description: "An example of the output that the template will generate."
+required:
+  - name
+  - filename
+  - short_description
+  - long_description
+  - description
+  - when
+  - then
+  - examples

@@ -1,0 +1,83 @@
+name: "Structured Feature Planning"
+filename: "structured_feature_planning.md"
+short_description: "Rule for creating a clear Markdown plan before implementing new functionality."
+long_description: >
+  This rule enforces a structured approach to feature development. 
+  Each feature starts with a Markdown plan that breaks down phases, clarifies requirements, 
+  and uses a simple progress tracker. Work is done step by step, with verification and 
+  user confirmation before moving forward.
+
+---
+# Cursor Rule: Structured Feature Planning
+
+description: >
+  Always create a Markdown plan before coding new features. 
+  Break tasks into phases, ask clarifying questions, and track progress with ✅ ⏳ ❌.
+  Advance step by step, validate with tests, and confirm before continuing.
+
+when:
+  - "User requests a new feature"
+  - "User suggests functionality to add"
+  - "User describes a system or behavior"
+
+then: |
+  1. Generate a Markdown file named `<FeatureName>_Plan.md`.
+  2. Add a **Progress Key** at the top:
+     ```
+     ## Progress Key
+     ✅: Completed
+     ⏳: In Progress
+     ❌: Not Started / Blocked
+     ```
+  3. Split implementation into logical phases (Phase 1, Phase 2, etc.).
+  4. For each phase:
+     - Document which files/scripts/modules are needed
+     - Include setup or integration instructions
+     - Provide a "Testing Checklist" for validation
+  5. Ask clarifying questions before finalizing the plan.
+  6. After confirmation, implement **one phase at a time**:
+     - Update the progress status (✅, ⏳, ❌) in the Markdown
+     - Explain what was done and how to integrate it
+     - Suggest tests to verify functionality
+     - Pause until user approves the next step
+  7. If issues come up, mark as ⏳ and continue working until resolved.
+  8. Keep a "Future Enhancements" section for deferred ideas.
+
+examples:
+  - "Plan out a Dialogue System with branching choices before coding"
+  - "Outline a Crafting System feature in Markdown first"
+  - "Step-by-step plan for AI enemy behavior with testing per stage"
+
+output_example: |
+  # Dialogue System Plan
+
+  ## Progress Key
+  ✅: Completed
+  ⏳: In Progress
+  ❌: Not Started / Blocked
+
+  ---
+
+  ### Phase 1: Basic Dialogue UI ❌
+
+  - **Files Needed**: `DialogueUI.cs`, `UIManager.cs`
+  - **Setup**: Create a new Unity scene and add a Canvas for the UI.
+  - **Testing Checklist**:
+    - [ ] Dialogue box appears on screen.
+    - [ ] Text is displayed correctly.
+
+  ---
+
+  ### Phase 2: Branching Conversations ❌
+
+  - **Files Needed**: `DialogueNode.cs`, `DialogueManager.cs`
+  - **Setup**: Implement a node-based data structure for conversations.
+  - **Testing Checklist**:
+    - [ ] Choices are presented to the player.
+    - [ ] Selecting a choice leads to the correct dialogue branch.
+
+  ---
+
+  ### Future Enhancements
+  - Add support for animated character portraits.
+  - Implement a quest integration system.

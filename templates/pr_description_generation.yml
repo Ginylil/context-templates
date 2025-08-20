@@ -1,0 +1,58 @@
+name: "Pull Request Description Generator"
+filename: "pr_description.md"
+short_description: "Generates a PR description based on file changes and commit messages."
+long_description: >
+  This rule automates the creation of a Pull Request description by analyzing the changes 
+  between the current branch and the default branch (main/master). It summarizes the core 
+  changes based on file modifications and commit messages to provide a clear and concise 
+  overview of the PR.
+
+---
+# Cursor Rule: Pull Request Description Generator
+
+description: >
+  Generate a comprehensive PR description by analyzing file changes and commit history 
+  against the default branch.
+
+when:
+  - "User is creating a pull request"
+  - "User asks to generate a PR description"
+  - "User wants to summarize changes for a PR"
+
+then: |
+  1. Identify the default branch (e.g., `main` or `master`).
+  2. Run `git diff --stat <default-branch>...HEAD` to get a list of changed files.
+  3. Run `git log <default-branch>..HEAD --oneline` to get commit messages.
+  4. Generate a Markdown file named `PR_Description.md`.
+  5. Structure the description with the following sections:
+     - **## Core Changes**
+     - **## Detailed Changes**
+     - **## Commit History**
+  6. In **Core Changes**, provide a high-level summary of the purpose of the PR, derived 
+     from commit messages and changed files.
+  7. In **Detailed Changes**, list the modified files with a brief explanation of the 
+     changes in each.
+  8. In **Commit History**, list the commit messages.
+  9. Ask the user to review and approve the generated description before use.
+
+examples:
+  - "Generate a PR description for my current changes."
+  - "Create a summary for my pull request."
+  - "What should I put in my PR description?"
+
+output_example: |
+  ## Core Changes
+
+  This PR introduces a new feature for user authentication and refactors the existing database schema.
+
+  ## Detailed Changes
+
+  - `src/auth/auth.service.ts`: Implemented the core authentication logic using JWT.
+  - `src/users/users.module.ts`: Added a new module for managing user-related routes.
+  - `prisma/schema.prisma`: Updated the database schema to include a new `sessions` table.
+
+  ## Commit History
+
+  - `feat: implement user authentication`
+  - `refactor: update database schema`
+  - `fix: resolve login bug`
