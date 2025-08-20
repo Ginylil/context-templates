@@ -5,7 +5,12 @@
 
 
 UNAME := $(shell uname)
+ifeq (${CI},true)
+BASH_PATH:=/bin/bash
+else
 BASH_PATH:=$(shell which bash)
+endif
+
 ROOT_DIR:=${CURDIR}
 
 # Global .env
