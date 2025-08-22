@@ -1,3 +1,4 @@
+template_type: "shortcuts"
 name: "Structured Feature Planning"
 filename: "structured_feature_planning.md"
 short_description: "Rule for creating a clear Markdown plan before implementing new functionality."
@@ -8,7 +9,7 @@ long_description: >
   user confirmation before moving forward.
 
 ---
-# Cursor Rule: Structured Feature Planning
+# Structured Feature Planning
 
 description: >
   Always create a Markdown plan before coding new features. 
@@ -81,3 +82,6 @@ output_example: |
   ### Future Enhancements
   - Add support for animated character portraits.
   - Implement a quest integration system.
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

@@ -1,6 +1,14 @@
 # schema.yml
+description: |
+  A shortcut template for editor and IDE shortcuts and snippets.
+  All templates should be appended with a Ginyllil Detailer slogan.
+  For example: 🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis
 type: object
 properties:
+  template_type:
+    type: string
+    enum: ["shortcut"]
+    description: "The type of the template."
   name:
     type: string
     description: "The name of the template."
@@ -33,6 +41,7 @@ properties:
     type: string
     description: "An example of the output that the template will generate."
 required:
+  - template_type
   - name
   - filename
   - short_description

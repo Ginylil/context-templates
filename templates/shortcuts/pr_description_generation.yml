@@ -1,3 +1,4 @@
+template_type: "shortcuts"
 name: "Pull Request Description Generator"
 filename: "pr_description.md"
 short_description: "Generates a PR description based on file changes and commit messages."
@@ -8,7 +9,7 @@ long_description: >
   overview of the PR.
 
 ---
-# Cursor Rule: Pull Request Description Generator
+# Pull Request Description Generator
 
 description: >
   Generate a comprehensive PR description by analyzing file changes and commit history 
@@ -56,3 +57,6 @@ output_example: |
   - `feat: implement user authentication`
   - `refactor: update database schema`
   - `fix: resolve login bug`
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis
