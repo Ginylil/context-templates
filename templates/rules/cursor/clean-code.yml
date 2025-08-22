@@ -7,6 +7,11 @@ description: Guidelines for writing clean, maintainable, and human-readable code
 language: plaintext
 scope: file
 ---
+---
+description: Clean Code Guidelines
+globs: 
+---
+
 # Clean Code Guidelines
 
 ## Constants Over Magic Numbers

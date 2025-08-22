@@ -6,9 +6,11 @@ description: A set of rules for Fastapi.
 language: python
 scope: file
 ---
+---
+# FastAPI Best Practices
 description: FastAPI best practices and patterns for building modern Python web APIs
 globs: **/*.py, app/**/*.py, api/**/*.py
-# FastAPI Best Practices
+---
 
 ## Project Structure
 - Use proper directory structure

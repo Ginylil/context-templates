@@ -6,10 +6,11 @@ description: A set of rules for Nativescript.
 language: javascript
 scope: file
 ---
+---
+# NativeScript Best Practices
 description: NativeScript best practices and patterns for mobile applications
 globs: **/*.tsx, **/*.ts, **/*.vue, **/*.svelte, src/**/*.ts, app/**/*.ts, src/**/*.tsx, app/**/*.tsx, src/**/*.vue, app/**/*.vue, src/**/*.svelte
-# NativeScript Best Practices
-
+---
 ## Code Style and Structure
 - Organize code using modular components and services for maintainability.
 - Use platform-specific files (`.ios.ts`, `.android.ts`) when code exceeds 20 platform-specific lines.

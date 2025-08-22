@@ -7,6 +7,10 @@ description: Gitflow Workflow Rules. These rules should be applied when performi
 language: plaintext
 scope: file
 ---
+---
+description: Gitflow Workflow Rules
+globs: 
+---
 # Gitflow Workflow Rules
 
 ## Main Branches

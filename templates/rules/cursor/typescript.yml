@@ -6,10 +6,11 @@ description: A set of rules for Typescript.
 language: typescript
 scope: file
 ---
+---
+# TypeScript Best Practices
 description: TypeScript coding standards and best practices for modern web development
 globs: **/*.ts, **/*.tsx, **/*.d.ts
-# TypeScript Best Practices
-
+---
 ## Type System
 - Prefer interfaces over types for object definitions
 - Use type for unions, intersections, and mapped types

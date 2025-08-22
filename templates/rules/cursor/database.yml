@@ -5,11 +5,12 @@ name: Database
 description: Database best practices focusing on Prisma and Supabase integration
 language: sql
 scope: file
-globs:
-- prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
+---
 ---
 # Database Best Practices
-
+description: Database best practices focusing on Prisma and Supabase integration
+globs: prisma/**/*, src/db/**/*, **/*.prisma, supabase/**/*
+---
 ## Prisma Setup
 - Use proper schema design
 - Implement proper migrations

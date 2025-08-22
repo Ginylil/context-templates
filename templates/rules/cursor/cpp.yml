@@ -6,9 +6,11 @@ description: A set of rules for Cpp.
 language: cpp
 scope: file
 ---
-description: 
+---
+description: C++ Programming Guidelines
 globs: **/*.c,**/*.cpp,**/*.h,**/*.hpp,**/*.cxx,CMakeLists.txt,*.cmake,conanfile.txt,Makefile,**/*.cc
 alwaysApply: false
+---
 # C++ Programming Guidelines
 
 ## Basic Principles

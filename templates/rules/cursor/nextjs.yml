@@ -6,10 +6,11 @@ description: A set of rules for Nextjs.
 language: javascript
 scope: file
 ---
+---
+# Next.js Best Practices
 description: Next.js with TypeScript and Tailwind UI best practices
 globs: **/*.tsx, **/*.ts, src/**/*.ts, src/**/*.tsx
-# Next.js Best Practices
-
+---
 ## Project Structure
 - Use the App Router directory structure
 - Place components in `app` directory for route-specific components
