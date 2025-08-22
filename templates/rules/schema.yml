@@ -9,6 +9,10 @@ properties:
     type: string
     enum: ["rule"]
     description: "The type of the template."
+  template_subtype:
+    type: string
+    enum: ["cursor", "windsurf"]
+    description: "The subtype of the template."
   id:
     type: string
     description: "A unique identifier for the rule."
