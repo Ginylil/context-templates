@@ -12,13 +12,24 @@ def push_template(template_path, api_url, token):
         content = f.read()
 
     try:
-        if "---" in content:
+        if content.startswith("---"):
+            parts = content.split("---", 2)
+            if len(parts) >= 3:
+                metadata = yaml.safe_load(parts[1])
+                template_content = parts[2].strip()
+            else:  # Malformed frontmatter
+                metadata = None
+                template_content = content
+        elif "---" in content:
             parts = content.split("---", 1)
             metadata = yaml.safe_load(parts[0])
             template_content = parts[1].strip()
         else:
             metadata = yaml.safe_load(content)
             template_content = content
+
+        if metadata is None:
+            raise ValueError("Could not parse YAML metadata.")
 
         filename = metadata.get("filename") or os.path.basename(template_path)
 
@@ -40,6 +51,7 @@ def push_template(template_path, api_url, token):
             "short_description": short_desc,
             "long_description": long_desc,
             "template_type": metadata.get("template_type", ""),
+            "template_subtype": metadata.get("template_subtype", ""),
         }
 
         headers = {"Authorization": f"Bearer {token}"}
@@ -76,7 +88,7 @@ def main():
     for subdir, _, files in os.walk(templates_dir):
         for filename in files:
             if (
-                filename.endswith(".yml")
+                filename.endswith((".yml"))
                 and filename != "schema.yml"
                 and not filename.startswith("example-")
             ):
