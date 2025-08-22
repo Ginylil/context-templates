@@ -12,18 +12,34 @@ def push_template(template_path, api_url, token):
         content = f.read()
 
     try:
-        parts = content.split("---", 1)
-        metadata = yaml.safe_load(parts[0])
-        template_content = parts[1].strip()
+        if "---" in content:
+            parts = content.split("---", 1)
+            metadata = yaml.safe_load(parts[0])
+            template_content = parts[1].strip()
+        else:
+            metadata = yaml.safe_load(content)
+            template_content = content
+
+        filename = metadata.get("filename") or os.path.basename(template_path)
 
         files = {
-            "file": (metadata["filename"], template_content, "text/plain"),
+            "file": (filename, template_content, "text/plain"),
         }
+
+        long_desc = metadata.get("long_description", "")
+        if not long_desc:
+            long_desc = metadata.get("description", "")
+
+        short_desc = metadata.get("short_description", "")
+        if not short_desc and long_desc:
+            short_desc = long_desc.splitlines()[0]
+
         data = {
             "name": metadata["name"],
-            "filename": metadata["filename"],
-            "short_description": metadata.get("short_description", ""),
-            "long_description": metadata.get("long_description", ""),
+            "filename": filename,
+            "short_description": short_desc,
+            "long_description": long_desc,
+            "template_type": metadata.get("template_type", ""),
         }
 
         headers = {"Authorization": f"Bearer {token}"}
@@ -35,7 +51,8 @@ def push_template(template_path, api_url, token):
 
     except Exception as e:
         print(f"Failed to push template {template_path}: {e}", file=sys.stderr)
-        if "response" in locals() and os.environ.get("CI", "false").lower() != "true":
+        is_ci = os.environ.get("CI", "false").lower() == "true"
+        if "response" in locals() and not is_ci:
             print(f"Response: {response.text}", file=sys.stderr)
         sys.exit(1)
 
@@ -56,10 +73,15 @@ def main():
         sys.exit(1)
 
     templates_dir = "templates"
-    for filename in os.listdir(templates_dir):
-        if filename.endswith(".yml"):
-            template_path = os.path.join(templates_dir, filename)
-            push_template(template_path, api_url, token)
+    for subdir, _, files in os.walk(templates_dir):
+        for filename in files:
+            if (
+                filename.endswith(".yml")
+                and filename != "schema.yml"
+                and not filename.startswith("example-")
+            ):
+                template_path = os.path.join(subdir, filename)
+                push_template(template_path, api_url, token)
 
 
 if __name__ == "__main__":

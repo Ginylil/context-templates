@@ -1,0 +1,16 @@
+template_type: "shortcut"
+name: "Example Shortcut"
+filename: "example-shortcut-output.txt"
+short_description: "An example shortcut template."
+long_description: "This is a more detailed description of the example shortcut template. It demonstrates the structure of a shortcut template file."
+description: "This rule defines an example shortcut."
+when:
+  - "User invokes a shortcut"
+then: "The content defined in the template is output."
+examples:
+  - "User wants to see an example of a shortcut."
+output_example: |
+  This is an example output from the shortcut.
+
+---
+# 🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

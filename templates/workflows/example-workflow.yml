@@ -1,0 +1,18 @@
+template_type: "workflow"
+name: "Feature Development Workflow"
+description: "A complete workflow for planning, developing, and testing a new feature."
+steps:
+  - name: "Plan Feature"
+    instruction: "Based on the user request, create a detailed markdown plan for the new feature. The plan should include phases, required files, and a testing checklist. Ask the user for confirmation before proceeding."
+    condition: "User requests a new feature."
+  - name: "Execute First Phase"
+    instruction: "Implement the first phase of the feature as described in the plan. Update the plan with the progress."
+    condition: "User approves the plan."
+  - name: "Review and Test"
+    instruction: "Review the implemented code for any issues. Run the tests outlined in the testing checklist for the completed phase. Explain how to integrate and verify the changes."
+    condition: "First phase is implemented."
+  - name: "Get User Feedback"
+    instruction: "Present the completed work for the phase to the user. Pause and wait for their approval to proceed to the next phase."
+    condition: "Review and testing are complete."
+# 🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis
+

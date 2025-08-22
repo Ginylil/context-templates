@@ -1,0 +1,9 @@
+template_type: "rules"
+id: "example-rule"
+name: "Example Rule"
+description: "An example rule definition."
+language: "python"
+scope: "file"
+content: |
+  # The actual rule content or script
+  print("This is an example rule.")
