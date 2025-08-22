@@ -6,11 +6,12 @@ description: Rust best practices for Solana smart contract development using Anc
   framework and Solana SDK
 language: rust
 scope: file
-globs:
-- programs/**/*.rs, src/**/*.rs, tests/**/*.ts
+---
 ---
 # Rust + Solana (Anchor) Best Practices
-
+description: Rust best practices for Solana smart contract development using Anchor framework and Solana SDK
+globs: programs/**/*.rs, src/**/*.rs, tests/**/*.ts
+---
 ## Program Structure
 - Structure Solana programs using `Anchor` framework standards
 - Place program entrypoint logic in `lib.rs`, not `main.rs`

@@ -6,10 +6,11 @@ description: A set of rules for Svelte.
 language: javascript
 scope: file
 ---
+---
+# Svelte Best Practices
 description: Svelte best practices and patterns for modern web applications
 globs: **/*.svelte, src/**/*.ts, src/**/*.js
-# Svelte Best Practices
-
+---
 ## Component Structure
 - Keep components small and focused
 - Use proper TypeScript integration

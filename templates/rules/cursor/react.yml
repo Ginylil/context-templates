@@ -6,10 +6,11 @@ description: A set of rules for React.
 language: javascript
 scope: file
 ---
+---
+# React Best Practices
 description: React best practices and patterns for modern web applications
 globs: **/*.tsx, **/*.jsx, components/**/*
-# React Best Practices
-
+---
 ## Component Structure
 - Use functional components over class components
 - Keep components small and focused

@@ -6,6 +6,10 @@ description: Code Quality Guidelines
 language: plaintext
 scope: file
 ---
+---
+description: Code Quality Guidelines
+globs: 
+---
 # Code Quality Guidelines
 
 ## Verify Information

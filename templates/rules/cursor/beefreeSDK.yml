@@ -6,11 +6,11 @@ description: A set of rules for Beefreesdk.
 language: javascript
 scope: file
 ---
+---
+# Beefree SDK Guidelines
 description: Guidelines and best practices for building applications with [Beefree SDK](https://docs.beefree.io/beefree-sdk), including installation, authentication, configuration, customization, and template management
 globs: **/*.{ts,tsx,js,jsx,html,css}
-# Beefree SDK Guidelines
-Guidelines and best practices for building applications with [Beefree SDK](https://docs.beefree.io/beefree-sdk), including installation, authentication, configuration, customization, and template management.
-
+---
 ## Installation Guidelines
 
 ### Package Installation

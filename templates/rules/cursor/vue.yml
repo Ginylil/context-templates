@@ -6,10 +6,11 @@ description: A set of rules for Vue.
 language: javascript
 scope: file
 ---
+---
+# Vue.js Best Practices
 description: Vue.js best practices and patterns for modern web applications
 globs: **/*.vue, **/*.ts, components/**/*
-# Vue.js Best Practices
-
+---
 ## Component Structure
 - Use Composition API over Options API
 - Keep components small and focused

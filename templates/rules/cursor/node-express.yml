@@ -6,10 +6,11 @@ description: A set of rules for Node Express.
 language: javascript
 scope: file
 ---
+---
+# Node.js and Express.js Best Practices
 description: Node.js and Express.js best practices for backend development
 globs: **/*.js, **/*.ts, src/**/*.ts
-# Node.js and Express.js Best Practices
-
+---
 ## Project Structure
 - Use proper directory structure
 - Implement proper module organization

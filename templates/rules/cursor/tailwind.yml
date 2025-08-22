@@ -6,10 +6,11 @@ description: A set of rules for Tailwind.
 language: css
 scope: file
 ---
+---
+# Tailwind CSS Best Practices
 description: Tailwind CSS and UI component best practices for modern web applications
 globs: **/*.css, **/*.tsx, **/*.jsx, tailwind.config.js, tailwind.config.ts
-# Tailwind CSS Best Practices
-
+---
 ## Project Setup
 - Use proper Tailwind configuration
 - Configure theme extension properly
