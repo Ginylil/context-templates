@@ -49,3 +49,7 @@ templates/
 ## Contributing
 
 We welcome contributions! If you have a template that could benefit other developers, please feel free to open a pull request. (Contribution guidelines coming soon).
+
+## Credits
+
+A portion of the rules available in `templates/rules/cursor` are adapted from the collection at [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules/tree/main/rules-new) by [PatrickJS](https://github.com/PatrickJS). We are grateful for their contributions to the community.
