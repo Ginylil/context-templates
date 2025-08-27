@@ -1,0 +1,83 @@
+template_type: "shortcut"
+name: "Code Review Checklist Generator"
+filename: "code_review_checklist.md"
+short_description: "Generates a comprehensive checklist for thorough code reviews."
+long_description: >
+  This template creates a standardized checklist covering key areas like code quality,
+  security, performance, testing, and documentation. It helps ensure consistent and 
+  thorough code reviews across the team.
+
+---
+# Code Review Checklist Generator
+
+description: >
+  Generate a comprehensive checklist to ensure thorough and consistent code reviews 
+  covering quality, security, performance, and best practices.
+
+when:
+  - "User is reviewing a pull request"
+  - "User asks for code review guidelines"
+  - "User wants a review checklist"
+
+then: |
+  1. Generate a comprehensive checklist covering multiple review areas.
+  2. Include sections for Code Quality, Security, Performance, Testing, and Documentation.
+  3. Provide checkboxes for each item to track review progress.
+  4. Include language/framework specific items if specified.
+  5. Add space for reviewer comments and suggestions.
+  6. Format as Markdown for easy copying into PR comments.
+
+examples:
+  - "Give me a code review checklist."
+  - "Generate a PR review template."
+  - "What should I check during code review?"
+
+output_example: |
+  # Code Review Checklist
+
+  ## 📋 General Code Quality
+  - [ ] Code is readable and well-structured
+  - [ ] Variable and function names are descriptive
+  - [ ] Code follows project style guidelines
+  - [ ] No commented-out code or debug statements
+  - [ ] Error handling is appropriate and consistent
+  - [ ] Code is DRY (Don't Repeat Yourself)
+
+  ## 🔒 Security
+  - [ ] No hardcoded secrets or credentials
+  - [ ] Input validation is present where needed
+  - [ ] SQL injection prevention measures in place
+  - [ ] XSS protection implemented
+  - [ ] Authentication/authorization properly handled
+
+  ## ⚡ Performance
+  - [ ] No obvious performance bottlenecks
+  - [ ] Database queries are optimized
+  - [ ] Unnecessary loops or redundant operations removed
+  - [ ] Memory usage considerations addressed
+  - [ ] Async operations used appropriately
+
+  ## 🧪 Testing
+  - [ ] Unit tests cover new functionality
+  - [ ] Tests are meaningful and not just for coverage
+  - [ ] Edge cases are tested
+  - [ ] Integration tests updated if needed
+  - [ ] All tests pass
+
+  ## 📚 Documentation
+  - [ ] Public APIs are documented
+  - [ ] Complex logic includes inline comments
+  - [ ] README updated if needed
+  - [ ] Breaking changes are documented
+
+  ## 🔄 Git Practices
+  - [ ] Commit messages are clear and descriptive
+  - [ ] PR description explains the changes
+  - [ ] No merge conflicts
+  - [ ] Branch is up to date with target branch
+
+  ## 💬 Reviewer Notes
+  <!-- Add any specific feedback or suggestions here -->
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

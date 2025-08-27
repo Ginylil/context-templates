@@ -1,0 +1,86 @@
+template_type: "shortcut"
+name: "API Endpoint Documentation Generator"
+filename: "api_endpoint_doc.md"
+short_description: "Generates standardized API endpoint documentation in Markdown format."
+long_description: >
+  This template helps create comprehensive API endpoint documentation by prompting for 
+  route details, HTTP methods, parameters, responses, and authentication requirements. 
+  It outputs a structured Markdown block ready for integration into API documentation.
+
+---
+# API Endpoint Documentation Generator
+
+description: >
+  Generate standardized API endpoint documentation with all necessary details 
+  including route, method, parameters, responses, and authentication.
+
+when:
+  - "User is documenting a new API endpoint"
+  - "User asks for API documentation template"
+  - "User needs to document REST API routes"
+
+then: |
+  1. Ask the user for the endpoint URL/route (e.g., `/api/users/{id}`).
+  2. Ask for the HTTP method (GET, POST, PUT, DELETE, PATCH).
+  3. Ask for a brief description of what the endpoint does.
+  4. Ask for required and optional parameters (path, query, body).
+  5. Ask for authentication requirements (API key, JWT, OAuth, etc.).
+  6. Ask for possible response codes and their meanings.
+  7. Ask for example request and response payloads.
+  8. Generate a structured Markdown documentation block.
+  9. Include sections for Description, Authentication, Parameters, Responses, and Examples.
+
+examples:
+  - "Document my new user creation endpoint."
+  - "Generate API docs for this route."
+  - "Create endpoint documentation template."
+
+output_example: |
+  ## POST /api/users
+
+  ### Description
+  Creates a new user account in the system.
+
+  ### Authentication
+  Requires Bearer token with `admin` role.
+
+  ### Parameters
+
+  #### Body Parameters
+  | Parameter | Type | Required | Description |
+  |-----------|------|----------|-------------|
+  | email | string | Yes | User's email address |
+  | name | string | Yes | User's full name |
+  | role | string | No | User role (default: 'user') |
+
+  ### Responses
+
+  | Status Code | Description |
+  |-------------|-------------|
+  | 201 | User created successfully |
+  | 400 | Invalid request data |
+  | 401 | Unauthorized |
+  | 409 | Email already exists |
+
+  ### Example Request
+  ```json
+  {
+    "email": "john@example.com",
+    "name": "John Doe",
+    "role": "user"
+  }
+  ```
+
+  ### Example Response (201)
+  ```json
+  {
+    "id": "123",
+    "email": "john@example.com",
+    "name": "John Doe",
+    "role": "user",
+    "created_at": "2023-12-01T10:00:00Z"
+  }
+  ```
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

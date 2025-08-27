@@ -1,0 +1,73 @@
+template_type: "shortcut"
+name: "Environment Variable Cheat Sheet Generator"
+filename: "env_cheatsheet.md"
+short_description: "Generates a documentation table of environment variables from .env files."
+long_description: >
+  This template parses .env, .env.example, or env.template files and creates
+  a comprehensive Markdown table documenting all environment variables,
+  their default values, and descriptions for team reference.
+
+---
+# Environment Variable Cheat Sheet Generator
+
+description: >
+  Generate a comprehensive documentation table of environment variables
+  by parsing .env files and organizing them into a readable format.
+
+when:
+  - "User needs to document environment variables"
+  - "User asks for env documentation"
+  - "User wants to create env variable reference"
+
+then: |
+  1. Ask user for the path to .env file (.env, .env.example, env.template).
+  2. Parse the file to extract variable names and values.
+  3. Ask user to provide descriptions for variables that lack comments.
+  4. Group variables by category if prefixes suggest logical groupings.
+  5. Generate a Markdown table with columns: Variable, Default Value, Description, Required.
+  6. Include setup instructions for new developers.
+  7. Add notes about sensitive variables that should not have default values.
+
+examples:
+  - "Document my environment variables."
+  - "Create env cheat sheet from .env.example."
+  - "Generate environment variable reference."
+
+output_example: |
+  # Environment Variables Reference
+
+  ## Setup Instructions
+  1. Copy `.env.example` to `.env`
+  2. Update the values according to your environment
+  3. Never commit `.env` file to version control
+
+  ## Database Configuration
+  | Variable | Default Value | Description | Required |
+  |----------|---------------|-------------|----------|
+  | DB_HOST | localhost | Database server hostname | Yes |
+  | DB_PORT | 5432 | Database server port | Yes |
+  | DB_NAME | myapp_dev | Database name | Yes |
+  | DB_USER | postgres | Database username | Yes |
+  | DB_PASSWORD | - | Database password | Yes |
+
+  ## API Configuration
+  | Variable | Default Value | Description | Required |
+  |----------|---------------|-------------|----------|
+  | API_PORT | 3000 | Port for the API server | No |
+  | API_SECRET | - | Secret key for JWT tokens | Yes |
+  | API_RATE_LIMIT | 100 | Requests per minute limit | No |
+
+  ## External Services
+  | Variable | Default Value | Description | Required |
+  |----------|---------------|-------------|----------|
+  | REDIS_URL | redis://localhost:6379 | Redis connection string | No |
+  | SMTP_HOST | - | Email server hostname | No |
+  | SMTP_PORT | 587 | Email server port | No |
+
+  ## Notes
+  - Variables marked with "-" in Default Value should be set explicitly
+  - All password and secret variables should use strong, unique values
+  - Development and production environments should use different values
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

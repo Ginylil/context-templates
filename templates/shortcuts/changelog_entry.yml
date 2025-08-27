@@ -1,0 +1,64 @@
+template_type: "shortcut"
+name: "Changelog Entry Helper"
+filename: "changelog_entry.md"
+short_description: "Generates changelog entries following Keep a Changelog format."
+long_description: >
+  This template helps create structured changelog entries by analyzing commits
+  between releases and organizing them into Added, Changed, Fixed, and Removed
+  sections following the Keep a Changelog standard.
+
+---
+# Changelog Entry Helper
+
+description: >
+  Generate changelog entries by analyzing commits and organizing them into 
+  standardized categories following Keep a Changelog format.
+
+when:
+  - "User is preparing a release"
+  - "User asks to generate changelog entry"
+  - "User needs to update CHANGELOG.md"
+
+then: |
+  1. Ask for the version number and release date.
+  2. Ask for the previous version/tag to compare against.
+  3. Run `git log <previous-tag>..HEAD --oneline` to get commit messages.
+  4. Categorize commits into: Added, Changed, Fixed, Removed, Security.
+  5. Generate a changelog section following Keep a Changelog format.
+  6. Include links to commits or pull requests if applicable.
+  7. Ask user to review and edit before adding to CHANGELOG.md.
+
+examples:
+  - "Generate changelog for version 2.1.0."
+  - "Create changelog entry for my release."
+  - "What changed since last version?"
+
+output_example: |
+  ## [2.1.0] - 2023-12-01
+
+  ### Added
+  - New user authentication system with JWT support
+  - Dark mode toggle in user preferences
+  - API rate limiting for public endpoints
+  - Automated backup functionality
+
+  ### Changed
+  - Updated React to version 18.2.0
+  - Improved error messages for better user experience
+  - Optimized database queries for faster response times
+
+  ### Fixed
+  - Fixed memory leak in WebSocket connections
+  - Resolved issue with file upload progress indicator
+  - Fixed timezone handling in date calculations
+
+  ### Security
+  - Updated dependencies to address security vulnerabilities
+  - Implemented input sanitization for user-generated content
+
+  ### Removed
+  - Deprecated legacy API endpoints (v1)
+  - Removed unused CSS classes and assets
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

@@ -1,0 +1,96 @@
+template_type: "shortcut"
+name: "Bug Reproduction Steps Template"
+filename: "bug_report.md"
+short_description: "Generates a standardized bug report template with reproduction steps."
+long_description: >
+  This template creates a comprehensive bug report format that includes
+  environment details, reproduction steps, expected vs actual behavior,
+  and additional context to help developers quickly understand and fix issues.
+
+---
+# Bug Reproduction Steps Template
+
+description: >
+  Generate a standardized bug report template that captures all necessary
+  information for reproducing and fixing issues efficiently.
+
+when:
+  - "User encounters a bug"
+  - "User asks for bug report template"
+  - "User needs to report an issue"
+
+then: |
+  1. Ask user for a brief bug summary.
+  2. Ask for environment details (OS, browser, app version, etc.).
+  3. Ask for step-by-step reproduction instructions.
+  4. Ask for expected behavior vs actual behavior.
+  5. Ask for any error messages, logs, or screenshots.
+  6. Ask for additional context (frequency, impact, workarounds).
+  7. Generate a comprehensive bug report in Markdown format.
+  8. Include sections for all gathered information.
+
+examples:
+  - "Help me report a bug."
+  - "Generate bug report template."
+  - "Create issue reproduction steps."
+
+output_example: |
+  # Bug Report: Login form validation not working
+
+  ## 🐛 Summary
+  The login form accepts invalid email addresses and allows submission without proper validation.
+
+  ## 🌍 Environment
+  - **OS**: macOS 14.1
+  - **Browser**: Chrome 119.0.6045.105
+  - **App Version**: 2.1.3
+  - **Device**: MacBook Pro M2
+  - **Screen Resolution**: 1920x1080
+
+  ## 🔄 Steps to Reproduce
+  1. Navigate to `/login` page
+  2. Enter an invalid email address (e.g., "notanemail")
+  3. Enter any password
+  4. Click the "Login" button
+  5. Observe the behavior
+
+  ## ✅ Expected Behavior
+  - Form should show validation error for invalid email format
+  - Login button should remain disabled until valid data is entered
+  - User should not be able to submit the form
+
+  ## ❌ Actual Behavior
+  - No validation error is shown
+  - Form submits with invalid email
+  - User sees generic "Login failed" message from server
+
+  ## 📋 Additional Information
+
+  ### Error Messages/Logs
+  ```
+  Console Error: Uncaught TypeError: Cannot read property 'validate' of undefined
+      at LoginForm.js:45:12
+  ```
+
+  ### Screenshots
+  [Attach screenshots if applicable]
+
+  ### Frequency
+  - ☑️ Always
+  - ☐ Sometimes
+  - ☐ Rarely
+
+  ### Impact
+  - ☐ Critical (blocks users)
+  - ☑️ High (affects user experience)
+  - ☐ Medium (minor inconvenience)
+  - ☐ Low (cosmetic issue)
+
+  ### Workaround
+  Users can still login by entering a valid email format, but there's no client-side guidance.
+
+  ### Additional Context
+  This issue started appearing after the recent form library update in version 2.1.0.
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis
