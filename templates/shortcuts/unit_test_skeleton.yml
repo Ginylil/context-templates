@@ -1,0 +1,92 @@
+template_type: "shortcut"
+name: "Unit Test Skeleton Generator"
+filename: "unit_test_skeleton.txt"
+short_description: "Generates unit test templates with Arrange/Act/Assert structure."
+long_description: >
+  This template creates unit test skeletons for various languages and frameworks.
+  It follows the Arrange/Act/Assert pattern and includes setup for common testing
+  scenarios like mocking, assertions, and edge cases.
+
+---
+# Unit Test Skeleton Generator
+
+description: >
+  Generate unit test templates with proper structure including setup, test cases,
+  and assertions for various programming languages and frameworks.
+
+when:
+  - "User needs to write unit tests"
+  - "User asks for test template"
+  - "User wants test skeleton for a function"
+
+then: |
+  1. Ask the user for the programming language/framework (e.g., Jest, pytest, JUnit).
+  2. Ask for the module/class/function name to be tested.
+  3. Ask for the main functionality being tested.
+  4. Ask for edge cases or specific scenarios to test.
+  5. Generate test file with appropriate imports and setup.
+  6. Include test methods following Arrange/Act/Assert pattern.
+  7. Add placeholder comments for test data, mocks, and assertions.
+  8. Include examples of positive, negative, and edge case tests.
+
+examples:
+  - "Generate unit tests for my Calculator class."
+  - "Create test skeleton for user authentication function."
+  - "I need Jest tests for my API service."
+
+output_example: |
+  ```javascript
+  // userService.test.js
+  import { UserService } from '../src/userService';
+  import { mockDatabase } from '../mocks/database';
+
+  describe('UserService', () => {
+    let userService;
+
+    beforeEach(() => {
+      // Arrange - Setup
+      userService = new UserService(mockDatabase);
+      jest.clearAllMocks();
+    });
+
+    describe('createUser', () => {
+      it('should create a user with valid data', async () => {
+        // Arrange
+        const userData = {
+          email: 'test@example.com',
+          name: 'Test User'
+        };
+        mockDatabase.save.mockResolvedValue({ id: '123', ...userData });
+
+        // Act
+        const result = await userService.createUser(userData);
+
+        // Assert
+        expect(result).toEqual({ id: '123', ...userData });
+        expect(mockDatabase.save).toHaveBeenCalledWith(userData);
+      });
+
+      it('should throw error with invalid email', async () => {
+        // Arrange
+        const invalidData = { email: 'invalid-email', name: 'Test' };
+
+        // Act & Assert
+        await expect(userService.createUser(invalidData))
+          .rejects.toThrow('Invalid email format');
+      });
+
+      it('should handle database errors gracefully', async () => {
+        // Arrange
+        const userData = { email: 'test@example.com', name: 'Test' };
+        mockDatabase.save.mockRejectedValue(new Error('DB Error'));
+
+        // Act & Assert
+        await expect(userService.createUser(userData))
+          .rejects.toThrow('Failed to create user');
+      });
+    });
+  });
+  ```
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis
