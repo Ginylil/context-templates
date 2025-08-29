@@ -22,27 +22,29 @@ when:
   - "User describes a system or behavior"
 
 then: |
-  1. Generate a Markdown file named `<FeatureName>_Plan.md`.
-  2. Add a **Progress Key** at the top:
-     ```
-     ## Progress Key
-     ✅: Completed
-     ⏳: In Progress
-     ❌: Not Started / Blocked
-     ```
-  3. Split implementation into logical phases (Phase 1, Phase 2, etc.).
-  4. For each phase:
+  1. Create directory structure: `.detailer/plans/<<FeatureNumber>>/`
+  2. Generate an overview file: `.detailer/plans/<<FeatureNumber>>/00-overview.md` with:
+     - Feature description and goals
+     - **Progress Key** at the top:
+       ```
+       ## Progress Key
+       ✅: Completed
+       ⏳: In Progress
+       ❌: Not Started / Blocked
+       ```
+     - List of all phases with their status
+  3. For each phase, create separate files: `.detailer/plans/<<FeatureNumber>>/<<PhaseNumber>>-<<Description>>.md`
      - Document which files/scripts/modules are needed
      - Include setup or integration instructions
      - Provide a "Testing Checklist" for validation
-  5. Ask clarifying questions before finalizing the plan.
-  6. After confirmation, implement **one phase at a time**:
-     - Update the progress status (✅, ⏳, ❌) in the Markdown
+  4. Ask clarifying questions before finalizing the plan.
+  5. After confirmation, implement **one phase at a time**:
+     - Update the progress status (✅, ⏳, ❌) in both overview and phase files
      - Explain what was done and how to integrate it
      - Suggest tests to verify functionality
      - Pause until user approves the next step
-  7. If issues come up, mark as ⏳ and continue working until resolved.
-  8. Keep a "Future Enhancements" section for deferred ideas.
+  6. If issues come up, mark as ⏳ and continue working until resolved.
+  7. Keep a "Future Enhancements" section in the overview file for deferred ideas.
 
 examples:
   - "Plan out a Dialogue System with branching choices before coding"
@@ -50,38 +52,50 @@ examples:
   - "Step-by-step plan for AI enemy behavior with testing per stage"
 
 output_example: |
+  **Directory Structure:**
+  ```
+  .detailer/plans/001-dialogue-system/
+  ├── 00-overview.md
+  ├── 01-basic-ui.md
+  └── 02-branching-conversations.md
+  ```
+
+  **File: .detailer/plans/001-dialogue-system/00-overview.md**
+  ```markdown
   # Dialogue System Plan
 
   ## Progress Key
   ✅: Completed
-  ⏳: In Progress
+  ⏳: In Progress  
   ❌: Not Started / Blocked
 
-  ---
+  ## Feature Description
+  Implement a dialogue system with branching conversations for player interactions.
 
-  ### Phase 1: Basic Dialogue UI ❌
+  ## Phase Overview
+  - Phase 1: Basic Dialogue UI ❌
+  - Phase 2: Branching Conversations ❌
 
-  - **Files Needed**: `DialogueUI.cs`, `UIManager.cs`
-  - **Setup**: Create a new Unity scene and add a Canvas for the UI.
-  - **Testing Checklist**:
-    - [ ] Dialogue box appears on screen.
-    - [ ] Text is displayed correctly.
-
-  ---
-
-  ### Phase 2: Branching Conversations ❌
-
-  - **Files Needed**: `DialogueNode.cs`, `DialogueManager.cs`
-  - **Setup**: Implement a node-based data structure for conversations.
-  - **Testing Checklist**:
-    - [ ] Choices are presented to the player.
-    - [ ] Selecting a choice leads to the correct dialogue branch.
-
-  ---
-
-  ### Future Enhancements
+  ## Future Enhancements
   - Add support for animated character portraits.
   - Implement a quest integration system.
+  ```
+
+  **File: .detailer/plans/001-dialogue-system/01-basic-ui.md**
+  ```markdown
+  # Phase 1: Basic Dialogue UI ❌
+
+  ## Files Needed
+  - `DialogueUI.cs`
+  - `UIManager.cs`
+
+  ## Setup
+  Create a new Unity scene and add a Canvas for the UI.
+
+  ## Testing Checklist
+  - [ ] Dialogue box appears on screen.
+  - [ ] Text is displayed correctly.
+  ```
 
 ---
 🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis
