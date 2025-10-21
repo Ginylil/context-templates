@@ -1,4 +1,4 @@
-template_type: "shortcuts"
+template_type: "shortcut"
 name: "Pull Request Description Generator"
 filename: "pr_description.md"
 short_description: "Generates a PR description based on file changes and commit messages."

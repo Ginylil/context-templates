@@ -1,5 +1,5 @@
 ---
-template_type: rules
+template_type: "rule"
 template_subtype: cursor
 name: Vue
 description: A set of rules for Vue.

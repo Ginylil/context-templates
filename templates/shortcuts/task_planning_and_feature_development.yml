@@ -1,4 +1,4 @@
-template_type: "shortcuts"
+template_type: "shortcut"
 name: "Structured Feature Planning"
 filename: "structured_feature_planning.md"
 short_description: "Rule for creating a clear Markdown plan before implementing new functionality."

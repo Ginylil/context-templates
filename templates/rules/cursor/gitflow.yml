@@ -1,5 +1,5 @@
 ---
-template_type: rules
+template_type: "rule"
 template_subtype: cursor
 name: Gitflow
 description: Gitflow Workflow Rules. These rules should be applied when performing

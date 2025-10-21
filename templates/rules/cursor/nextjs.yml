@@ -1,5 +1,5 @@
 ---
-template_type: rules
+template_type: "rule"
 template_subtype: cursor
 name: Nextjs
 description: A set of rules for Nextjs.

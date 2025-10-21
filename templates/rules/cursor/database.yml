@@ -1,5 +1,5 @@
 ---
-template_type: rules
+template_type: "rule"
 template_subtype: cursor
 name: Database
 description: Database best practices focusing on Prisma and Supabase integration

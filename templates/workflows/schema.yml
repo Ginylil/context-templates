@@ -7,7 +7,7 @@ type: object
 properties:
   template_type:
     type: string
-    enum: ["workflows"]
+    enum: ["workflow"]
     description: "The type of the template."
   name:
     type: string

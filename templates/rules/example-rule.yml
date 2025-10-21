@@ -1,4 +1,4 @@
-template_type: "rules"
+template_type: "rule"
 id: "example-rule"
 name: "Example Rule"
 description: "An example rule definition."
