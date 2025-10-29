@@ -35,24 +35,12 @@ dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6
 
 ### Platform-Specific Setup
 
-<input type="radio" id="tab-cursor" name="ide-tabs" checked="checked">
-<input type="radio" id="tab-windsurf" name="ide-tabs">
-<input type="radio" id="tab-claude" name="ide-tabs">
-<input type="radio" id="tab-copilot" name="ide-tabs">
-<input type="radio" id="tab-general" name="ide-tabs">
+Choose your platform to see the configuration instructions:
 
-<div class="tabs">
-  <label for="tab-cursor">Cursor</label>
-  <label for="tab-windsurf">Windsurf</label>
-  <label for="tab-claude">Claude Code</label>
-  <label for="tab-copilot">Copilot</label>
-  <label for="tab-general">General</label>
-</div>
+<details open>
+<summary><strong>🎯 Cursor IDE</strong></summary>
 
-<div class="tab-content">
-  <div class="tab-pane" id="content-cursor">
-    
-Add the following configuration to `~/.cursor/mcp.json`:
+Add the following configuration to your Cursor MCP settings file at `~/.cursor/mcp.json`:
 
 ```json
 {
@@ -74,37 +62,12 @@ Add the following configuration to `~/.cursor/mcp.json`:
 }
 ```
 
-  </div>
+</details>
 
-  <div class="tab-pane" id="content-windsurf">
-    
-Add the following configuration to your Windsurf MCP settings file (typically `~/.windsurf/mcp.json` or in the Windsurf settings):
+<details>
+<summary><strong>🌊 Windsurf IDE</strong></summary>
 
-```json
-{
-  "mcpServers": {
-    "context-templates": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://detailer-api.supabase.co/functions/v1/mcp",
-        "--header",
-        "Authorization:${AUTH_HEADER}",
-        "--allow-http"
-      ],
-      "env": {
-        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
-      }
-    }
-  }
-}
-```
-
-  </div>
-
-  <div class="tab-pane" id="content-claude">
-    
-Add the following configuration to your Claude Code MCP settings:
+Add the following configuration to your Windsurf MCP settings file (typically `~/.windsurf/mcp.json`):
 
 ```json
 {
@@ -126,11 +89,16 @@ Add the following configuration to your Claude Code MCP settings:
 }
 ```
 
-  </div>
+</details>
 
-  <div class="tab-pane" id="content-copilot">
-    
-For GitHub Copilot, configure MCP in your Copilot settings (location may vary by installation):
+<details>
+<summary><strong>🤖 Claude Desktop</strong></summary>
+
+Add the following configuration to your Claude Desktop configuration file:
+
+**macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`  
+**Linux**: `~/.config/Claude/claude_desktop_config.json`
 
 ```json
 {
@@ -152,10 +120,11 @@ For GitHub Copilot, configure MCP in your Copilot settings (location may vary by
 }
 ```
 
-  </div>
+</details>
 
-  <div class="tab-pane" id="content-general">
-    
+<details>
+<summary><strong>🔧 Other MCP-Compatible Tools</strong></summary>
+
 For any other tool that supports MCP, use this standard configuration format:
 
 ```json
@@ -178,56 +147,9 @@ For any other tool that supports MCP, use this standard configuration format:
 }
 ```
 
-  </div>
-</div>
+Consult your tool's documentation for the specific configuration file location.
 
-<style>
-input[type="radio"] { display: none; }
-.tabs {
-  display: flex;
-  border-bottom: 1px solid #ddd;
-  margin-bottom: 1rem;
-}
-.tabs label {
-  padding: 0.75rem 1.5rem;
-  cursor: pointer;
-  background: #f6f8fa;
-  border: 1px solid #ddd;
-  border-bottom: none;
-  margin-right: 0.25rem;
-  border-radius: 4px 4px 0 0;
-  user-select: none;
-}
-.tabs label:hover {
-  background: #e1e4e8;
-}
-input[type="radio"]:checked + .tabs label[for="tab-cursor"],
-#tab-cursor:checked ~ .tabs label[for="tab-cursor"],
-#tab-windsurf:checked ~ .tabs label[for="tab-windsurf"],
-#tab-claude:checked ~ .tabs label[for="tab-claude"],
-#tab-copilot:checked ~ .tabs label[for="tab-copilot"],
-#tab-general:checked ~ .tabs label[for="tab-general"] {
-  background: white;
-  border-bottom: 1px solid white;
-  margin-bottom: -1px;
-  position: relative;
-  z-index: 1;
-}
-.tab-content {
-  position: relative;
-}
-.tab-pane {
-  display: none;
-  padding: 1rem 0;
-}
-#tab-cursor:checked ~ .tab-content #content-cursor,
-#tab-windsurf:checked ~ .tab-content #content-windsurf,
-#tab-claude:checked ~ .tab-content #content-claude,
-#tab-copilot:checked ~ .tab-content #content-copilot,
-#tab-general:checked ~ .tab-content #content-general {
-  display: block;
-}
-</style>
+</details>
 
 **Note:** After adding the configuration, restart your IDE or reload the MCP servers for the changes to take effect.
 
