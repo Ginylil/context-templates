@@ -43,7 +43,7 @@ Choose your platform to see the configuration instructions:
 #### Option 1: Using Cursor's MCP Settings UI (Recommended)
 
 1. Open Cursor IDE
-2. Click the **Settings/Cog icon (âš™ï¸)** in the top-right corner
+2. Click the **Settings/Cog icon (⚙️)** in the top-right corner
 3. Select **"MCP"** from the sidebar
 4. Click **"Add new global MCP server"**
 5. This will open your `mcp.json` configuration file
