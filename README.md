@@ -21,6 +21,195 @@ Download a template's raw content directly into your workspace. This is useful w
 ### `do_template`
 Execute a template directly and receive immediate, context-aware output. Instead of just getting the template file, `do_template` processes it and provides you with the generated result, such as a feature plan or a list of best practices.
 
+## Using Context Templates with MCP Public Token
+
+You can access context templates directly via MCP (Model Context Protocol) using the public token. This allows you to use templates across different AI development platforms without needing to clone this repository.
+
+### Public Token
+
+```
+dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6
+```
+
+**MCP Server URL:** `https://detailer-api.supabase.co/functions/v1/mcp`
+
+### Platform-Specific Setup
+
+Choose your platform to see the configuration instructions:
+
+<details open>
+<summary><strong>🎯 Cursor IDE</strong></summary>
+
+#### Option 1: Using Cursor's MCP Settings UI (Recommended)
+
+1. Open Cursor IDE
+2. Click the **Settings/Cog icon (âš™ï¸)** in the top-right corner
+3. Select **"MCP"** from the sidebar
+4. Click **"Add new global MCP server"**
+5. This will open your `mcp.json` configuration file
+6. Add the configuration below
+
+#### Option 2: Manual Configuration
+
+Directly edit your Cursor MCP settings file at the following location:
+
+**macOS/Linux:** `~/.cursor/mcp.json`  
+**Windows:** `%USERPROFILE%\.cursor\mcp.json`
+
+Add the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+**After configuration:**
+- Save the file
+- Restart Cursor IDE completely to load the new MCP server
+- The MCP server indicator should appear in the Cursor interface
+
+</details>
+
+<details>
+<summary><strong>🌊 Windsurf IDE</strong></summary>
+
+#### Option 1: Using Windsurf's MCP Settings UI (Recommended)
+
+1. Open Windsurf IDE
+2. Press `Cmd/Ctrl + ,` to open **Windsurf Settings**
+3. Scroll down to the **Cascade** section
+4. Find **"Plugins (MCP servers)"** or **"Model Context Protocol (MCP) Servers"**
+5. Click **"Manage Plugins"**
+6. Click **"View raw config"** or **"Add custom server"**
+7. Add the configuration below
+8. Click the **Refresh** button after saving
+
+#### Option 2: Manual Configuration
+
+Directly edit your Windsurf MCP configuration file at the following location:
+
+**macOS:** `~/.codeium/windsurf/mcp_config.json`  
+**Windows:** `%APPDATA%\Codeium\Windsurf\mcp_config.json`  
+**Linux:** `~/.config/Codeium/Windsurf/mcp_config.json` or `~/.codeium/windsurf/mcp_config.json`
+
+Add the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+**After configuration:**
+- Save the file
+- Click the **Refresh** button in the MCP settings panel
+- Restart Windsurf IDE for changes to take full effect
+
+</details>
+
+<details>
+<summary><strong>🤖 Claude Desktop</strong></summary>
+
+Add the following configuration to your Claude Desktop configuration file:
+
+**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`  
+**Linux:** `~/.config/Claude/claude_desktop_config.json`
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+**After configuration:**
+- Save the file
+- Completely quit Claude Desktop (not just close the window)
+- Restart Claude Desktop to load the new MCP server
+- You should see an MCP indicator in the bottom-right of the chat interface
+
+</details>
+
+<details>
+<summary><strong>🔧 Other MCP-Compatible Tools</strong></summary>
+
+For any other tool that supports MCP, use this standard configuration format:
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+Consult your tool's documentation for the specific configuration file location and format requirements.
+
+</details>
+
+---
+
+**Important Notes:**
+- After adding the configuration, **restart your IDE completely** (quit and reopen) for the changes to take effect
+- For Cursor and Windsurf, you may need to **reload or refresh** the MCP servers panel after the first configuration
+- Ensure you have **Node.js** installed on your system (required for `npx` command)
+- If you encounter issues, check that the configuration file syntax is valid JSON
+
 ## Template Types
 
 This repository is organized into three main categories of templates:

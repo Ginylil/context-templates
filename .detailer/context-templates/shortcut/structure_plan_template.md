@@ -1,0 +1,90 @@
+# Structured Feature Planning
+
+description: >
+  Always create a Markdown plan before coding new features. 
+  Break tasks into phases, ask clarifying questions, and track progress with ✅ ⏳ ❌.
+  Advance step by step, validate with tests, and confirm before continuing.
+
+when:
+  - "User requests a new feature"
+  - "User suggests functionality to add"
+  - "User describes a system or behavior"
+
+then: |
+  1. Create directory structure: `.detailer/plans/<<FeatureNumber>>/`
+  2. Generate an overview file: `.detailer/plans/<<FeatureNumber>>/00-overview.md` with:
+     - Feature description and goals
+     - **Progress Key** at the top:
+       ```
+       ## Progress Key
+       ✅: Completed
+       ⏳: In Progress
+       ❌: Not Started / Blocked
+       ```
+     - List of all phases with their status
+  3. For each phase, create separate files: `.detailer/plans/<<FeatureNumber>>/<<PhaseNumber>>-<<Description>>.md`
+     - Document which files/scripts/modules are needed
+     - Include setup or integration instructions
+     - Provide a "Testing Checklist" for validation
+  4. Ask clarifying questions before finalizing the plan.
+  5. After confirmation, implement **one phase at a time**:
+     - Update the progress status (✅, ⏳, ❌) in both overview and phase files
+     - Explain what was done and how to integrate it
+     - Suggest tests to verify functionality
+     - Pause until user approves the next step
+  6. If issues come up, mark as ⏳ and continue working until resolved.
+  7. Keep a "Future Enhancements" section in the overview file for deferred ideas.
+
+examples:
+  - "Plan out a Dialogue System with branching choices before coding"
+  - "Outline a Crafting System feature in Markdown first"
+  - "Step-by-step plan for AI enemy behavior with testing per stage"
+
+output_example: |
+  **Directory Structure:**
+  ```
+  .detailer/plans/001-dialogue-system/
+  ├── 00-overview.md
+  ├── 01-basic-ui.md
+  └── 02-branching-conversations.md
+  ```
+
+  **File: .detailer/plans/001-dialogue-system/00-overview.md**
+  ```markdown
+  # Dialogue System Plan
+
+  ## Progress Key
+  ✅: Completed
+  ⏳: In Progress  
+  ❌: Not Started / Blocked
+
+  ## Feature Description
+  Implement a dialogue system with branching conversations for player interactions.
+
+  ## Phase Overview
+  - Phase 1: Basic Dialogue UI ❌
+  - Phase 2: Branching Conversations ❌
+
+  ## Future Enhancements
+  - Add support for animated character portraits.
+  - Implement a quest integration system.
+  ```
+
+  **File: .detailer/plans/001-dialogue-system/01-basic-ui.md**
+  ```markdown
+  # Phase 1: Basic Dialogue UI ❌
+
+  ## Files Needed
+  - `DialogueUI.cs`
+  - `UIManager.cs`
+
+  ## Setup
+  Create a new Unity scene and add a Canvas for the UI.
+
+  ## Testing Checklist
+  - [ ] Dialogue box appears on screen.
+  - [ ] Text is displayed correctly.
+  ```
+
+---
+🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Context-aware codebase analysis

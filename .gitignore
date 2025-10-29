@@ -1,3 +1,6 @@
 .*
 !.*ignore*
 !.github
+!.detailer
+
+.detailer/plans
