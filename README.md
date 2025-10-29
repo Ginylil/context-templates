@@ -21,6 +21,216 @@ Download a template's raw content directly into your workspace. This is useful w
 ### `do_template`
 Execute a template directly and receive immediate, context-aware output. Instead of just getting the template file, `do_template` processes it and provides you with the generated result, such as a feature plan or a list of best practices.
 
+## Using Context Templates with MCP Public Token
+
+You can access context templates directly via MCP (Model Context Protocol) using the public token. This allows you to use templates across different AI development platforms without needing to clone this repository.
+
+### Public Token
+
+```
+dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6
+```
+
+**MCP Server URL:** `https://detailer-api.supabase.co/functions/v1/mcp`
+
+### Platform-Specific Setup
+
+<input type="radio" id="tab-cursor" name="ide-tabs" checked="checked">
+<input type="radio" id="tab-windsurf" name="ide-tabs">
+<input type="radio" id="tab-claude" name="ide-tabs">
+<input type="radio" id="tab-copilot" name="ide-tabs">
+<input type="radio" id="tab-general" name="ide-tabs">
+
+<div class="tabs">
+  <label for="tab-cursor">Cursor</label>
+  <label for="tab-windsurf">Windsurf</label>
+  <label for="tab-claude">Claude Code</label>
+  <label for="tab-copilot">Copilot</label>
+  <label for="tab-general">General</label>
+</div>
+
+<div class="tab-content">
+  <div class="tab-pane" id="content-cursor">
+    
+Add the following configuration to `~/.cursor/mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+  </div>
+
+  <div class="tab-pane" id="content-windsurf">
+    
+Add the following configuration to your Windsurf MCP settings file (typically `~/.windsurf/mcp.json` or in the Windsurf settings):
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+  </div>
+
+  <div class="tab-pane" id="content-claude">
+    
+Add the following configuration to your Claude Code MCP settings:
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+  </div>
+
+  <div class="tab-pane" id="content-copilot">
+    
+For GitHub Copilot, configure MCP in your Copilot settings (location may vary by installation):
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+  </div>
+
+  <div class="tab-pane" id="content-general">
+    
+For any other tool that supports MCP, use this standard configuration format:
+
+```json
+{
+  "mcpServers": {
+    "context-templates": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://detailer-api.supabase.co/functions/v1/mcp",
+        "--header",
+        "Authorization:${AUTH_HEADER}",
+        "--allow-http"
+      ],
+      "env": {
+        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
+      }
+    }
+  }
+}
+```
+
+  </div>
+</div>
+
+<style>
+input[type="radio"] { display: none; }
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 1rem;
+}
+.tabs label {
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  background: #f6f8fa;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  margin-right: 0.25rem;
+  border-radius: 4px 4px 0 0;
+  user-select: none;
+}
+.tabs label:hover {
+  background: #e1e4e8;
+}
+input[type="radio"]:checked + .tabs label[for="tab-cursor"],
+#tab-cursor:checked ~ .tabs label[for="tab-cursor"],
+#tab-windsurf:checked ~ .tabs label[for="tab-windsurf"],
+#tab-claude:checked ~ .tabs label[for="tab-claude"],
+#tab-copilot:checked ~ .tabs label[for="tab-copilot"],
+#tab-general:checked ~ .tabs label[for="tab-general"] {
+  background: white;
+  border-bottom: 1px solid white;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 1;
+}
+.tab-content {
+  position: relative;
+}
+.tab-pane {
+  display: none;
+  padding: 1rem 0;
+}
+#tab-cursor:checked ~ .tab-content #content-cursor,
+#tab-windsurf:checked ~ .tab-content #content-windsurf,
+#tab-claude:checked ~ .tab-content #content-claude,
+#tab-copilot:checked ~ .tab-content #content-copilot,
+#tab-general:checked ~ .tab-content #content-general {
+  display: block;
+}
+</style>
+
+**Note:** After adding the configuration, restart your IDE or reload the MCP servers for the changes to take effect.
+
 ## Template Types
 
 This repository is organized into three main categories of templates:
