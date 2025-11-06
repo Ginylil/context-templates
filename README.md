@@ -40,9 +40,11 @@ Choose your platform to see the configuration instructions:
 <details open>
 <summary><strong>⚡ Kiro (One-Click Install)</strong></summary>
 
-Click the link below for instant one-click installation:
+Copy and paste this link into your browser's address bar for instant installation:
 
-**[Add to Kiro →](kiro://kiro.mcp/add?name=context-templates&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22mcp-remote%22%2C%22https%3A%2F%2Fdetailer-api.supabase.co%2Ffunctions%2Fv1%2Fmcp%22%2C%22--header%22%2C%22Authorization%3ABearer%20dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6%22%2C%22--allow-http%22%5D%2C%22disabled%22%3Afalse%2C%22autoApprove%22%3A%5B%5D%7D)**
+```
+kiro://kiro.mcp/add?name=context-templates&config=%7B%22command%22%3A%22npx%22%2C%22args%22%3A%5B%22mcp-remote%22%2C%22https%3A%2F%2Fdetailer-api.supabase.co%2Ffunctions%2Fv1%2Fmcp%22%2C%22--header%22%2C%22Authorization%3ABearer%20dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6%22%2C%22--allow-http%22%5D%2C%22disabled%22%3Afalse%2C%22autoApprove%22%3A%5B%5D%7D
+```
 
 This will open Kiro and prompt you to install the context-templates MCP server automatically.
 
