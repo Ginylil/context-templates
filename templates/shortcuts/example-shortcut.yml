@@ -1,6 +1,6 @@
 template_type: "shortcut"
 name: "Example Shortcut"
-filename: "example-shortcut-output.txt"
+filename: "example-shortcut-output.md"
 short_description: "An example shortcut template."
 long_description: "This is a more detailed description of the example shortcut template. It demonstrates the structure of a shortcut template file."
 description: "This rule defines an example shortcut."
