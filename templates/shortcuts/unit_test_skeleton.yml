@@ -1,6 +1,6 @@
 template_type: "shortcut"
 name: "Unit Test Skeleton Generator"
-filename: "unit_test_skeleton.txt"
+filename: "unit_test_skeleton.md"
 short_description: "Generates unit test templates with Arrange/Act/Assert structure."
 long_description: >
   This template creates unit test skeletons for various languages and frameworks.
