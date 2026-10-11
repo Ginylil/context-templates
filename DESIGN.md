@@ -59,12 +59,18 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
   controls and participant headers. Keep the sequence header strip outside the
   horizontal overflow container, sticky below playback controls; synchronize its
   horizontal position and width with the lifelines. In sequence walkthroughs, fit
-  the active participants and message endpoints to the available width, folding
-  contiguous inactive columns into selectable `…` groups in source order. Hide
-  arrows with omitted endpoints. Preserve message numbers and chronological
+  as many participants as readable boxes and omission markers allow. Always keep
+  active message endpoints; prioritize participants from the previous and next
+  chronological messages (often four in total), then fill remaining room with
+  nearby participants. Show every participant if they fit; collapse only overflow
+  groups into selectable `…` in source order. Recalculate on step changes, window
+  resize and sidebar toggles. Hide arrows with omitted endpoints. Preserve
+  message numbers and chronological
   vertical positions. Keep text at least 10px and the entire active arrow visible
   without horizontal scrolling. Overview restores all participants and messages
-  at their original positions; show a pan hint if the full view overflows. Numeric step
+  at their original positions; show a pan hint if the full view overflows. Auto-follow
+  keeps visible previous/next arrows in view when their combined height fits below
+  sticky controls; otherwise prioritize the active exchange. Numeric step
   targets become 40px. Layouts use explicit coordinates, concise
   labels and routing bends; never accept clipping/overlap as an automatic layout.
 - The educational UML subset must be stated; diamonds, triangles, direction,
@@ -114,9 +120,11 @@ matched state before/after captures use 1440×960. Short-window state checks at
 quiet transparent branding and horizontal-only panning on mobile. Matched
 before/after captures use 1440×960 for the flowchart; route inspection also uses a narrower, taller viewport.
 The long-sequence regression traverses all 32 messages across six participants
-at 1271×658 and 390×844, checks whole active arrows and participant headers
-fit without horizontal overflow, labelled omission groups, pointer/keyboard
-expansion, canonical Overview restoration, sidebar sizing,
+at 1271×658, 800×658 and 390×844, checks whole active arrows and participant
+headers fit without horizontal overflow, room-filling participant selection,
+previous/next messages with four participants, collapse/expansion during resize,
+labelled omission groups, pointer/keyboard expansion, canonical Overview
+restoration, all 32 mobile sidebar steps,
 multi-screen page movement, reset/jump, pause/resume and final-step playback.
 It also checks the repeated embedded logo and captures matched footer proof.
 Human inspection still checks routing and visual hierarchy. The initial reference

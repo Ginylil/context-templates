@@ -8,10 +8,13 @@ description: "Create a standalone interactive HTML sequence diagram for a protoc
 Read `references/authoring.md` and `assets/example.json`, then investigate the
 requested interaction before modeling it. For a longer exchange or more
 participants, `assets/long-example.json` demonstrates 32 messages across six
-participants with readable labels and page auto-follow. Walkthroughs fit active
-participants to the canvas, replacing inactive groups with selectable `…`;
-Overview restores the complete diagram. Preserve participant order and message
-numbers; hide arrows with omitted endpoints. Verify the whole active arrow and
+participants with readable labels and page auto-follow. Show as many participants
+as fit: retain active endpoints, prioritize the previous and next messages
+(often four participants), then fill remaining space with nearby participants.
+Collapse only overflow groups into selectable `…`; Overview restores the complete
+diagram. Recalculate on step changes, resize and sidebar toggles. Preserve
+participant order and message numbers; hide arrows with omitted endpoints.
+Verify the whole active arrow and
 participant boxes fit without horizontal scrolling on desktop and phone.
 Ask at most five questions total, only for material unknowns; otherwise proceed
 with minimal visible assumptions.

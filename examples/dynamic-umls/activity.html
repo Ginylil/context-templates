@@ -92,6 +92,10 @@ function wrapSVGText(t,value,width,x,y,size){
   if(line)lines.push(line);t.replaceChildren();
   lines.forEach((value,i)=>append(t,'tspan',{x,y:y+(i-(lines.length-1)/2)*(size+2)},value));
 }
+function sequenceNeighbors(step){
+  const indices=step.edges.map(id=>model.edges.findIndex(e=>e.id===id));
+  return indices.length?[model.edges[Math.min(...indices)-1],model.edges[Math.max(...indices)+1]]:[];
+}
 function layoutSequence(){
   if(model.type!=='sequence')return;
   const frame=$('canvas-scroll'),head=$('participant-headings').querySelector('svg');
@@ -99,17 +103,38 @@ function layoutSequence(){
   const ordered=[...model.nodes].sort((a,b)=>a.x-b.x),current=steps()[index];
   const visible=new Set(overview?ordered.map(n=>n.id):current.nodes);
   if(!overview)for(const id of current.edges){const edge=edgeMap.get(id);visible.add(edge.from);visible.add(edge.to);}
-  const tokens=[];
-  for(const node of ordered){
-    if(visible.has(node.id))tokens.push({node});
-    else if(tokens.at(-1)?.omitted)tokens.at(-1).omitted.push(node);
-    else tokens.push({omitted:[node]});
-  }
   const width=overview?model.width:Math.max(1,Math.floor(frame.clientWidth-32));
-  // At sidebar widths, keep the internal omission cue and give the endpoints room.
-  if(!overview&&width<260){if(tokens[0]?.omitted)tokens.shift();if(tokens.at(-1)?.omitted)tokens.pop();}
-  const small=width<500,gap=small?8:24,dotWidth=small?20:32,margin=small?8:16;
-  const count=visible.size,omitted=tokens.filter(t=>t.omitted).length;
+  const small=width<500,density=Math.max(0,Math.min(1,(width-320)/400));
+  const gap=8+16*density,dotWidth=20+12*density,margin=8+8*density;
+  const makeTokens=shown=>{
+    const list=[];
+    for(const node of ordered){
+      if(shown.has(node.id))list.push({node});
+      else if(list.at(-1)?.omitted)list.at(-1).omitted.push(node);
+      else list.push({omitted:[node]});
+    }
+    // At sidebar widths, keep the internal omission cue and give names room.
+    if(!overview&&width<260){if(list[0]?.omitted)list.shift();if(list.at(-1)?.omitted)list.pop();}
+    return list;
+  };
+  const fits=shown=>{
+    const list=makeTokens(shown);
+    const needed=list.reduce((sum,t)=>sum+(t.node?Math.min(t.node.w||180,128):dotWidth),0)+gap*(list.length-1)+margin*2;
+    return needed<=width;
+  };
+  if(!overview){
+    // Prefer surrounding messages, then fill remaining room with nearby participants.
+    const [previous,next]=sequenceNeighbors(current);
+    const context=[previous?.from,next?.from,previous?.to,next?.to].filter(Boolean);
+    const anchors=ordered.map((n,i)=>visible.has(n.id)?i:-1).filter(i=>i>=0);
+    const nearby=ordered.map((n,i)=>({id:n.id,distance:Math.min(...anchors.map(a=>Math.abs(a-i)))}))
+      .sort((a,b)=>a.distance-b.distance).map(n=>n.id);
+    for(const id of new Set([...context,...nearby])){
+      if(visible.has(id))continue;
+      const expanded=new Set([...visible,id]);if(fits(expanded))visible.add(id);
+    }
+  }
+  const tokens=makeTokens(visible),count=visible.size,omitted=tokens.filter(t=>t.omitted).length;
   const allowance=(width-margin*2-gap*(tokens.length-1)-dotWidth*omitted)/count;
   for(const token of tokens)token.width=token.node?Math.min(token.node.w||180,small?128:220,Math.max(24,allowance)):dotWidth;
   const used=tokens.reduce((sum,t)=>sum+t.width,0)+gap*(tokens.length-1);
@@ -187,6 +212,13 @@ function followActive(){
   let box={left:Math.min(...boxes.map(b=>b.left)),right:Math.max(...boxes.map(b=>b.right)),top:Math.min(...boxes.map(b=>b.top)),bottom:Math.max(...boxes.map(b=>b.bottom))};
   const bounds=frame.getBoundingClientRect(),headerHeight=strip.hidden?0:strip.getBoundingClientRect().height;
   const viewportTop=toolbar.getBoundingClientRect().height+headerHeight+16,viewportBottom=innerHeight-16;
+  // Show the surrounding exchange too when its visible arrows fit in the window.
+  if(sequence&&!overview){
+    const context=sequenceNeighbors(step).filter(e=>e&&edgeEls.get(e.id).style.display!=='none')
+      .map(e=>edgeEls.get(e.id).getBoundingClientRect());
+    const top=Math.min(box.top,...context.map(b=>b.top)),bottom=Math.max(box.bottom,...context.map(b=>b.bottom));
+    if(bottom-top<=viewportBottom-viewportTop){box.top=top;box.bottom=bottom;}
+  }
   // A distant structural transition may span several screens; follow its destination then.
   if(!sequence&&(box.right-box.left>bounds.width-32||box.bottom-box.top>viewportBottom-viewportTop)){
     const destination=step.edges.length?edgeMap.get(step.edges.at(-1)).to:step.nodes.at(-1);

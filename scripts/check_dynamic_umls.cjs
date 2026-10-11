@@ -361,7 +361,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
         && [...document.querySelectorAll('#participant-headings [data-node]')].filter(n=>getComputedStyle(n).display!=='none').every(n=>{const r=n.getBoundingClientRect(),box=n.querySelector('.shape').getBBox();return r.left>=bounds.left&&r.right<=bounds.right&&[...n.querySelectorAll('text')].filter(t=>getComputedStyle(t).display!=='none').every(t=>{const b=t.getBBox();return b.x>=box.x-1&&b.x+b.width<=box.x+box.width+1&&b.y>=box.y-1&&b.y+b.height<=box.y+box.height+1;});})
         && parseFloat(getComputedStyle(font).fontSize)*Math.hypot(matrix.a,matrix.b)>=10-0.01;
     };
-    for(const viewport of [{width:1271,height:658},{width:390,height:844}]){
+    for(const viewport of [{width:1271,height:658},{width:800,height:658},{width:390,height:844}]){
       await page.setViewportSize(viewport);await page.goto(longUrl);
       const longModel=JSON.parse(await page.locator('#diagram-data').textContent());
       assert.equal(longModel.edges.length,32);assert.equal(longModel.nodes.length,6);
@@ -375,24 +375,28 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
         }
       }
       await page.locator('#step-track button').nth(27).click();
-      assert.deepEqual(await page.locator('#participant-headings [data-node]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.node)),['app','store']);
-      assert.deepEqual(await page.locator('[data-omitted]').evaluateAll(nodes=>nodes.map(n=>n.dataset.omitted)),['browser','queue worker','notifier']);
-      assert.match(await page.locator('[data-omitted]').nth(1).getAttribute('aria-label'),/Job queue, Worker/);
-      assert.deepEqual(await page.locator('[data-edge]:visible').evaluateAll(edges=>edges.map(e=>e.dataset.edge)),longModel.edges.filter(e=>['app','store'].includes(e.from)&&['app','store'].includes(e.to)).map(e=>e.id),'Only messages between shown participants remain visible');
+      const shown=await page.locator('#participant-headings [data-node]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.node));
+      const expected=viewport.width===1271?longModel.nodes.map(n=>n.id):viewport.width===800?['browser','app','store','notifier']:['app','store'];
+      assert.deepEqual(shown,expected,'Fill available width instead of always hiding inactive participants');
+      const omitted=await page.locator('[data-omitted]').evaluateAll(nodes=>nodes.map(n=>n.dataset.omitted));
+      assert.deepEqual(omitted,viewport.width===1271?[]:viewport.width===800?['queue worker']:['browser','queue worker','notifier']);
+      if(omitted.length)assert.match(await page.locator('[data-omitted]').filter({hasText:'…'}).first().getAttribute('aria-label'),/omitted participants/);
+      assert.deepEqual(await page.locator('[data-edge]:visible').evaluateAll(edges=>edges.map(e=>e.dataset.edge)),longModel.edges.filter(e=>shown.includes(e.from)&&shown.includes(e.to)).map(e=>e.id),'Only messages between shown participants remain visible');
       await page.waitForTimeout(250);
-      await page.screenshot({path:path.join(output,`sequence-collapse-${viewport.width}-after.png`)});
+      await page.screenshot({path:path.join(output,`sequence-density-${viewport.width}-after.png`)});
       // Both pointer and keyboard expansion restore the canonical complete diagram.
       for(const activation of ['click','keyboard']){
-        const omission=page.locator('[data-omitted]').nth(1);
-        if(activation==='click')await omission.click();else{await omission.focus();await page.keyboard.press('Enter');}
+        const omission=page.locator('[data-omitted]').first();
+        if(!omitted.length)await page.locator('#overview').click();
+        else if(activation==='click')await omission.click();else{await omission.focus();await page.keyboard.press('Enter');}
         assert.equal(await page.locator('#overview').getAttribute('aria-pressed'),'true');
         assert.equal(await page.locator('[data-node]:visible').count(),6);
         assert.equal(await page.locator('[data-edge]:visible').count(),32);
         assert.equal(await page.locator('[data-omitted]').count(),0);
         assert(await page.locator('[data-lifeline]').evaluateAll(lines=>{const m=JSON.parse(document.getElementById('diagram-data').textContent);return lines.every(line=>Number(line.getAttribute('x1'))===m.nodes.find(n=>n.id===line.dataset.lifeline).x);}));
-        if(viewport.width===390){assert((await canvasSizing()).horizontal);assert(await page.locator('.mobile-hint').isVisible());}
+        assert((await canvasSizing()).horizontal);assert(await page.locator('.mobile-hint').isVisible());
         await page.locator('#overview').click();
-        assert(await page.evaluate(visibleMessage),'Leaving Overview must restore the focused geometry');
+        assert(await page.evaluate(visibleMessage),'Leaving Overview must restore the width-aware geometry');
       }
       await page.locator('#sidebar-toggle').click();
       assert(await page.evaluate(visibleMessage),'Sidebar must retain the whole active arrow and participant boxes');
@@ -420,12 +424,32 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
       await page.locator('footer').screenshot({path:path.join(output,`footer-${viewport.width}-after.png`)});
     }
+    // Keep both surrounding messages visible when their four participants fit.
+    await page.setViewportSize({width:800,height:658});await page.goto(longUrl);
+    await page.locator('#step-track button').nth(4).click();
+    assert.deepEqual(await page.locator('[data-node]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.node)),['browser','app','queue','worker']);
+    for(const id of ['message-04','message-05','message-06']){
+      assert(await page.locator(`[data-edge="${id}"]`).isVisible(),`${id}: surrounding exchange hidden despite sufficient space`);
+      assert(await page.locator(`[data-edge="${id}"]`).evaluate(el=>{const r=el.getBoundingClientRect(),h=document.getElementById('participant-headings').getBoundingClientRect();return r.top>=h.bottom&&r.bottom<=innerHeight;}),`${id}: surrounding arrow outside the actual window`);
+    }
+    await page.screenshot({path:path.join(output,'sequence-surrounding-calls-after.png')});
+    for(const [width,count] of [[1271,6],[390,2],[800,4]]){
+      await page.setViewportSize({width,height:844});
+      await page.waitForFunction(expected=>[...document.querySelectorAll('[data-node]')].filter(n=>getComputedStyle(n).display!=='none').length===expected,count);
+      assert(await page.evaluate(visibleMessage),'Resize must preserve active arrow fit and header alignment');
+    }
+    await page.setViewportSize({width:390,height:844});await page.locator('#sidebar-toggle').click();
+    for(let i=0;i<32;i++){
+      await page.locator('#step-track button').nth(i).click();
+      assert(await page.evaluate(visibleMessage),`Mobile sidebar step ${i+1}: active arrow and readable participant names must fit`);
+    }
+    await page.locator('#sidebar-toggle').click();
     // Match the original footer baseline on the original sequence page.
     await page.setViewportSize({width:1250,height:673});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);
     await page.locator('footer').scrollIntoViewIfNeeded();
     await page.locator('footer').screenshot({path:path.join(output,'footer-after.png')});
-    console.log('Long sequence: all 32 arrows and participant headers fit desktop/mobile without horizontal scroll; ellipsis groups, full Overview restoration, sidebar, playback, modal resume and footer passed.');
+    console.log('Long sequence: all 32 arrows and headers fit wide/medium/mobile views; width-aware participants, surrounding calls, resize, ellipses, Overview, mobile sidebar, playback and modal resume passed.');
     await page.setViewportSize({width:1440,height:1000});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/index.html')).href);
     assert.equal(await page.locator('.card').count(), 6);

@@ -105,16 +105,21 @@ the document owns vertical scrolling. Narrow views pan horizontally without an
 inner vertical canvas scrollbar. Sequence headers sit outside the horizontal
 overflow container and stick below the playback controls; their width and pan
 position stay aligned with the lifelines. Auto-follow checks the active message's
-geometry in the visible window, accounting for both sticky regions. Structural
-views prioritize the destination when a transition spans more than one viewport.
+geometry in the visible window, accounting for both sticky regions. Sequence
+auto-follow includes visible previous/next arrows when the combined height fits;
+otherwise it prioritizes the active exchange. Structural views prioritize the
+destination when a transition spans more than one viewport.
 State diagrams fit the available width when event labels stay at least 10px.
-Sequence walkthroughs retain the active step participants and message endpoints,
-replacing contiguous inactive groups with selectable ellipses in source order.
-At very narrow sidebar widths, outer omission markers yield space to participant
+Sequence walkthroughs always retain the active step participants and message
+endpoints. Add participants from the previous and next chronological messages
+first, then nearby participants while readable boxes and omission markers fit.
+Show the entire sequence when it fits; only overflow groups become selectable
+ellipses, preserving source order. Recalculate on step changes, window resize and
+sidebar toggles. At very narrow sidebar widths, outer omission markers yield space to participant
 names; internal omission markers remain. Only arrows whose endpoints are shown
 remain visible; message numbers and chronological vertical positions are
-preserved. Headers and arrows adapt to the
-canvas width without horizontal panning. Overview restores the canonical full
+preserved. Headers and arrows adapt to the canvas width without horizontal
+panning. Overview restores the canonical full
 layout and every message, with a visible horizontal-pan hint when needed.
 
 Scenario selection uses a themed button/listbox below the trigger, with keyboard

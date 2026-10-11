@@ -60,16 +60,21 @@ Those are different subjects. Do not silently substitute one for the other.
    height follows its content, with horizontal panning only where needed. Keep
    playback controls sticky. Place sequence participant labels outside the
    horizontal overflow container, sticky below controls, and synchronize their
-   width and horizontal pan with the lifelines. Sequence walkthroughs show active
-   participants and message endpoints, replacing contiguous inactive groups with
-   selectable `…` in source order. Only show arrows whose endpoints are visible;
-   retain original message numbers and chronological vertical positions. Fit the
+   width and horizontal pan with the lifelines. Sequence walkthroughs show as many
+   participants as fit. Always keep the active message endpoints; prioritize
+   participants from the previous and next chronological messages, then add nearby
+   participants with the remaining space. Show all participants if they fit, and
+   replace only overflow groups with selectable `…` in source order. Recalculate
+   on step changes, resize and sidebar toggles. Only show arrows whose endpoints
+   are visible; retain original message numbers and chronological vertical
+   positions. Fit the
    whole active arrow and its participant boxes without horizontal scrolling;
    wrap concise labels and retain at least 10px text. At very narrow sidebar widths,
    let outer omission markers yield room to names; keep internal markers. Overview
    restores every participant and message at canonical positions, with a pan hint
    when needed. Follow the active message through page scrolling, keeping it below
-   both sticky regions. Nested view Back restores
+   both sticky regions; include visible previous/next arrows when their combined
+   height fits the window. Nested view Back restores
    the parent document scroll and horizontal pan.
 5. Open the actual file in a browser when available. Inspect desktop and narrow
    widths, label collisions, clipping, edge routing, relationship direction and
@@ -80,7 +85,9 @@ Those are different subjects. Do not silently substitute one for the other.
    container. Check every type has no inner vertical canvas overflow, including
    with the sidebar. For a long sequence, traverse every step at desktop and phone
    widths: check whole arrow endpoints and participant headers fit without
-   horizontal overflow, omission names/order, and pointer/keyboard expansion.
+   horizontal overflow, enough participants shown for the available space,
+   previous/next messages when their endpoints fit, omission names/order, and
+   pointer/keyboard expansion. Resize the same step to check expansion/collapse.
    Check Overview restores every participant/message and header/lifeline
    alignment after horizontal panning. Verify it loads offline, has no
    console errors, and respects reduced motion. Fix the artifact when a check
