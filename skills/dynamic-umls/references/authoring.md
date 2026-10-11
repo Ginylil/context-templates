@@ -60,9 +60,16 @@ Those are different subjects. Do not silently substitute one for the other.
    height follows its content, with horizontal panning only where needed. Keep
    playback controls sticky. Place sequence participant labels outside the
    horizontal overflow container, sticky below controls, and synchronize their
-   width and horizontal pan with the lifelines. Sequence labels retain at least
-   10px text; use horizontal panning when more participants require width. Follow the active message through
-   page scrolling, keeping it below both sticky regions. Nested view Back restores
+   width and horizontal pan with the lifelines. Sequence walkthroughs show active
+   participants and message endpoints, replacing contiguous inactive groups with
+   selectable `…` in source order. Only show arrows whose endpoints are visible;
+   retain original message numbers and chronological vertical positions. Fit the
+   whole active arrow and its participant boxes without horizontal scrolling;
+   wrap concise labels and retain at least 10px text. At very narrow sidebar widths,
+   let outer omission markers yield room to names; keep internal markers. Overview
+   restores every participant and message at canonical positions, with a pan hint
+   when needed. Follow the active message through page scrolling, keeping it below
+   both sticky regions. Nested view Back restores
    the parent document scroll and horizontal pan.
 5. Open the actual file in a browser when available. Inspect desktop and narrow
    widths, label collisions, clipping, edge routing, relationship direction and
@@ -71,7 +78,11 @@ Those are different subjects. Do not silently substitute one for the other.
    preservation and optional sidebar. Check the active message is inside the
    actual browser viewport in a short window, not merely inside the canvas
    container. Check every type has no inner vertical canvas overflow, including
-   with the sidebar. Check participant/lifeline alignment after horizontal panning. Verify it loads offline, has no
+   with the sidebar. For a long sequence, traverse every step at desktop and phone
+   widths: check whole arrow endpoints and participant headers fit without
+   horizontal overflow, omission names/order, and pointer/keyboard expansion.
+   Check Overview restores every participant/message and header/lifeline
+   alignment after horizontal panning. Verify it loads offline, has no
    console errors, and respects reduced motion. Fix the artifact when a check
    fails; metadata validation alone is not rendered proof. Do not install a
    dependency or start a server merely to deliver the page. If browser tools are

@@ -27,8 +27,11 @@ scenarios and Ginylil branding linked to [contexttemplates.com](https://contextt
 Details open from the info icon in a modal: playback pauses while you read and
 resumes on close only if it was playing. The optional Sidebar trades canvas width
 for persistent details. All six types use the page for vertical scrolling, with
-horizontal panning when needed. Playback follows the active message or state,
-with sticky controls and sequence participant labels.
+horizontal panning when needed. Sequence walkthroughs fit the active participants
+to the available width, replacing inactive groups with `…`. Select the dots or
+Overview to see all participants and messages; the full view can pan horizontally.
+Playback follows the active message or state, with sticky controls and sequence
+participant labels.
 Scenario menus open below the trigger in the page theme. Flowcharts read
 vertically, keep retries on outer side rails, and compose larger processes as
 clickable subprocesses, with a maximum of seven nodes per view. A bundled Python

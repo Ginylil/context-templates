@@ -137,9 +137,11 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       assert.equal(await page.locator('.node').first().evaluate(el => getComputedStyle(el).transitionDuration), '0s');
       await page.locator('#next').click();
       assert.match(await page.locator('#counter').textContent(), /^03/);
-      await page.locator('[data-node]').first().focus();
+      const mobileNode=page.locator('[data-node]:visible').first();
+      const mobileNodeId=await mobileNode.getAttribute('data-node');
+      await mobileNode.focus();
       await page.keyboard.press('Space');
-      assert.equal(await page.locator('#inspect-title').textContent(), model.nodes[0].label);
+      assert.equal(await page.locator('#inspect-title').textContent(),model.nodes.find(n=>n.id===mobileNodeId).label);
       assert.equal(await page.locator('#details-modal').isVisible(),true);
       const modalBox=await page.locator('#details-modal').boundingBox();
       assert(modalBox.x>=0&&modalBox.y>=0&&modalBox.x+modalBox.width<=390&&modalBox.y+modalBox.height<=844);
@@ -334,6 +336,8 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     await page.locator('#step-track button').nth(4).click();
     assert(await page.evaluate(()=>{const e=document.querySelector('.edge.active').getBoundingClientRect(),f=document.getElementById('canvas-scroll').getBoundingClientRect(),h=document.querySelector('#participant-headings svg').getBoundingClientRect();return e.top>=h.bottom && e.bottom<=Math.min(innerHeight,f.bottom);}), 'Mobile message must be vertically visible');
     await page.screenshot({path:path.join(output,'sequence-mobile-after.png')});
+    assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:false,top:0});
+    await page.locator('#overview').click();
     await page.locator('#canvas-scroll').evaluate(el=>el.scrollLeft=90);
     await page.waitForTimeout(100);
     const aligned=await page.locator('#participant-headings [data-node]').evaluateAll(nodes=>nodes.every(node=>{
@@ -347,28 +351,53 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     // Long-sequence review: traverse every message on a multi-screen, six-participant page.
     const longUrl=pathToFileURL(path.join(root,'examples/dynamic-umls/sequence-long.html')).href;
     const visibleMessage=()=>{
-      const edge=document.querySelector('.edge.active'),text=edge.querySelector('text').getBoundingClientRect();
+      const edge=document.querySelector('.edge.active'),text=edge.getBoundingClientRect();
       const heads=document.querySelector('#participant-headings').getBoundingClientRect();
       const frame=document.getElementById('canvas-scroll'),bounds=frame.getBoundingClientRect();
       const font=edge.querySelector('text'),matrix=font.getScreenCTM();
       return text.top>=heads.bottom&&text.bottom<=innerHeight-1&&text.left>=bounds.left&&text.right<=bounds.right
         && heads.top>=document.querySelector('.toolbar').getBoundingClientRect().bottom-1
-        && frame.scrollTop===0&&frame.scrollHeight<=frame.clientHeight+1
+        && frame.scrollTop===0&&frame.scrollHeight<=frame.clientHeight+1&&frame.scrollWidth<=frame.clientWidth+1
+        && [...document.querySelectorAll('#participant-headings [data-node]')].filter(n=>getComputedStyle(n).display!=='none').every(n=>{const r=n.getBoundingClientRect(),box=n.querySelector('.shape').getBBox();return r.left>=bounds.left&&r.right<=bounds.right&&[...n.querySelectorAll('text')].filter(t=>getComputedStyle(t).display!=='none').every(t=>{const b=t.getBBox();return b.x>=box.x-1&&b.x+b.width<=box.x+box.width+1&&b.y>=box.y-1&&b.y+b.height<=box.y+box.height+1;});})
         && parseFloat(getComputedStyle(font).fontSize)*Math.hypot(matrix.a,matrix.b)>=10-0.01;
     };
-    for(const viewport of [{width:1440,height:760},{width:390,height:844}]){
+    for(const viewport of [{width:1271,height:658},{width:390,height:844}]){
       await page.setViewportSize(viewport);await page.goto(longUrl);
       const longModel=JSON.parse(await page.locator('#diagram-data').textContent());
       assert.equal(longModel.edges.length,32);assert.equal(longModel.nodes.length,6);
       await page.locator('#reset').click();
       for(let i=0;i<32;i++){
         if(i)await page.locator('#next').click();
-        assert(await page.evaluate(visibleMessage),`Long sequence step ${i+1}: active message text must remain readable below headers at ${viewport.width}px`);
+        assert(await page.evaluate(visibleMessage),`Long sequence step ${i+1}: active arrow, endpoints and headers must fit without horizontal scrolling at ${viewport.width}px`);
         if([0,15,31].includes(i)){
           await page.waitForTimeout(250);
           await page.screenshot({path:path.join(output,`sequence-long-${viewport.width}-step-${i+1}.png`)});
         }
       }
+      await page.locator('#step-track button').nth(27).click();
+      assert.deepEqual(await page.locator('#participant-headings [data-node]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.node)),['app','store']);
+      assert.deepEqual(await page.locator('[data-omitted]').evaluateAll(nodes=>nodes.map(n=>n.dataset.omitted)),['browser','queue worker','notifier']);
+      assert.match(await page.locator('[data-omitted]').nth(1).getAttribute('aria-label'),/Job queue, Worker/);
+      assert.deepEqual(await page.locator('[data-edge]:visible').evaluateAll(edges=>edges.map(e=>e.dataset.edge)),longModel.edges.filter(e=>['app','store'].includes(e.from)&&['app','store'].includes(e.to)).map(e=>e.id),'Only messages between shown participants remain visible');
+      await page.waitForTimeout(250);
+      await page.screenshot({path:path.join(output,`sequence-collapse-${viewport.width}-after.png`)});
+      // Both pointer and keyboard expansion restore the canonical complete diagram.
+      for(const activation of ['click','keyboard']){
+        const omission=page.locator('[data-omitted]').nth(1);
+        if(activation==='click')await omission.click();else{await omission.focus();await page.keyboard.press('Enter');}
+        assert.equal(await page.locator('#overview').getAttribute('aria-pressed'),'true');
+        assert.equal(await page.locator('[data-node]:visible').count(),6);
+        assert.equal(await page.locator('[data-edge]:visible').count(),32);
+        assert.equal(await page.locator('[data-omitted]').count(),0);
+        assert(await page.locator('[data-lifeline]').evaluateAll(lines=>{const m=JSON.parse(document.getElementById('diagram-data').textContent);return lines.every(line=>Number(line.getAttribute('x1'))===m.nodes.find(n=>n.id===line.dataset.lifeline).x);}));
+        if(viewport.width===390){assert((await canvasSizing()).horizontal);assert(await page.locator('.mobile-hint').isVisible());}
+        await page.locator('#overview').click();
+        assert(await page.evaluate(visibleMessage),'Leaving Overview must restore the focused geometry');
+      }
+      await page.locator('#sidebar-toggle').click();
+      assert(await page.evaluate(visibleMessage),'Sidebar must retain the whole active arrow and participant boxes');
+      await page.locator('#sidebar-toggle').click();
+      await page.locator('#step-track button').nth(31).click();
       assert(await page.evaluate(()=>scrollY>innerHeight*2),'Long sequence should exercise several screens of document scrolling');
       const finalY=await page.evaluate(()=>scrollY);
       await page.locator('#reset').click();assert(await page.evaluate(()=>scrollY)<finalY,'Reset must return to the beginning');
@@ -396,7 +425,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);
     await page.locator('footer').scrollIntoViewIfNeeded();
     await page.locator('footer').screenshot({path:path.join(output,'footer-after.png')});
-    console.log('Long sequence: all 32 messages readable on desktop/mobile; multi-screen follow, reset, jumps, modal resume, final playback and footer logo verified.');
+    console.log('Long sequence: all 32 arrows and participant headers fit desktop/mobile without horizontal scroll; ellipsis groups, full Overview restoration, sidebar, playback, modal resume and footer passed.');
     await page.setViewportSize({width:1440,height:1000});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/index.html')).href);
     assert.equal(await page.locator('.card').count(), 6);
