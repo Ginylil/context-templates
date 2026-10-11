@@ -64,7 +64,8 @@ proof stages. There is no staging environment for this repository.
 ## Dynamic UMLs
 
 The router skill owns the shared HTML renderer, standard-library generator,
-authoring guide, supplied Ginylil PNG, flowchart verifier and six example JSON models. `scripts/dynamic_umls.py` deterministically
+authoring guide, supplied Ginylil PNG, flowchart verifier, six diagram-type examples
+and an additional long sequence model (32 messages, six participants). `scripts/dynamic_umls.py` deterministically
 copies these resources into the focused skill folders and generates standalone
 review pages plus a local gallery. No hosted website or publishing flow is added.
 
@@ -106,7 +107,8 @@ overflow container and stick below the playback controls; their width and pan
 position stay aligned with the lifelines. Auto-follow checks the active message's
 geometry in the visible window, accounting for both sticky regions. Structural
 views prioritize the destination when a transition spans more than one viewport.
-State diagrams fit the available width when event labels stay at least 10px.
+State and sequence diagrams fit the available width when event labels stay at
+least 10px; sequence views with more participants pan instead of shrinking text.
 
 Scenario selection uses a themed button/listbox below the trigger, with keyboard
 navigation, committed selection, typeahead and dismissal. Subprocess inspection
@@ -114,4 +116,6 @@ offers Explore subprocess; changing views pauses playback. Back restores parent
 scenario, step, overview, scroll and originating node focus. The supplied logo
 is embedded unchanged as a PNG data URL, including in the local gallery. The
 transparent mark is 40px (32px on narrow diagram pages), with 80% opacity and no
-backing tile. Back also restores the parent document scroll position for nested views.
+backing tile. Every diagram footer repeats the same embedded logo as a 32px
+mark beside the domain link. Back also restores the parent document scroll
+position for nested views.

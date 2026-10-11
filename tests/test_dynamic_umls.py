@@ -53,6 +53,20 @@ class DynamicUmlTests(unittest.TestCase):
                     self.assertNotIn('<script src=', page)
                     self.assertNotIn('<link ', page)
 
+    def test_long_sequence_renders_from_isolated_installed_copies(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            home = Path(temporary) / 'home'
+            for agent in installer.TARGETS:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    installer.install(ROOT, home, [agent], ['dynamic-sequence-diagram'], False)
+                folder = home / installer.TARGETS[agent] / 'dynamic-sequence-diagram'
+                output = Path(temporary) / f'{agent}-long.html'
+                result = subprocess.run([sys.executable, str(folder / 'scripts/render.py'),
+                    str(folder / 'assets/long-example.json'), '--expect', 'sequence', '--output', str(output)],
+                    capture_output=True, text=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertEqual(output.read_bytes(), (ROOT / 'examples/dynamic-umls/sequence-long.html').read_bytes())
+
     def test_renderer_preserves_existing_output(self):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / 'keep.html'

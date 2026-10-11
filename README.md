@@ -35,14 +35,14 @@ clickable subprocesses, with a maximum of seven nodes per view. A bundled Python
 verifier checks these rules before rendering. State diagrams share the node limit
 and routing checks, allow horizontal layouts and expandable state detail views,
 and place transition causes directly on their arrows. Pages use the supplied Ginylil
-coffee-and-sun logo as a small, subdued transparent mark. State diagrams fit the
-available width when readable. Diagram canvases have no inner vertical scrollbar.
+coffee-and-sun logo as a small, subdued transparent mark in both header and footer.
+State diagrams fit the available width when readable. Diagram canvases have no inner vertical scrollbar.
 Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | Example to download and open locally |
 | --- | --- |
-| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Six-example gallery](examples/dynamic-umls/index.html) |
-| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](examples/dynamic-umls/sequence.html) |
+| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Example gallery](examples/dynamic-umls/index.html) |
+| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](examples/dynamic-umls/sequence-long.html) |
 | [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](examples/dynamic-umls/class.html) |
 | [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](examples/dynamic-umls/flowchart.html) |
 | [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](examples/dynamic-umls/state.html) |

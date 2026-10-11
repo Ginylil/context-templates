@@ -19,7 +19,8 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
 - Titles use system Georgia/serif; UI uses system sans; labels/code use system
   monospace. No font download, CDN, icon library, telemetry or network dependency.
 - Use the supplied Ginylil coffee-and-sun logo, linked to
-  `https://contexttemplates.com`. Keep a visible footer destination as well.
+  `https://contexttemplates.com` in both masthead and footer. The footer uses a
+  32px transparent mark at the same 80% opacity beside the visible destination.
 - Scenario menus belong to the page theme and open below their trigger on desktop
   and mobile. Support keyboard selection, typeahead, Escape/Tab dismissal and
   outside click; preserve focus and distinguish selection from keyboard focus.
@@ -57,8 +58,9 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
   Follow active messages through document scrolling, accounting for sticky
   controls and participant headers. Keep the sequence header strip outside the
   horizontal overflow container, sticky below playback controls; synchronize its
-  horizontal position and width with the lifelines. Numeric step targets become
-  40px. Layouts use explicit coordinates, concise
+  horizontal position and width with the lifelines. Sequence labels retain at
+  least 10px text when more participants require horizontal panning. Numeric step
+  targets become 40px. Layouts use explicit coordinates, concise
   labels and routing bends; never accept clipping/overlap as an automatic layout.
 - The educational UML subset must be stated; diamonds, triangles, direction,
   returns and parallel branches must retain their documented meaning.
@@ -70,7 +72,8 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
 
 `skills/dynamic-umls/` owns `assets/template.html`, `assets/ginylil.png`,
 `scripts/render.py`, `scripts/validate_flowchart.py`, `scripts/validate_state.py`,
-`references/authoring.md` and `assets/examples/<type>.json`. The six focused skills
+`references/authoring.md`, `assets/examples/<type>.json` and the additional
+`assets/examples/sequence-long.json`. The six focused skills
 have generated copies of the shared resources plus their own `assets/example.json`
 so every downloadable skill works alone. Edit shared resources at the router,
 then run `python scripts/dynamic_umls.py`. Do not hand-edit generated copies or
@@ -85,7 +88,7 @@ module resolution with `DYNAMIC_UMLS_PLAYWRIGHT` and browser executable with
 `DYNAMIC_UMLS_CHROME` if needed. Screenshots go to ignored
 `dist/dynamic-umls-proof/` or `DYNAMIC_UMLS_PROOF`.
 
-The browser check loads all six through `file://` offline, tests navigation,
+The browser check loads all seven examples through `file://` offline, tests navigation,
 scenarios, inspector, keyboard focus, playback to end, restart, reduced motion,
 mobile page overflow and node text bounds, modal pause/resume and optional
 sidebar width, and captures desktop/mobile proof. Regression proof at 1440×760
@@ -105,6 +108,10 @@ matched state before/after captures use 1440×960. Short-window state checks at
 1250×673 verify width fit, the absence of inner vertical scrolling, page auto-follow,
 quiet transparent branding and horizontal-only panning on mobile. Matched
 before/after captures use 1440×960 for the flowchart; route inspection also uses a narrower, taller viewport.
+The long-sequence regression traverses all 32 messages across six participants
+at 1440×760 and 390×844, checks readable active text below sticky headers,
+multi-screen page movement, reset/jump, pause/resume and final-step playback.
+It also checks the repeated embedded logo and captures matched footer proof.
 Human inspection still checks routing and visual hierarchy. The initial reference
 was rendered separately before implementation; only sequence shares that reference
 subject. Other types have no prior shipped visual baseline. This repository has no

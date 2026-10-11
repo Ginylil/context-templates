@@ -26,7 +26,9 @@ Those are different subjects. Do not silently substitute one for the other.
 1. Locate this skill's own folder (resolve installed links where present). Read
    `assets/example.json` for a focused skill, or `assets/examples/<type>.json` for
    the router, and this guide. Use the installed resources rather than hard-coded
-   machine paths or another skill being installed.
+   machine paths or another skill being installed. For a longer sequence or more
+   participants, inspect `assets/long-example.json` in the focused sequence skill
+   or `assets/examples/sequence-long.json` in the router.
 2. Build a UTF-8 JSON model in the user's workspace. Keep the example's visual
    style; replace the model with investigated content. For small diagrams use
    roughly 3–8 nodes. Flowcharts allow **at most seven nodes per view**: extract
@@ -47,7 +49,7 @@ Those are different subjects. Do not silently substitute one for the other.
    It opens through `file://`; no server, build system, CDN, network fetch, fonts,
    tracking or secret is needed. Branding must retain the supplied coffee-and-sun
    Ginylil PNG, embedded as a data URL with its transparent background, a small
-   subdued mark without a backing tile, and a visible link to **https://contexttemplates.com**. User-controlled model text
+   subdued mark without a backing tile in the masthead and footer, and a visible link to **https://contexttemplates.com**. User-controlled model text
    must remain data (`textContent`); never interpolate it as executable HTML/JS.
    Keep the diagram full-width and details hidden by default. An info icon opens
    step details in a modal, pauses playback and remembers whether it was playing
@@ -58,7 +60,8 @@ Those are different subjects. Do not silently substitute one for the other.
    height follows its content, with horizontal panning only where needed. Keep
    playback controls sticky. Place sequence participant labels outside the
    horizontal overflow container, sticky below controls, and synchronize their
-   width and horizontal pan with the lifelines. Follow the active message through
+   width and horizontal pan with the lifelines. Sequence labels retain at least
+   10px text; use horizontal panning when more participants require width. Follow the active message through
    page scrolling, keeping it below both sticky regions. Nested view Back restores
    the parent document scroll and horizontal pan.
 5. Open the actual file in a browser when available. Inspect desktop and narrow

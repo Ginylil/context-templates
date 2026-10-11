@@ -26,6 +26,9 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       assert.equal(await page.title(), model.title);
       assert(await page.locator('#canvas-scroll').evaluate(el=>el.scrollHeight<=el.clientHeight+1&&el.scrollTop===0),`${kind}: diagram must use document vertical scrolling`);
       assert.equal(await page.locator('.brand').getAttribute('href'), 'https://contexttemplates.com');
+      assert.equal(await page.locator('footer a').getAttribute('href'),'https://contexttemplates.com');
+      assert.equal(await page.locator('footer .brand-logo').getAttribute('src'),await page.locator('header .brand-logo').getAttribute('src'));
+      assert.equal(await page.locator('footer .brand-logo').evaluate(el=>el.complete&&el.naturalWidth>0),true);
       assert.equal(await page.locator('#counter').textContent(), `01 / ${String(model.scenarios[0].steps.length).padStart(2,'0')}`);
       await page.locator('#next').click();
       assert.match(await page.locator('#counter').textContent(), /^02/);
@@ -155,7 +158,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       vertical:el.scrollHeight>el.clientHeight+1,horizontal:el.scrollWidth>el.clientWidth+1,top:el.scrollTop
     }));
     assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:false,top:0});
-    const branding=await page.locator('.brand-logo').evaluate(el=>({
+    const branding=await page.locator('header .brand-logo').evaluate(el=>({
       width:el.getBoundingClientRect().width,background:getComputedStyle(el).backgroundColor,opacity:Number(getComputedStyle(el).opacity)
     }));
     assert.equal(branding.width,40);assert.equal(branding.background,'rgba(0, 0, 0, 0)');assert(branding.opacity<1);
@@ -341,12 +344,66 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     assert(aligned,'Participant headers must remain aligned after horizontal panning');
     assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:true,top:0});
     console.log('Short-window regression: manual and playing step 5 visible; Escape resumes prior playback; headers retained.');
+    // Long-sequence review: traverse every message on a multi-screen, six-participant page.
+    const longUrl=pathToFileURL(path.join(root,'examples/dynamic-umls/sequence-long.html')).href;
+    const visibleMessage=()=>{
+      const edge=document.querySelector('.edge.active'),text=edge.querySelector('text').getBoundingClientRect();
+      const heads=document.querySelector('#participant-headings').getBoundingClientRect();
+      const frame=document.getElementById('canvas-scroll'),bounds=frame.getBoundingClientRect();
+      const font=edge.querySelector('text'),matrix=font.getScreenCTM();
+      return text.top>=heads.bottom&&text.bottom<=innerHeight-1&&text.left>=bounds.left&&text.right<=bounds.right
+        && heads.top>=document.querySelector('.toolbar').getBoundingClientRect().bottom-1
+        && frame.scrollTop===0&&frame.scrollHeight<=frame.clientHeight+1
+        && parseFloat(getComputedStyle(font).fontSize)*Math.hypot(matrix.a,matrix.b)>=10-0.01;
+    };
+    for(const viewport of [{width:1440,height:760},{width:390,height:844}]){
+      await page.setViewportSize(viewport);await page.goto(longUrl);
+      const longModel=JSON.parse(await page.locator('#diagram-data').textContent());
+      assert.equal(longModel.edges.length,32);assert.equal(longModel.nodes.length,6);
+      await page.locator('#reset').click();
+      for(let i=0;i<32;i++){
+        if(i)await page.locator('#next').click();
+        assert(await page.evaluate(visibleMessage),`Long sequence step ${i+1}: active message text must remain readable below headers at ${viewport.width}px`);
+        if([0,15,31].includes(i)){
+          await page.waitForTimeout(250);
+          await page.screenshot({path:path.join(output,`sequence-long-${viewport.width}-step-${i+1}.png`)});
+        }
+      }
+      assert(await page.evaluate(()=>scrollY>innerHeight*2),'Long sequence should exercise several screens of document scrolling');
+      const finalY=await page.evaluate(()=>scrollY);
+      await page.locator('#reset').click();assert(await page.evaluate(()=>scrollY)<finalY,'Reset must return to the beginning');
+      await page.locator('#step-track button').nth(15).click();
+      assert(await page.evaluate(visibleMessage),'Jumping to a middle step must restore its viewport');
+      await page.evaluate(()=>{document.getElementById('pace').value='1';document.getElementById('pace').dispatchEvent(new Event('input'));});
+      await page.locator('#play').click();await page.locator('#info').click();
+      const heldLong=await page.locator('#counter').textContent();await page.waitForTimeout(1150);
+      assert.equal(await page.locator('#counter').textContent(),heldLong);
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(previous=>document.getElementById('counter').textContent!==previous,heldLong,{timeout:2000});
+      assert(await page.evaluate(visibleMessage),'Long sequence playback must follow after closing details');
+      await page.locator('#play').click();
+      await page.locator('#step-track button').nth(30).click();await page.locator('#play').click();
+      await page.waitForFunction(()=>document.getElementById('play').textContent==='Play ▷',null,{timeout:2000});
+      assert(await page.evaluate(visibleMessage),'Final long-sequence playback message must be visible');
+      await page.locator('footer').scrollIntoViewIfNeeded();
+      const footerLogo=await page.locator('footer .brand-logo').evaluate(el=>({width:el.width,background:getComputedStyle(el).backgroundColor,opacity:getComputedStyle(el).opacity}));
+      assert.equal(footerLogo.width,32);assert.equal(footerLogo.background,'rgba(0, 0, 0, 0)');assert.equal(footerLogo.opacity,'0.8');
+      assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true);
+      await page.locator('footer').screenshot({path:path.join(output,`footer-${viewport.width}-after.png`)});
+    }
+    // Match the original footer baseline on the original sequence page.
+    await page.setViewportSize({width:1250,height:673});
+    await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);
+    await page.locator('footer').scrollIntoViewIfNeeded();
+    await page.locator('footer').screenshot({path:path.join(output,'footer-after.png')});
+    console.log('Long sequence: all 32 messages readable on desktop/mobile; multi-screen follow, reset, jumps, modal resume, final playback and footer logo verified.');
     await page.setViewportSize({width:1440,height:1000});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/index.html')).href);
     assert.equal(await page.locator('.card').count(), 6);
+    assert.equal(await page.locator('a[href="sequence-long.html"]').count(),1);
     await page.screenshot({path:path.join(output,'gallery.png'),fullPage:true});
     assert.deepEqual(errors, [], 'Browser console or page errors');
     assert.deepEqual(network, [], 'Unexpected network requests');
-    console.log(`Six examples verified without network requests. Proof: ${output}`);
+    console.log(`Seven examples verified without network requests. Proof: ${output}`);
   } finally {await browser.close();}
 })().catch(error => {console.error(error);process.exitCode=1;});

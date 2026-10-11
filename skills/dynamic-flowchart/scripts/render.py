@@ -180,8 +180,8 @@ def render(model, template=None, expected=None):
     validate(model, expected)
     template = template or Path(__file__).resolve().parents[1] / 'assets/template.html'
     page = template.read_text(encoding='utf-8')
-    require(all(page.count(key) == 1 for key in ('__DIAGRAM_DATA__', '__PAGE_TITLE__', '__GINYLIL_LOGO__')),
-            'template: expected exactly one title, model and logo placeholder')
+    require(all(page.count(key) == 1 for key in ('__DIAGRAM_DATA__', '__PAGE_TITLE__')) and page.count('__GINYLIL_LOGO__') >= 1,
+            'template: expected one title and model placeholder, and at least one logo placeholder')
     # Treat all model text as data. Escape HTML parser delimiters even in a JSON
     # script block. The renderer uses textContent, never model-controlled innerHTML.
     data = json.dumps(model, ensure_ascii=True, separators=(',', ':'), allow_nan=False)
