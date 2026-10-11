@@ -144,6 +144,40 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       await page.emulateMedia({reducedMotion:'no-preference'});
       console.log(`${kind}: offline playback, navigation, scenarios, inspector, keyboard, desktop/mobile, reduced motion passed`);
     }
+    // Match the owner's short, wide window: state diagrams must not need two canvas scroll axes.
+    await page.setViewportSize({width:1250,height:673});
+    await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/state.html')).href);
+    const canvasSizing=()=>page.locator('#canvas-scroll').evaluate(el=>({
+      vertical:el.scrollHeight>el.clientHeight+1,horizontal:el.scrollWidth>el.clientWidth+1,top:el.scrollTop
+    }));
+    assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:false,top:0});
+    const branding=await page.locator('.brand-logo').evaluate(el=>({
+      width:el.getBoundingClientRect().width,background:getComputedStyle(el).backgroundColor,opacity:Number(getComputedStyle(el).opacity)
+    }));
+    assert.equal(branding.width,40);assert.equal(branding.background,'rgba(0, 0, 0, 0)');assert(branding.opacity<1);
+    await page.screenshot({path:path.join(output,'state-scroll-after.png')});
+    await page.screenshot({path:path.join(output,'state-page-scroll-after.png'),fullPage:true});
+    const destinationVisible=()=>page.locator('.node.active').last().evaluate(el=>{
+      const b=el.getBoundingClientRect(),frame=document.getElementById('canvas-scroll').getBoundingClientRect();
+      const toolbar=document.querySelector('.toolbar').getBoundingClientRect();
+      return b.top>=toolbar.bottom&&b.bottom<=innerHeight&&b.left>=frame.left&&b.right<=frame.right;
+    });
+    await page.locator('#scenario').click();await page.locator('#scenario-menu [role=option]').nth(1).click();
+    await page.locator('#next').click();
+    assert(await destinationVisible(),'Cancellation destination must be visible below sticky controls');
+    assert(await page.evaluate(()=>scrollY>0),'State playback follows the page vertically');
+    assert.equal((await canvasSizing()).vertical,false);
+    await page.locator('#sidebar-toggle').click();
+    assert.equal((await canvasSizing()).vertical,false,'Sidebar must not introduce a second canvas scroll axis');
+    await page.locator('#sidebar-toggle').click();
+    await page.setViewportSize({width:390,height:844});
+    await page.locator('#reset').click();
+    assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:true,top:0});
+    await page.locator('#next').click();
+    assert(await destinationVisible(),'Narrow state view must pan to the transition destination');
+    assert.equal((await canvasSizing()).vertical,false);
+    await page.setViewportSize({width:1440,height:1000});
+    console.log('State viewport: no inner vertical scroll, desktop width fits, mobile horizontal panning and page auto-follow passed.');
     // A transition label must sit on a real arrow segment, with room for its text.
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/state.html')).href);
     await page.locator('#overview').click();
@@ -185,6 +219,8 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     const fixture=path.join(output,'state-detail-fixture.html');
     await fs.writeFile(fixture,statePage.replace(/(<script id="diagram-data" type="application\/json">).*?(<\/script>)/s,(_,a,b)=>a+JSON.stringify(rootState)+b));
     await page.goto(pathToFileURL(fixture).href);
+    await page.evaluate(()=>window.scrollTo(0,80));
+    const parentPageScroll=await page.evaluate(()=>scrollY);
     await page.locator('[data-node=draft]').focus();await page.keyboard.press('Enter');
     assert.equal(await page.locator('#open-subflow').textContent(),'Explore state detail ↓');
     await page.locator('#open-subflow').click();
@@ -195,6 +231,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     await page.locator('#flow-back').click();
     assert.equal(await page.locator('#title').textContent(),rootState.title);
     assert.equal(await page.locator('[data-node=draft]').evaluate(el=>el===document.activeElement),true);
+    assert.equal(await page.evaluate(()=>scrollY),parentPageScroll,'Back must restore the parent page scroll');
     // Composition: drill into a bounded child, then recover the parent's scenario/step.
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/flowchart.html')).href);
     await page.locator('#scenario').click();await page.locator('#scenario-menu [role=option]').nth(1).click();

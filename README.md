@@ -33,7 +33,9 @@ clickable subprocesses, with a maximum of seven nodes per view. A bundled Python
 verifier checks these rules before rendering. State diagrams share the node limit
 and routing checks, allow horizontal layouts and expandable state detail views,
 and place transition causes directly on their arrows. Pages use the supplied Ginylil
-coffee-and-sun logo.
+coffee-and-sun logo as a small, subdued transparent mark. State diagrams fit the
+available width when readable and use page scrolling vertically; narrow screens
+keep horizontal panning without an inner vertical scrollbar.
 Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | Example to download and open locally |

@@ -5,7 +5,8 @@ one HTML file; the example gallery is a local review index. The user's supplied
 sequence page informed the dark canvas, warm accent and light explanatory notes.
 The renderer is repo-owned. The Ginylil coffee-and-sun logo is the PNG supplied
 by the owner, stored at `assets/ginylil.png` in the canonical skill and embedded
-unchanged as a data URL. A paper backing keeps its dark artwork readable.
+unchanged as a data URL. Its transparent background remains visible; use a quiet
+40px mark (32px on narrow screens), 80% opacity and no bright backing tile.
 
 ## Visual and interaction rules
 
@@ -33,7 +34,11 @@ unchanged as a data URL. A paper backing keeps its dark artwork readable.
   node area along the chosen axis. Transition causes sit directly on a chosen
   straight arrow segment, with a canvas-colored backing and space for arrowheads;
   reject floating state labels. Keep state text at its logical size on mobile
-  rather than shrinking the entire diagram. The Python verifier uses conservative
+  rather than shrinking the entire diagram. State diagrams fit the available
+  width while event text stays at least 10px; otherwise allow horizontal panning.
+  Let the document own vertical scrolling, with no inner vertical state scrollport.
+  Follow the active destination when a transition spans more than one viewport.
+  The Python verifier uses conservative
   bounding boxes and label estimates; browser inspection checks actual text.
   See the authoring guide for the numeric geometry policy.
 - Play is opt-in. Previous/next, reset, speed, overview, scenario selection and
@@ -88,8 +93,10 @@ with a named title, close control, keyboard dismissal and focus restoration.
 The scenario menu keyboard/below-trigger checks and subprocess drill-down/return
 checks supplement these regressions. State label checks compare label centers
 against the actual SVG connector path and verify readable mobile sizing;
-matched state before/after captures use 1440×960. Matched before/after captures use 1440×960
-for the flowchart; route inspection also uses a narrower, taller viewport.
+matched state before/after captures use 1440×960. Short-window state checks at
+1250×673 verify width fit, the absence of inner vertical scrolling, page auto-follow,
+quiet transparent branding and horizontal-only panning on mobile. Matched
+before/after captures use 1440×960 for the flowchart; route inspection also uses a narrower, taller viewport.
 Human inspection still checks routing and visual hierarchy. The initial reference
 was rendered separately before implementation; only sequence shares that reference
 subject. Other types have no prior shipped visual baseline. This repository has no

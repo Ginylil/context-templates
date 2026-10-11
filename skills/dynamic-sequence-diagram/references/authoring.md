@@ -46,7 +46,8 @@ Those are different subjects. Do not silently substitute one for the other.
 4. Deliver one standalone `.html` with embedded CSS, JavaScript, SVG and model.
    It opens through `file://`; no server, build system, CDN, network fetch, fonts,
    tracking or secret is needed. Branding must retain the supplied coffee-and-sun
-   Ginylil PNG, embedded as a data URL, and a visible link to **https://contexttemplates.com**. User-controlled model text
+   Ginylil PNG, embedded as a data URL with its transparent background, a small
+   subdued mark without a backing tile, and a visible link to **https://contexttemplates.com**. User-controlled model text
    must remain data (`textContent`); never interpolate it as executable HTML/JS.
    Keep the diagram full-width and details hidden by default. An info icon opens
    step details in a modal, pauses playback and remembers whether it was playing
@@ -201,5 +202,10 @@ python3 scripts/validate_state.py /absolute/path/order-states.html
 
 `render.py --expect state` runs the same verifier automatically. Inspect each
 transition's actual cause label on its arrow in desktop and mobile previews.
-State views retain logical sizing on narrow screens and scroll horizontally
-instead of shrinking event text to an unreadable size.
+State views fit the available width when event text stays at least 10px. They
+retain logical sizing on narrow screens and pan horizontally instead of shrinking
+event text to an unreadable size. The page owns vertical scrolling; do not add an
+inner vertical state scrollport. Keep controls sticky and follow active states
+through document scrolling. For transitions wider or taller than the viewport,
+follow the destination. Back restores the parent page and horizontal pan positions.
+Verify this in a short desktop window as well as on mobile, including with the sidebar.
