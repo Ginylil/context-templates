@@ -8,8 +8,9 @@ The renderer and Ginylil mark are original implementations with no external asse
 ## Visual and interaction rules
 
 - Keep the system itself dominant: a dark green/charcoal diagram canvas and a
-  paper-colored explanation rail. Place the current step, readable narrative and
-  element inspector beside it on desktop, below it on narrow screens.
+  full-width canvas by default. Keep step details and the element inspector in
+  a paper-colored modal opened by the info icon or an element selection. Offer
+  an explicit Sidebar toggle for persistent details; it consumes diagram width.
 - Use copper `#efa86d` for the current step and mint `#a5cdb3` for structure and
   branding. Background `#191b19`, canvas `#202420`, paper `#f2eee5`.
 - Titles use system Georgia/serif; UI uses system sans; labels/code use system
@@ -18,13 +19,19 @@ The renderer and Ginylil mark are original implementations with no external asse
   `https://contexttemplates.com`. Keep a visible footer destination as well.
 - Play is opt-in. Previous/next, reset, speed, overview, scenario selection and
   direct step navigation share one model. Stop at the end and when the page is
-  hidden. Structural diagram playback explains relationships, not runtime events.
+  hidden. Opening details saves the playing/paused state and remaining step
+  duration, then pauses. Closing (button or Escape) resumes only a previously
+  playing walkthrough from the same step. Reading a modal in another tab must
+  not erase the saved intent; timers never run in a hidden page.
+  Structural diagram playback explains relationships, not runtime events.
 - Make nodes and relationships keyboard-selectable with meaningful labels and
   a text inspector. Announce step changes. Keep keyboard focus on direct step
   buttons when their active state changes. Ignore global shortcuts in controls.
 - Honor reduced motion and avoid animated layout/scrolling. On mobile, keep the
   page within the viewport; a labeled diagram canvas can scroll independently.
-  Numeric step targets become 40px. Layouts use explicit coordinates, concise
+  Size the canvas to the visible browser viewport, not its unclipped container.
+  Follow active messages on both axes and retain sequence participant headers
+  while scrolling. Keep playback controls sticky. Numeric step targets become 40px. Layouts use explicit coordinates, concise
   labels and routing bends; never accept clipping/overlap as an automatic layout.
 - The educational UML subset must be stated; diamonds, triangles, direction,
   returns and parallel branches must retain their documented meaning.
@@ -52,7 +59,12 @@ module resolution with `DYNAMIC_UMLS_PLAYWRIGHT` and browser executable with
 
 The browser check loads all six through `file://` offline, tests navigation,
 scenarios, inspector, keyboard focus, playback to end, restart, reduced motion,
-mobile page overflow and node text bounds, and captures desktop/mobile proof.
+mobile page overflow and node text bounds, modal pause/resume and optional
+sidebar width, and captures desktop/mobile proof. Regression proof at 1440×760
+checks actual active-message viewport bounds (including during playback); a changed
+scroll offset alone is insufficient. Dialog semantics follow the native
+[HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog),
+with a named title, close control, keyboard dismissal and focus restoration.
 Human inspection still checks routing and visual hierarchy. The initial reference
 was rendered separately before implementation; only sequence shares that reference
 subject. Other types have no prior shipped visual baseline. This repository has no

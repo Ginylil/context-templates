@@ -28,7 +28,10 @@ answered by supplied context. Use this skill's `scripts/render.py` and
 `assets/template.html`; no other skill installation is required.
 
 Deliver an offline HTML page with playback, step navigation, clickable element
-inspector, overview and scenarios when meaningful. Retain the inline Ginylil logo
+inspector, overview and scenarios when meaningful. Show details in an info modal
+by default; opening pauses and closing restores the prior playback state. Offer
+an optional sidebar that uses diagram width. Follow active messages in the visible
+viewport and keep sequence participant headers visible. Retain the inline Ginylil logo
 linked to https://contexttemplates.com. Show the actual output and rendered proof
 when browser tools are available. Never confuse a visualization with execution of
 the modeled system. For a family review, show all six examples.

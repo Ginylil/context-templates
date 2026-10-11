@@ -47,10 +47,19 @@ Those are different subjects. Do not silently substitute one for the other.
    tracking or secret is needed. Branding must retain the inline Ginylil mark and
    a visible link to **https://contexttemplates.com**. User-controlled model text
    must remain data (`textContent`); never interpolate it as executable HTML/JS.
+   Keep the diagram full-width and details hidden by default. An info icon opens
+   step details in a modal, pauses playback and remembers whether it was playing
+   plus the remaining step duration. Closing by button or Escape resumes only a
+   previously playing walkthrough from the same step; an already paused one stays
+   paused. Offer a Sidebar toggle for users who trade diagram width for persistent
+   details. Keep sequence participant labels visible while following messages.
 5. Open the actual file in a browser when available. Inspect desktop and narrow
    widths, label collisions, clipping, edge routing, relationship direction and
    readability. Test next/previous/reset, playback to end, scenario changes,
-   keyboard activation, inspector and overview. Verify it loads offline, has no
+   keyboard activation, inspector, overview, modal pause/resume, paused-state
+   preservation and optional sidebar. Check the active message is inside the
+   actual browser viewport in a short window, not merely inside the canvas
+   container. Verify it loads offline, has no
    console errors, and respects reduced motion. Fix the artifact when a check
    fails; metadata validation alone is not rendered proof. Do not install a
    dependency or start a server merely to deliver the page. If browser tools are
@@ -69,7 +78,7 @@ Required top-level fields:
 - `title`, `lede`, `evidence`: nonempty text. `evidence` says what was inspected
   or that the model is illustrative. Optional `kicker`, `canvasLabel`.
 - `width`, `height`: SVG logical dimensions, 200–3000. The page scales and allows
-  horizontal scrolling on small screens without hiding controls or notes.
+  horizontal scrolling on small screens without clipping controls or disclosures.
 - `nodes`: at least two, each with unique lowercase `id`, `label`, `detail`,
   `kind`, center `x`, center `y`. Optional `w`, `h`, `role`.
 - `edges`: at least one, each with unique `id`, `from`, `to`, `label`, `detail`,

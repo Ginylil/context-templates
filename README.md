@@ -24,7 +24,10 @@ walkthrough. Each skill investigates the supplied context, makes minimal explici
 assumptions, and asks **at most five questions** for material unknowns. Pages include
 playback, step navigation, an element inspector, overview, meaningful alternate
 scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com).
-They open locally and work offline, without a server or external dependencies.
+Details open from the info icon in a modal: playback pauses while you read and
+resumes on close only if it was playing. The optional Sidebar trades canvas width
+for persistent details. Active messages auto-scroll inside the visible viewport.
+Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | Example to download and open locally |
 | --- | --- |

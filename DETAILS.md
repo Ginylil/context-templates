@@ -81,3 +81,11 @@ agents, preserves existing HTML files, rejects unsafe/invalid model content and
 checks canonical copies. Optional browser proof uses an existing Playwright runtime
 and verifies local offline interaction and responsive layouts. Neither lane proves
 that a real agent discovered the skill or followed the investigation/question policy.
+
+The viewer defaults to a full-width diagram with details disclosed through an info
+modal. Opening it pauses the current timer and saves its remaining duration; close
+or Escape restores prior playback intent. A manually paused walkthrough stays
+paused. The optional sidebar uses the same details DOM, narrows the diagram and
+keeps its contents current. Sequence headers stay visible during canvas scrolling.
+Auto-follow sizes the canvas against the visible viewport and checks the active
+message's geometry rather than only comparing unclipped container bounds.
