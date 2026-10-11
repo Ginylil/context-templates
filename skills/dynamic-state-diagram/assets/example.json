@@ -3,67 +3,67 @@
   "title": "The life of an order",
   "lede": "Events move an order between stable states. Choose fulfillment or cancellation.",
   "kicker": "Dynamic UMLs / state",
-  "width": 940,
-  "height": 520,
+  "width": 1200,
+  "height": 510,
   "nodes": [
     {
       "id": "initial",
       "label": "Initial",
       "kind": "initial",
-      "x": 55,
-      "y": 265,
+      "x": 40,
+      "y": 120,
       "detail": "The state machine starts here."
     },
     {
       "id": "draft",
       "label": "Draft",
       "kind": "state",
-      "x": 230,
-      "y": 265,
+      "x": 225,
+      "y": 120,
       "detail": "An order exists but is not paid.",
-      "w": 160
+      "w": 150
     },
     {
       "id": "paid",
       "label": "Paid",
       "kind": "state",
-      "x": 460,
-      "y": 125,
+      "x": 550,
+      "y": 120,
       "detail": "Payment has been confirmed.",
-      "w": 170
+      "w": 150
     },
     {
       "id": "shipped",
       "label": "Shipped",
       "kind": "state",
-      "x": 720,
-      "y": 125,
+      "x": 880,
+      "y": 120,
       "detail": "The fulfillment provider has confirmed dispatch.",
-      "w": 170
+      "w": 150
     },
     {
       "id": "complete",
       "label": "Complete",
       "kind": "final",
-      "x": 875,
-      "y": 125,
+      "x": 1150,
+      "y": 120,
       "detail": "The modeled fulfilled lifecycle ends here."
     },
     {
       "id": "cancelled",
       "label": "Cancelled",
       "kind": "state",
-      "x": 460,
-      "y": 410,
+      "x": 550,
+      "y": 400,
       "detail": "The unpaid order was cancelled.",
-      "w": 170
+      "w": 150
     },
     {
       "id": "closed",
       "label": "Closed",
       "kind": "final",
-      "x": 720,
-      "y": 410,
+      "x": 880,
+      "y": 400,
       "detail": "The cancellation path terminates here."
     }
   ],
@@ -72,9 +72,16 @@
       "id": "create",
       "from": "initial",
       "to": "draft",
-      "label": "create",
+      "label": "/ create",
       "kind": "transition",
-      "detail": "Initialize a draft order."
+      "detail": "Initial transition effect creates a draft; it has no trigger or guard.",
+      "fromPort": "right",
+      "toPort": "left",
+      "route": "forward",
+      "labelOn": {
+        "segment": 0,
+        "at": 0.5
+      }
     },
     {
       "id": "pay",
@@ -83,15 +90,12 @@
       "label": "paymentConfirmed",
       "kind": "transition",
       "detail": "A confirmed payment triggers the transition.",
-      "via": [
-        {
-          "x": 230,
-          "y": 125
-        }
-      ],
-      "labelAt": {
-        "x": 345,
-        "y": 70
+      "fromPort": "right",
+      "toPort": "left",
+      "route": "forward",
+      "labelOn": {
+        "segment": 0,
+        "at": 0.5
       }
     },
     {
@@ -101,9 +105,12 @@
       "label": "dispatchConfirmed",
       "kind": "transition",
       "detail": "Shipping follows the confirmation event.",
-      "labelAt": {
-        "x": 590,
-        "y": 70
+      "fromPort": "right",
+      "toPort": "left",
+      "route": "forward",
+      "labelOn": {
+        "segment": 0,
+        "at": 0.5
       }
     },
     {
@@ -113,9 +120,12 @@
       "label": "deliveryConfirmed",
       "kind": "transition",
       "detail": "Delivery closes this illustrative lifecycle.",
-      "labelAt": {
-        "x": 800,
-        "y": 80
+      "fromPort": "right",
+      "toPort": "left",
+      "route": "forward",
+      "labelOn": {
+        "segment": 0,
+        "at": 0.5
       }
     },
     {
@@ -125,16 +135,19 @@
       "label": "cancel [unpaid]",
       "kind": "transition",
       "detail": "Only an unpaid order can use this branch in the simplified model.",
+      "fromPort": "bottom",
+      "toPort": "left",
+      "route": "forward",
+      "labelOn": {
+        "segment": 1,
+        "at": 0.5
+      },
       "via": [
         {
-          "x": 230,
-          "y": 410
+          "x": 225,
+          "y": 400
         }
-      ],
-      "labelAt": {
-        "x": 335,
-        "y": 355
-      }
+      ]
     },
     {
       "id": "close",
@@ -142,7 +155,14 @@
       "to": "closed",
       "label": "close",
       "kind": "transition",
-      "detail": "Cancellation terminates the modeled order."
+      "detail": "Cancellation terminates the modeled order.",
+      "fromPort": "right",
+      "toPort": "left",
+      "route": "forward",
+      "labelOn": {
+        "segment": 0,
+        "at": 0.5
+      }
     }
   ],
   "scenarios": [
@@ -239,7 +259,8 @@
   "assumptions": [
     "Illustrative state machine; these events and cancellation policy are example choices.",
     "Labels use trigger [guard] where applicable. Initial and final states have distinct symbols.",
-    "Refunds, returns, failed payments and partial shipments are outside this model."
+    "Refunds, returns, failed payments and partial shipments are outside this model.",
+    "Each view contains at most seven nodes. Transition causes sit on their arrow segments; guards remain attached to the event label."
   ],
   "legend": [
     {
@@ -258,5 +279,6 @@
       "href": "https://www.omg.org/spec/UML/2.5.1"
     }
   ],
-  "evidence": "Evidence: illustrative example; no application repository was supplied."
+  "evidence": "Evidence: illustrative example; no application repository was supplied.",
+  "orientation": "horizontal"
 }

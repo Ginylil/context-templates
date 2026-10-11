@@ -28,8 +28,14 @@ unchanged as a data URL. A paper backing keeps its dark artwork readable.
   views pauses playback. Use orthogonal explicit ports and separate routes.
   Returns use outer side rails and enter side ports. Reject connector crossings,
   overlaps, routes through nodes, insufficient node spacing and invalid child links.
-  The Python verifier uses conservative bounding boxes; browser inspection still
-  checks text placement. See the authoring guide for the numeric geometry policy.
+  State diagrams share this policy, allow horizontal or vertical forward paths,
+  and offer expandable state detail views. Their return rails run outside the
+  node area along the chosen axis. Transition causes sit directly on a chosen
+  straight arrow segment, with a canvas-colored backing and space for arrowheads;
+  reject floating state labels. Keep state text at its logical size on mobile
+  rather than shrinking the entire diagram. The Python verifier uses conservative
+  bounding boxes and label estimates; browser inspection checks actual text.
+  See the authoring guide for the numeric geometry policy.
 - Play is opt-in. Previous/next, reset, speed, overview, scenario selection and
   direct step navigation share one model. Stop at the end and when the page is
   hidden. Opening details saves the playing/paused state and remaining step
@@ -55,7 +61,7 @@ unchanged as a data URL. A paper backing keeps its dark artwork readable.
 ## Canonical sources and generated copies
 
 `skills/dynamic-umls/` owns `assets/template.html`, `assets/ginylil.png`,
-`scripts/render.py`, `scripts/validate_flowchart.py`,
+`scripts/render.py`, `scripts/validate_flowchart.py`, `scripts/validate_state.py`,
 `references/authoring.md` and `assets/examples/<type>.json`. The six focused skills
 have generated copies of the shared resources plus their own `assets/example.json`
 so every downloadable skill works alone. Edit shared resources at the router,
@@ -80,7 +86,9 @@ scroll offset alone is insufficient. Dialog semantics follow the native
 [HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog),
 with a named title, close control, keyboard dismissal and focus restoration.
 The scenario menu keyboard/below-trigger checks and subprocess drill-down/return
-checks supplement these regressions. Matched before/after captures use 1440×960
+checks supplement these regressions. State label checks compare label centers
+against the actual SVG connector path and verify readable mobile sizing;
+matched state before/after captures use 1440×960. Matched before/after captures use 1440×960
 for the flowchart; route inspection also uses a narrower, taller viewport.
 Human inspection still checks routing and visual hierarchy. The initial reference
 was rendered separately before implementation; only sequence shares that reference

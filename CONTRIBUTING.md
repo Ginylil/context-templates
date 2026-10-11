@@ -90,3 +90,8 @@ Flowchart contributions must pass the bundled Python verifier for every nested
 view, including the seven-node cap, orthogonal top-down routes and outer side
 loops. Add focused rejection cases when changing geometry policy. Preserve the
 owner-supplied Ginylil logo and its contexttemplates.com link.
+
+State diagrams share the seven-node and collision rules but may run horizontally
+or vertically. Cause labels must sit on arrow segments (`labelOn`), with room
+for their text and arrowheads. Run `scripts/validate_state.py` and inspect the
+actual rendered label placement before submitting a state diagram change.

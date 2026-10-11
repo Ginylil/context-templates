@@ -104,7 +104,7 @@ Required top-level fields:
 | Sequence | `participant` | `call`, `signal`, `return` | Participants at `y=45`, horizontal lifelines; edge array is chronological. Messages laid out at `y=142 + 68*index`. Height at least `142 + 68*(messages−1) + 60`. A call has a filled arrow, signal an open arrow, return a dashed open arrow. Self-calls supported. Keep each walkthrough hop explicit; do not confuse async messaging with a dashed return. |
 | Class | `class` | `association`, `composition`, `aggregation`, `inheritance`, `dependency` | Optional `fields`, `methods` lists. Composition/aggregation diamond is at `from` (whole); inheritance triangle at `to` (parent). Optional `sourceMultiplicity`, `targetMultiplicity`; do not invent cardinalities. Structural exploration is not a simulated object lifecycle. |
 | Flowchart | `process`, `decision`, `terminal`, `subprocess` | `flow` | At most seven nodes in each view, top-down orthogonal forward edges, outer side loops, and explicit ports. Label decision exits (e.g. Yes/No); distinguish termination from repair loops. This is a general process notation, not formally a UML diagram type. |
-| State | `state`, `initial`, `final`, `decision` | `transition` | Name transitions `trigger [guard] / effect` when applicable. Use genuine states, not action boxes. This subset has no entry/exit compartments, hierarchy or history pseudostates. |
+| State | `state`, `initial`, `final`, `decision` | `transition` | At most seven nodes per view, explicit orthogonal ports, outer return rails and `labelOn` placement on the arrow. Horizontal/vertical layouts and explanatory state detail views are supported. Name transitions `trigger [guard] / effect` when applicable; initial transitions have effects, no triggers or guards. No entry/exit compartments, hierarchical execution or history pseudostates. |
 | Activity | `action`, `initial`, `final`, `decision`, `fork`, `join` | `flow` | Fork/join bars have `w` and height 8. Parallel branches must highlight together when concurrent; a join waits for its required branches. Label guards on decisions. No swimlanes/object flows in this renderer. |
 | Component | `component` | `dependency` | Dashed dependency arrows point from dependent (`from`) to supplier (`to`), not file/message movement. Inspect real boundaries. This subset has no ports or provided/required-interface notation. |
 
@@ -162,3 +162,44 @@ arrow keys, Home/End, Enter/Space, letter search, Escape, Tab and outside-click
 closure. Selection and focus are distinct; a keyboard highlight is not committed
 until activated. The listbox follows the
 [WAI-ARIA listbox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/).
+
+
+## State diagrams use the same clarity rules
+
+Keep each view within seven nodes, including pseudostates. Reuse the flowchart
+spacing, collision and orthogonal-routing policy. Set `orientation` to
+`horizontal` (default) for left-to-right transitions or `vertical` for top-to-bottom
+transitions. Forward paths must move monotonically along that axis; they may bend
+along the other axis for alternate branches. A return uses an outer rail at least
+32 pixels beyond all node boxes: top/bottom for a horizontal layout, left/right
+for a vertical one. State self-transitions are supported as explicit outer loops.
+
+Each transition requires `fromPort`, `toPort`, `route`, and
+`labelOn: {"segment": 1, "at": 0.5}`. Segment indices are zero-based in the actual
+polyline: source port, `via` waypoints, target port. `at` defaults to the segment
+midpoint. The renderer places `trigger [guard] / effect` directly on that straight
+segment with an opaque canvas-colored backing so the arrow does not strike through
+letters. Vertical labels rotate with their segment. Keep arrowheads and bends
+clear; do not use `labelAt`. The verifier rejects labels that do not fit, collide
+with node boxes, overlap each other, or cover another transition. It uses a
+conservative estimate for 11px monospace labels; browser checks use actual text.
+Do not shorten an event into an ambiguous cause just to pass the check; lengthen
+the segment or simplify the view. Initial pseudostate arrows name an effect
+(e.g. `/ create`), not a trigger or guard.
+
+A `state` node may reference a full child **state** model through `subflow` and
+its owning view's `subflows`, using the same local-reference and nesting rules
+as flowcharts. These are expandable explanatory detail views; they do not implement
+hierarchical execution semantics. Selecting the state offers **Explore state
+detail**; Back restores parent context. Do not put a flowchart model inside a
+state detail reference. Preserve the inspected state/event meaning.
+
+```sh
+python3 scripts/validate_state.py /absolute/path/state-model.json
+python3 scripts/validate_state.py /absolute/path/order-states.html
+```
+
+`render.py --expect state` runs the same verifier automatically. Inspect each
+transition's actual cause label on its arrow in desktop and mobile previews.
+State views retain logical sizing on narrow screens and scroll horizontally
+instead of shrinking event text to an unreadable size.

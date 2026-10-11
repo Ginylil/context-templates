@@ -21,7 +21,7 @@ def require(ok, message):
 
 
 def box(n, padding=0):
-    w, h = n.get('w', 180), n.get('h', 66)
+    w, h = (24, 24) if n.get('kind') in {'initial', 'final'} else (n.get('w', 180), n.get('h', 66))
     return (n['x']-w/2-padding, n['y']-h/2-padding,
             n['x']+w/2+padding, n['y']+h/2+padding)
 
@@ -72,10 +72,32 @@ def touches_interior(segment, bounds):
     return l+EPS < x1 < r-EPS and max(min(y1, y2), t) < min(max(y1, y2), b)-EPS
 
 
+def label_geometry(e, path):
+    value = e.get('labelOn')
+    require(isinstance(value, dict), f"edge {e['id']}.labelOn: select an arrow segment")
+    segment, at = value.get('segment'), value.get('at', 0.5)
+    require(isinstance(segment, int) and not isinstance(segment, bool) and 0 <= segment < len(path)-1,
+            f"edge {e['id']}.labelOn.segment: invalid segment")
+    require(isinstance(at, (int, float)) and not isinstance(at, bool) and 0 <= at <= 1,
+            f"edge {e['id']}.labelOn.at: expected a fraction between 0 and 1")
+    a, b = path[segment], path[segment+1]
+    length = abs(b[0]-a[0])+abs(b[1]-a[1])
+    # Conservative estimate for the viewer's 11px monospace text plus its backing.
+    half = len(e['label'])*7/2+8
+    require(min(at*length, (1-at)*length) >= half+12,
+            f"edge {e['id']}: label does not fit its arrow segment; lengthen the route or shorten the label")
+    x, y = a[0]+(b[0]-a[0])*at, a[1]+(b[1]-a[1])*at
+    return (x-half, y-10, x+half, y+10) if a[1] == b[1] else (x-10, y-half, x+10, y+half)
+
+
 def validate_layout(model):
     """Called after model schema validation; geometry matches explicit viewer ports."""
+    kind = model.get('type', 'flowchart')
+    horizontal = kind == 'state' and model.get('orientation', 'horizontal') == 'horizontal'
+    axis = 0 if horizontal else 1
+    require(kind != 'state' or model.get('orientation', 'horizontal') in ('horizontal', 'vertical'), 'state.orientation: use horizontal or vertical')
     require(len(model['nodes']) <= MAX_NODES,
-            f"flowchart: {len(model['nodes'])} nodes exceeds {MAX_NODES}; extract a subprocess")
+            f"{kind}: {len(model['nodes'])} nodes exceeds {MAX_NODES}; extract a detail view")
     nodes = {n['id']: n for n in model['nodes']}
     for a, b in itertools.combinations(nodes.values(), 2):
         al, at, ar, ab = box(a, GAP/2)
@@ -85,6 +107,9 @@ def validate_layout(model):
     routes = []
     left = min(box(n)[0] for n in nodes.values())
     right = max(box(n)[2] for n in nodes.values())
+    top = min(box(n)[1] for n in nodes.values())
+    bottom = max(box(n)[3] for n in nodes.values())
+    labels = []
     for e in model['edges']:
         prefix = f"edge {e['id']}"
         for key in ('fromPort', 'toPort'):
@@ -98,16 +123,26 @@ def validate_layout(model):
         for side, a, b in [(e['fromPort'], p[0], p[1]), (e['toPort'], p[-1], p[-2])]:
             dx, dy = directions[side]
             require((b[0]-a[0])*dx+(b[1]-a[1])*dy > EPS, f'{prefix}: arrow must enter/exit the chosen port from outside')
+        source, target = nodes[e['from']], nodes[e['to']]
+        key = 'x' if horizontal else 'y'
         if e['route'] == 'forward':
-            require(nodes[e['to']]['y'] > nodes[e['from']]['y'], f'{prefix}: forward flow must move downward')
-            require(all(b[1] >= a[1] for a, b in segs), f'{prefix}: forward connector travels upward')
+            direction = 'rightward' if horizontal else 'downward'
+            require(target[key] > source[key], f'{prefix}: forward flow must move {direction}')
+            require(all(b[axis] >= a[axis] for a, b in segs), f'{prefix}: forward connector travels backward')
         else:
-            require(nodes[e['to']]['y'] < nodes[e['from']]['y'], f'{prefix}: loop must return to an earlier node')
-            require(e['fromPort'] in {'left', 'right'} and e['toPort'] in {'left', 'right'},
-                    f'{prefix}: loop must leave and enter side ports')
-            rising = [(a, b) for a, b in segs if b[1] < a[1]]
-            require(rising and all(a[0] == b[0] and (a[0] <= left-32 or a[0] >= right+32) for a, b in rising),
-                    f'{prefix}: upward loop must use an outer side rail, at least 32px beyond nodes')
+            require(target[key] < source[key] or (kind == 'state' and e['from'] == e['to']),
+                    f'{prefix}: loop must return to an earlier node or state self-transition')
+            sides = {'top', 'bottom'} if horizontal else {'left', 'right'}
+            require(e['fromPort'] in sides and e['toPort'] in sides,
+                    f'{prefix}: loop must leave and enter outer side ports')
+            returning = [(a, b) for a, b in segs if b[axis] < a[axis]]
+            def outer(a, b):
+                return (a[1] == b[1] and (a[1] <= top-32 or a[1] >= bottom+32)) if horizontal else (a[0] == b[0] and (a[0] <= left-32 or a[0] >= right+32))
+            require(returning and all(outer(a, b) for a, b in returning),
+                    f'{prefix}: return loop must use an outer side rail, at least 32px beyond nodes')
+        if kind == 'state':
+            require('labelAt' not in e, f'{prefix}: state labels must use labelOn, not floating labelAt')
+            labels.append((e, label_geometry(e, p)))
         for n in nodes.values():
             # Use conservative boxes (also for diamonds) so routes stay clear.
             padding = 0 if n['id'] in {e['from'], e['to']} else 12
@@ -125,6 +160,19 @@ def validate_layout(model):
             hit = intersection(s, t)
             require(hit is None or (hit != 'overlap' and hit in allowed),
                     f"edges {a['id']} / {b['id']}: crossing or overlapping connectors; reroute or extract a subprocess")
+    for e, bounds in labels:
+        l, t, r, b = bounds
+        for n in nodes.values():
+            nl, nt, nr, nb = box(n, 4)
+            require(r <= nl or nr <= l or b <= nt or nb <= t,
+                    f"edge {e['id']}: transition label collides with node {n['id']}")
+        for other, _, segs in routes:
+            if other['id'] != e['id']:
+                require(not any(touches_interior(segment, bounds) for segment in segs),
+                        f"edge {e['id']}: label covers another transition {other['id']}")
+    for (a, (al, at, ar, ab)), (b, (bl, bt, br, bb)) in itertools.combinations(labels, 2):
+        require(ar <= bl or br <= al or ab <= bt or bb <= at,
+                f"edges {a['id']} / {b['id']}: overlapping transition labels")
     return model
 
 

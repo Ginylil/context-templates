@@ -101,7 +101,7 @@ def validate(model, expected=None, _depth=0):
     for e in edges:
         require(isinstance(e.get('from'), str) and isinstance(e.get('to'), str)
                 and e['from'] in node_ids and e['to'] in node_ids, f"edge {e['id']}: unknown endpoint")
-        require(e['from'] != e['to'] or kind == 'sequence', 'self edges supported only in sequence diagrams')
+        require(e['from'] != e['to'] or kind in {'sequence', 'state'}, 'self edges supported only in sequence and state diagrams')
         require(isinstance(e.get('kind'), str) and e['kind'] in EDGES[kind], f"edge {e['id']}: unsupported relationship")
         string(e.get('label'), 'edge.label', 70); string(e.get('detail'), 'edge.detail')
         for key in ('sourceMultiplicity', 'targetMultiplicity'):
@@ -146,22 +146,23 @@ def validate(model, expected=None, _depth=0):
         string(item.get('label'), 'legend.label', 100)
         if 'dashed' in item:
             require(isinstance(item['dashed'], bool), 'legend.dashed: expected boolean')
-    if kind == 'flowchart':
+    if kind in {'flowchart', 'state'}:
         children = model.get('subflows', [])
         records(children, 'subflows', 0)
         child_ids = identifiers(children, 'subflows')
         used = set()
         for n in nodes:
-            if n['kind'] == 'subprocess':
+            if n['kind'] == 'subprocess' or (kind == 'state' and 'subflow' in n):
+                require(n['kind'] == ('state' if kind == 'state' else 'subprocess'), f"node {n['id']}: detail views belong to states or subprocesses")
                 require(isinstance(n.get('subflow'), str) and n['subflow'] in child_ids,
-                        f"node {n['id']}: subprocess must reference a local subflow")
+                        f"node {n['id']}: detail node must reference a local subflow")
                 used.add(n['subflow'])
             else:
-                require('subflow' not in n, f"node {n['id']}: only subprocesses may reference subflows")
-        require(used == child_ids, 'subflows: each child must be referenced by a subprocess')
+                require('subflow' not in n, f"node {n['id']}: only states or subprocesses may reference detail views")
+        require(used == child_ids, 'subflows: each child must be referenced by a detail node')
         for child in children:
             try:
-                validate(child, expected='flowchart', _depth=_depth+1)
+                validate(child, expected=kind, _depth=_depth+1)
             except ValueError as error:
                 raise ValueError(f"subflow {child['id']}: {error}") from error
         # Load beside this script so standalone installed packages work without path changes.
@@ -171,7 +172,7 @@ def validate(model, expected=None, _depth=0):
         layout.validate_layout(model)
     else:
         require('subflows' not in model and all('subflow' not in n for n in nodes),
-                'subflows: supported only in flowcharts')
+                'subflows: supported only in flowcharts and state diagrams')
     return model
 
 

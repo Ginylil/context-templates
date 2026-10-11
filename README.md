@@ -30,7 +30,9 @@ for persistent details. Active messages auto-scroll inside the visible viewport.
 Scenario menus open below the trigger in the page theme. Flowcharts read
 vertically, keep retries on outer side rails, and compose larger processes as
 clickable subprocesses, with a maximum of seven nodes per view. A bundled Python
-verifier checks these rules before rendering. Pages use the supplied Ginylil
+verifier checks these rules before rendering. State diagrams share the node limit
+and routing checks, allow horizontal layouts and expandable state detail views,
+and place transition causes directly on their arrows. Pages use the supplied Ginylil
 coffee-and-sun logo.
 Pages open locally and work offline, without a server or external dependencies.
 

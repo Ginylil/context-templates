@@ -81,7 +81,13 @@ standalone `scripts/validate_flowchart.py` accepts JSON or emitted HTML and chec
 every child view. It uses conservative node bounds; typography-dependent label
 collisions still require rendered inspection. Nested `subflows` are embedded full
 models referenced by double-bar subprocess nodes, with local references and
-maximum nesting depth four.
+maximum nesting depth four. State diagrams use the same geometry policy,
+with horizontal or vertical orientations, outer returns, self-transitions and
+state-only detail views. `scripts/validate_state.py` verifies state JSON or HTML;
+`labelOn` selects an actual straight segment, with conservative text-fit and
+collision checks. The SVG viewer measures actual text for its opaque backing.
+Floating state `labelAt` coordinates are rejected. State detail views explain
+structure without simulating hierarchical execution semantics.
 
 The test suite exercises all six renderers from isolated destinations for all three
 agents, preserves existing HTML files, rejects unsafe/invalid model content and

@@ -34,6 +34,9 @@ an optional sidebar that uses diagram width. Follow active messages in the visib
 viewport and keep sequence participant headers visible. For flowcharts, limit each view to seven nodes, use vertical forward paths and
 outer side loops, and compose larger flows with clickable subprocesses. Run the
 bundled `scripts/validate_flowchart.py`; rendering also enforces its checks.
+State diagrams follow the same node limit and routing clarity, allow horizontal
+or vertical layouts, and place cause labels on arrow segments. Validate them
+with `scripts/validate_state.py`; use expandable state detail views for complexity.
 Retain the supplied embedded Ginylil coffee-and-sun logo
 linked to https://contexttemplates.com. Show the actual output and rendered proof
 when browser tools are available. Never confuse a visualization with execution of
