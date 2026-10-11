@@ -54,14 +54,21 @@ Those are different subjects. Do not silently substitute one for the other.
    plus the remaining step duration. Closing by button or Escape resumes only a
    previously playing walkthrough from the same step; an already paused one stays
    paused. Offer a Sidebar toggle for users who trade diagram width for persistent
-   details. Keep sequence participant labels visible while following messages.
+   details. Use document scrolling vertically for every diagram type: canvas
+   height follows its content, with horizontal panning only where needed. Keep
+   playback controls sticky. Place sequence participant labels outside the
+   horizontal overflow container, sticky below controls, and synchronize their
+   width and horizontal pan with the lifelines. Follow the active message through
+   page scrolling, keeping it below both sticky regions. Nested view Back restores
+   the parent document scroll and horizontal pan.
 5. Open the actual file in a browser when available. Inspect desktop and narrow
    widths, label collisions, clipping, edge routing, relationship direction and
    readability. Test next/previous/reset, playback to end, scenario changes,
    keyboard activation, inspector, overview, modal pause/resume, paused-state
    preservation and optional sidebar. Check the active message is inside the
    actual browser viewport in a short window, not merely inside the canvas
-   container. Verify it loads offline, has no
+   container. Check every type has no inner vertical canvas overflow, including
+   with the sidebar. Check participant/lifeline alignment after horizontal panning. Verify it loads offline, has no
    console errors, and respects reduced motion. Fix the artifact when a check
    fails; metadata validation alone is not rendered proof. Do not install a
    dependency or start a server merely to deliver the page. If browser tools are

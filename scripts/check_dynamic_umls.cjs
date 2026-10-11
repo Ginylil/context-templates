@@ -24,6 +24,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       await page.goto(pathToFileURL(path.join(root, `examples/dynamic-umls/${kind}.html`)).href);
       const model = await page.locator('#diagram-data').textContent().then(JSON.parse);
       assert.equal(await page.title(), model.title);
+      assert(await page.locator('#canvas-scroll').evaluate(el=>el.scrollHeight<=el.clientHeight+1&&el.scrollTop===0),`${kind}: diagram must use document vertical scrolling`);
       assert.equal(await page.locator('.brand').getAttribute('href'), 'https://contexttemplates.com');
       assert.equal(await page.locator('#counter').textContent(), `01 / ${String(model.scenarios[0].steps.length).padStart(2,'0')}`);
       await page.locator('#next').click();
@@ -35,6 +36,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       await page.locator('#sidebar-toggle').click();
       assert.equal(await page.locator('#details-sidebar').isVisible(), true);
       assert(await page.locator('#canvas-scroll').evaluate(el=>el.clientWidth) < fullWidth-200);
+      assert(await page.locator('#canvas-scroll').evaluate(el=>el.scrollHeight<=el.clientHeight+1),`${kind}: sidebar introduced inner vertical scrolling`);
       await page.locator('#info').click();
       await page.locator('#close-details').click();
       await page.waitForFunction(()=>document.getElementById('info').getAttribute('aria-expanded')==='false');
@@ -95,7 +97,8 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       await page.waitForFunction(() => document.getElementById('play').textContent === 'Play ▷', null, {timeout:3000});
       assert.equal(await page.locator('#next').isDisabled(), true);
       if (kind === 'sequence') {
-        assert(await page.locator('#canvas-scroll').evaluate(el => el.scrollTop > 0));
+        assert(await page.evaluate(()=>scrollY>0));
+        assert.equal(await page.locator('#canvas-scroll').evaluate(el=>el.scrollTop),0);
         assert(await page.locator('.edge.active').evaluate(el=>{const b=el.getBoundingClientRect(),f=document.getElementById('canvas-scroll').getBoundingClientRect();return b.top>=f.top && b.bottom<=Math.min(innerHeight,f.bottom);}), 'Active message must be visible in the window');
       }
       await page.locator('#play').click(); // Replay restarts from first step.
@@ -127,6 +130,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       await page.setViewportSize({width:390,height:844});
       await page.emulateMedia({reducedMotion:'reduce'});
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true, `${kind}: page overflow`);
+      assert(await page.locator('#canvas-scroll').evaluate(el=>el.scrollHeight<=el.clientHeight+1&&el.scrollTop===0),`${kind}: mobile introduced inner vertical scrolling`);
       assert.equal(await page.locator('.node').first().evaluate(el => getComputedStyle(el).transitionDuration), '0s');
       await page.locator('#next').click();
       assert.match(await page.locator('#counter').textContent(), /^03/);
@@ -270,7 +274,12 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     await page.screenshot({path:path.join(output,'scenario-mobile-after.png')});
     await page.keyboard.press('Escape');
     console.log('Themed picker below trigger and nested subprocess return verified.');
-    // Reproduce the reported fifth-message failure in a short browser window.
+    // Reproduce the owner's sequence scrollbar in a short window, then verify page auto-follow.
+    await page.setViewportSize({width:1227,height:589});
+    await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);
+    await page.evaluate(()=>window.scrollTo(0,80));
+    assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:false,top:0});
+    await page.screenshot({path:path.join(output,'sequence-page-scroll-after.png')});
     await page.setViewportSize({width:1440,height:760});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);
     await page.locator('#step-track button').nth(4).click();
@@ -279,7 +288,9 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       const frame=document.getElementById('canvas-scroll').getBoundingClientRect();
       const heads=document.querySelector('#participant-headings svg').getBoundingClientRect();
       return edge.top>=heads.bottom && edge.bottom<=Math.min(innerHeight,frame.bottom)
-        && edge.left>=frame.left && edge.right<=frame.right && heads.top>=frame.top;
+        && edge.left>=frame.left && edge.right<=frame.right
+        && heads.top>=document.querySelector('.toolbar').getBoundingClientRect().bottom-1
+        && document.getElementById('canvas-scroll').scrollTop===0;
     };
     assert(await page.evaluate(inViewport),'Step 5 must be visible below sticky participant headers');
     await page.screenshot({path:path.join(output,'sequence-after.png')});
@@ -320,6 +331,15 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     await page.locator('#step-track button').nth(4).click();
     assert(await page.evaluate(()=>{const e=document.querySelector('.edge.active').getBoundingClientRect(),f=document.getElementById('canvas-scroll').getBoundingClientRect(),h=document.querySelector('#participant-headings svg').getBoundingClientRect();return e.top>=h.bottom && e.bottom<=Math.min(innerHeight,f.bottom);}), 'Mobile message must be vertically visible');
     await page.screenshot({path:path.join(output,'sequence-mobile-after.png')});
+    await page.locator('#canvas-scroll').evaluate(el=>el.scrollLeft=90);
+    await page.waitForTimeout(100);
+    const aligned=await page.locator('#participant-headings [data-node]').evaluateAll(nodes=>nodes.every(node=>{
+      const model=JSON.parse(document.getElementById('diagram-data').textContent),n=model.nodes.find(n=>n.id===node.dataset.node);
+      const matrix=document.getElementById('diagram').getScreenCTM(),shape=node.querySelector('.shape').getBoundingClientRect();
+      return Math.abs(shape.x+shape.width/2-(matrix.a*n.x+matrix.e))<1;
+    }));
+    assert(aligned,'Participant headers must remain aligned after horizontal panning');
+    assert.deepEqual(await canvasSizing(),{vertical:false,horizontal:true,top:0});
     console.log('Short-window regression: manual and playing step 5 visible; Escape resumes prior playback; headers retained.');
     await page.setViewportSize({width:1440,height:1000});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/index.html')).href);

@@ -26,7 +26,9 @@ playback, step navigation, an element inspector, overview, meaningful alternate
 scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com).
 Details open from the info icon in a modal: playback pauses while you read and
 resumes on close only if it was playing. The optional Sidebar trades canvas width
-for persistent details. Active messages auto-scroll inside the visible viewport.
+for persistent details. All six types use the page for vertical scrolling, with
+horizontal panning when needed. Playback follows the active message or state,
+with sticky controls and sequence participant labels.
 Scenario menus open below the trigger in the page theme. Flowcharts read
 vertically, keep retries on outer side rails, and compose larger processes as
 clickable subprocesses, with a maximum of seven nodes per view. A bundled Python
@@ -34,8 +36,7 @@ verifier checks these rules before rendering. State diagrams share the node limi
 and routing checks, allow horizontal layouts and expandable state detail views,
 and place transition causes directly on their arrows. Pages use the supplied Ginylil
 coffee-and-sun logo as a small, subdued transparent mark. State diagrams fit the
-available width when readable and use page scrolling vertically; narrow screens
-keep horizontal panning without an inner vertical scrollbar.
+available width when readable. Diagram canvases have no inner vertical scrollbar.
 Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | Example to download and open locally |

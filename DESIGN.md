@@ -36,7 +36,6 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
   reject floating state labels. Keep state text at its logical size on mobile
   rather than shrinking the entire diagram. State diagrams fit the available
   width while event text stays at least 10px; otherwise allow horizontal panning.
-  Let the document own vertical scrolling, with no inner vertical state scrollport.
   Follow the active destination when a transition spans more than one viewport.
   The Python verifier uses conservative
   bounding boxes and label estimates; browser inspection checks actual text.
@@ -52,10 +51,14 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
   a text inspector. Announce step changes. Keep keyboard focus on direct step
   buttons when their active state changes. Ignore global shortcuts in controls.
 - Honor reduced motion and avoid animated layout/scrolling. On mobile, keep the
-  page within the viewport; a labeled diagram canvas can scroll independently.
-  Size the canvas to the visible browser viewport, not its unclipped container.
-  Follow active messages on both axes and retain sequence participant headers
-  while scrolling. Keep playback controls sticky. Numeric step targets become 40px. Layouts use explicit coordinates, concise
+  page within the viewport width. The document owns vertical scrolling for all
+  six types; diagram canvases expand to their content height and only pan
+  horizontally when needed. Do not add a height-limited inner vertical scrollport.
+  Follow active messages through document scrolling, accounting for sticky
+  controls and participant headers. Keep the sequence header strip outside the
+  horizontal overflow container, sticky below playback controls; synchronize its
+  horizontal position and width with the lifelines. Numeric step targets become
+  40px. Layouts use explicit coordinates, concise
   labels and routing bends; never accept clipping/overlap as an automatic layout.
 - The educational UML subset must be stated; diamonds, triangles, direction,
   returns and parallel branches must retain their documented meaning.
@@ -86,10 +89,15 @@ The browser check loads all six through `file://` offline, tests navigation,
 scenarios, inspector, keyboard focus, playback to end, restart, reduced motion,
 mobile page overflow and node text bounds, modal pause/resume and optional
 sidebar width, and captures desktop/mobile proof. Regression proof at 1440×760
-checks actual active-message viewport bounds (including during playback); a changed
+checks actual active-message viewport bounds (including during playback),
+document movement, the absence of inner vertical canvas overflow for all six
+types, and sequence header/lifeline alignment during horizontal panning. A changed
 scroll offset alone is insufficient. Dialog semantics follow the native
 [HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog),
 with a named title, close control, keyboard dismissal and focus restoration.
+Participant strips follow the native
+[CSS sticky positioning rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position);
+an overflowing ancestor would make them stick to that container instead of the page.
 The scenario menu keyboard/below-trigger checks and subprocess drill-down/return
 checks supplement these regressions. State label checks compare label centers
 against the actual SVG connector path and verify readable mobile sizing;

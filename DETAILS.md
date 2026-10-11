@@ -99,13 +99,14 @@ The viewer defaults to a full-width diagram with details disclosed through an in
 modal. Opening it pauses the current timer and saves its remaining duration; close
 or Escape restores prior playback intent. A manually paused walkthrough stays
 paused. The optional sidebar uses the same details DOM, narrows the diagram and
-keeps its contents current. Sequence headers stay visible during canvas scrolling.
-Auto-follow sizes the canvas against the visible viewport and checks the active
-message's geometry rather than only comparing unclipped container bounds. State
-diagrams instead use document scrolling vertically, fitting the available width
-when event labels stay at least 10px. Narrow views retain logical sizing and pan
-horizontally, with no inner vertical state scrollport. Auto-follow prioritizes the
-destination when a transition spans more than one viewport.
+keeps its contents current. All six diagram canvases expand to their content height;
+the document owns vertical scrolling. Narrow views pan horizontally without an
+inner vertical canvas scrollbar. Sequence headers sit outside the horizontal
+overflow container and stick below the playback controls; their width and pan
+position stay aligned with the lifelines. Auto-follow checks the active message's
+geometry in the visible window, accounting for both sticky regions. Structural
+views prioritize the destination when a transition spans more than one viewport.
+State diagrams fit the available width when event labels stay at least 10px.
 
 Scenario selection uses a themed button/listbox below the trigger, with keyboard
 navigation, committed selection, typeahead and dismissal. Subprocess inspection
@@ -113,4 +114,4 @@ offers Explore subprocess; changing views pauses playback. Back restores parent
 scenario, step, overview, scroll and originating node focus. The supplied logo
 is embedded unchanged as a PNG data URL, including in the local gallery. The
 transparent mark is 40px (32px on narrow diagram pages), with 80% opacity and no
-backing tile. State detail Back also restores the parent document scroll position.
+backing tile. Back also restores the parent document scroll position for nested views.
