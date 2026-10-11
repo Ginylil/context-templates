@@ -27,6 +27,11 @@ scenarios and Ginylil branding linked to [contexttemplates.com](https://contextt
 Details open from the info icon in a modal: playback pauses while you read and
 resumes on close only if it was playing. The optional Sidebar trades canvas width
 for persistent details. Active messages auto-scroll inside the visible viewport.
+Scenario menus open below the trigger in the page theme. Flowcharts read
+vertically, keep retries on outer side rails, and compose larger processes as
+clickable subprocesses, with a maximum of seven nodes per view. A bundled Python
+verifier checks these rules before rendering. Pages use the supplied Ginylil
+coffee-and-sun logo.
 Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | Example to download and open locally |

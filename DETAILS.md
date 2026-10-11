@@ -64,7 +64,7 @@ proof stages. There is no staging environment for this repository.
 ## Dynamic UMLs
 
 The router skill owns the shared HTML renderer, standard-library generator,
-authoring guide and six example JSON models. `scripts/dynamic_umls.py` deterministically
+authoring guide, supplied Ginylil PNG, flowchart verifier and six example JSON models. `scripts/dynamic_umls.py` deterministically
 copies these resources into the focused skill folders and generates standalone
 review pages plus a local gallery. No hosted website or publishing flow is added.
 
@@ -74,7 +74,14 @@ installed. `scripts/render.py` checks model identifiers, notation, bounds, activ
 edge endpoints, source link schemes and required scope text. It safely embeds
 JSON, renders model text through DOM textContent, and exclusively creates output
 files to preserve user artifacts. Coordinates and line routes are authored rather
-than automatically laid out; validation cannot prove there are no label collisions.
+than automatically laid out. Flowchart validation enforces at most seven nodes
+per view, downward forward routes, orthogonal explicit ports, outer side loops,
+node spacing, no connector overlaps/crossings and no routes through nodes. The
+standalone `scripts/validate_flowchart.py` accepts JSON or emitted HTML and checks
+every child view. It uses conservative node bounds; typography-dependent label
+collisions still require rendered inspection. Nested `subflows` are embedded full
+models referenced by double-bar subprocess nodes, with local references and
+maximum nesting depth four.
 
 The test suite exercises all six renderers from isolated destinations for all three
 agents, preserves existing HTML files, rejects unsafe/invalid model content and
@@ -89,3 +96,9 @@ paused. The optional sidebar uses the same details DOM, narrows the diagram and
 keeps its contents current. Sequence headers stay visible during canvas scrolling.
 Auto-follow sizes the canvas against the visible viewport and checks the active
 message's geometry rather than only comparing unclipped container bounds.
+
+Scenario selection uses a themed button/listbox below the trigger, with keyboard
+navigation, committed selection, typeahead and dismissal. Subprocess inspection
+offers Explore subprocess; changing views pauses playback. Back restores parent
+scenario, step, overview, scroll and originating node focus. The supplied logo
+is embedded unchanged as a PNG data URL, including in the local gallery.

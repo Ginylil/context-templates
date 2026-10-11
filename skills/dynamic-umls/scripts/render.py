@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import html
+import importlib.util
 import json
 import math
 import re
@@ -14,7 +16,7 @@ from urllib.parse import urlsplit
 KINDS = {
     'sequence': {'participant'},
     'class': {'class'},
-    'flowchart': {'process', 'decision', 'terminal'},
+    'flowchart': {'process', 'decision', 'terminal', 'subprocess'},
     'state': {'state', 'initial', 'final', 'decision'},
     'activity': {'action', 'decision', 'initial', 'final', 'fork', 'join'},
     'component': {'component'},
@@ -58,7 +60,8 @@ def identifiers(items, where):
     return set(ids)
 
 
-def validate(model, expected=None):
+def validate(model, expected=None, _depth=0):
+    require(_depth <= 4, "subflows: maximum nesting depth is four")
     require(isinstance(model, dict), 'model: expected object')
     kind = model.get('type')
     require(isinstance(kind, str) and kind in KINDS, 'type: unsupported diagram')
@@ -143,6 +146,32 @@ def validate(model, expected=None):
         string(item.get('label'), 'legend.label', 100)
         if 'dashed' in item:
             require(isinstance(item['dashed'], bool), 'legend.dashed: expected boolean')
+    if kind == 'flowchart':
+        children = model.get('subflows', [])
+        records(children, 'subflows', 0)
+        child_ids = identifiers(children, 'subflows')
+        used = set()
+        for n in nodes:
+            if n['kind'] == 'subprocess':
+                require(isinstance(n.get('subflow'), str) and n['subflow'] in child_ids,
+                        f"node {n['id']}: subprocess must reference a local subflow")
+                used.add(n['subflow'])
+            else:
+                require('subflow' not in n, f"node {n['id']}: only subprocesses may reference subflows")
+        require(used == child_ids, 'subflows: each child must be referenced by a subprocess')
+        for child in children:
+            try:
+                validate(child, expected='flowchart', _depth=_depth+1)
+            except ValueError as error:
+                raise ValueError(f"subflow {child['id']}: {error}") from error
+        # Load beside this script so standalone installed packages work without path changes.
+        sys.dont_write_bytecode = True
+        spec = importlib.util.spec_from_file_location('flow_layout', Path(__file__).with_name('validate_flowchart.py'))
+        layout = importlib.util.module_from_spec(spec); spec.loader.exec_module(layout)
+        layout.validate_layout(model)
+    else:
+        require('subflows' not in model and all('subflow' not in n for n in nodes),
+                'subflows: supported only in flowcharts')
     return model
 
 
@@ -150,15 +179,16 @@ def render(model, template=None, expected=None):
     validate(model, expected)
     template = template or Path(__file__).resolve().parents[1] / 'assets/template.html'
     page = template.read_text(encoding='utf-8')
-    require(page.count('__DIAGRAM_DATA__') == 1 and page.count('__PAGE_TITLE__') == 1,
-            'template: expected exactly one title and model placeholder')
+    require(all(page.count(key) == 1 for key in ('__DIAGRAM_DATA__', '__PAGE_TITLE__', '__GINYLIL_LOGO__')),
+            'template: expected exactly one title, model and logo placeholder')
     # Treat all model text as data. Escape HTML parser delimiters even in a JSON
     # script block. The renderer uses textContent, never model-controlled innerHTML.
     data = json.dumps(model, ensure_ascii=True, separators=(',', ':'), allow_nan=False)
     data = data.replace('&', '\\u0026').replace('<', '\\u003c').replace('>', '\\u003e')
+    logo = 'data:image/png;base64,' + base64.b64encode((Path(__file__).resolve().parents[1] / 'assets/ginylil.png').read_bytes()).decode('ascii')
     # One pass: literal placeholder names inside user data remain untouched.
-    return re.sub(r'__PAGE_TITLE__|__DIAGRAM_DATA__',
-                  lambda match: html.escape(model['title']) if match[0] == '__PAGE_TITLE__' else data, page)
+    return re.sub(r'__PAGE_TITLE__|__DIAGRAM_DATA__|__GINYLIL_LOGO__',
+                  lambda match: {'__PAGE_TITLE__': html.escape(model['title']), '__DIAGRAM_DATA__': data, '__GINYLIL_LOGO__': logo}[match[0]], page)
 
 
 def main():

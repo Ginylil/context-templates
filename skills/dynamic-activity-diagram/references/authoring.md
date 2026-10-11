@@ -29,8 +29,9 @@ Those are different subjects. Do not silently substitute one for the other.
    machine paths or another skill being installed.
 2. Build a UTF-8 JSON model in the user's workspace. Keep the example's visual
    style; replace the model with investigated content. For small diagrams use
-   roughly 3–8 nodes; split a dense system into several requested views rather
-   than unreadable text. Keep labels short; details belong in the inspector.
+   roughly 3–8 nodes. Flowcharts allow **at most seven nodes per view**: extract
+   a coherent subprocess instead of shrinking text or packing extra nodes into
+   the overview. This cap is our readability policy, not a UML/ISO requirement. Keep labels short; details belong in the inspector.
 3. Run from the skill folder (substitute actual paths):
 
    ```sh
@@ -44,8 +45,8 @@ Those are different subjects. Do not silently substitute one for the other.
    installed skill folders so managed updates remain safe.
 4. Deliver one standalone `.html` with embedded CSS, JavaScript, SVG and model.
    It opens through `file://`; no server, build system, CDN, network fetch, fonts,
-   tracking or secret is needed. Branding must retain the inline Ginylil mark and
-   a visible link to **https://contexttemplates.com**. User-controlled model text
+   tracking or secret is needed. Branding must retain the supplied coffee-and-sun
+   Ginylil PNG, embedded as a data URL, and a visible link to **https://contexttemplates.com**. User-controlled model text
    must remain data (`textContent`); never interpolate it as executable HTML/JS.
    Keep the diagram full-width and details hidden by default. An info icon opens
    step details in a modal, pauses playback and remembers whether it was playing
@@ -70,7 +71,7 @@ Those are different subjects. Do not silently substitute one for the other.
    A playback tutorial is a visualization of the model, not execution of a real
    login, payment, deployment or agent installation.
 
-## Model contract (version 1)
+## Model contract
 
 Required top-level fields:
 
@@ -102,7 +103,7 @@ Required top-level fields:
 | --- | --- | --- | --- |
 | Sequence | `participant` | `call`, `signal`, `return` | Participants at `y=45`, horizontal lifelines; edge array is chronological. Messages laid out at `y=142 + 68*index`. Height at least `142 + 68*(messages−1) + 60`. A call has a filled arrow, signal an open arrow, return a dashed open arrow. Self-calls supported. Keep each walkthrough hop explicit; do not confuse async messaging with a dashed return. |
 | Class | `class` | `association`, `composition`, `aggregation`, `inheritance`, `dependency` | Optional `fields`, `methods` lists. Composition/aggregation diamond is at `from` (whole); inheritance triangle at `to` (parent). Optional `sourceMultiplicity`, `targetMultiplicity`; do not invent cardinalities. Structural exploration is not a simulated object lifecycle. |
-| Flowchart | `process`, `decision`, `terminal` | `flow` | Label decision exits (e.g. Yes/No); distinguish termination from repair loops. This is a general process notation, not formally a UML diagram type. |
+| Flowchart | `process`, `decision`, `terminal`, `subprocess` | `flow` | At most seven nodes in each view, top-down orthogonal forward edges, outer side loops, and explicit ports. Label decision exits (e.g. Yes/No); distinguish termination from repair loops. This is a general process notation, not formally a UML diagram type. |
 | State | `state`, `initial`, `final`, `decision` | `transition` | Name transitions `trigger [guard] / effect` when applicable. Use genuine states, not action boxes. This subset has no entry/exit compartments, hierarchy or history pseudostates. |
 | Activity | `action`, `initial`, `final`, `decision`, `fork`, `join` | `flow` | Fork/join bars have `w` and height 8. Parallel branches must highlight together when concurrent; a join waits for its required branches. Label guards on decisions. No swimlanes/object flows in this renderer. |
 | Component | `component` | `dependency` | Dashed dependency arrows point from dependent (`from`) to supplier (`to`), not file/message movement. Inspect real boundaries. This subset has no ports or provided/required-interface notation. |
@@ -111,3 +112,53 @@ The renderer implements a focused educational subset of
 [UML 2.5.1](https://www.omg.org/spec/UML/2.5.1), not a complete UML modeling tool.
 For unsupported notation, explain the limitation and propose a separate appropriate
 view; do not disguise an unsupported symbol as a different UML construct.
+
+
+## Bounded, composed flowcharts
+
+Use a vertical main path with clearly named decision exits. Keep return loops on
+an outer left or right rail, then enter the earlier node through a side port with
+an arrow. Use independent routes; do not share connector segments or cross other
+connectors. Only an exact shared endpoint on the same node is allowed. Leave at
+least 16 logical pixels between node boxes, 12 between routes and unrelated node
+boxes, and put upward loop segments at least 32 pixels outside the full node area.
+The validator conservatively treats diamonds/terminals as their bounding boxes.
+Keep labels in open space and verify their actual typography in the browser.
+
+Every flowchart edge requires `fromPort` and `toPort` (`top`, `bottom`, `left`,
+`right`) and `route` (`forward` or `loop`). `forward` edges must lead to a lower
+node without upward segments. `loop` edges must return to a higher node, leave
+and enter side ports, and route upward only along an outer rail. Supply `via`
+waypoints for orthogonal bends; the generator does not silently auto-route them.
+
+A node with `kind: "subprocess"` requires `subflow: "repair-flow"`. Its owning
+model's optional `subflows` list contains a full flowchart model with matching
+`id: "repair-flow"`. Each child has its own nodes, routes, scenarios, sources,
+scope and assumptions; references stay within the owning view. Every child must
+be referenced. Nesting is bounded at four child levels and every view stays
+within seven nodes. The double-bar process symbol follows
+[draw.io's subprocess notation](https://www.drawio.com/docs/best-practice/process-map-flowchart/);
+explicit ports follow its [fixed connectors](https://www.drawio.com/docs/manual/connectors/).
+
+Selecting a subprocess shows its explanation and an **Explore subprocess**
+button in the inspector. Opening the child pauses playback. **Back to parent**
+restores the previous scenario, step, overview and scroll position, with focus on
+the originating subprocess. Playback stays paused so the reader decides when to
+continue. All nested models remain embedded in the same HTML file.
+
+Before generation, run the bundled standard-library verifier:
+
+```sh
+python3 scripts/validate_flowchart.py /absolute/path/model.json
+```
+
+It also accepts emitted HTML and verifies every nested view. `render.py --check`
+and HTML generation automatically enforce the same rules, so invalid routes
+cannot bypass the verifier. It checks geometry and structure, not process truth
+or font-dependent label collisions; browser inspection remains required.
+
+The scenario picker uses the page theme and opens beneath its trigger. Check
+arrow keys, Home/End, Enter/Space, letter search, Escape, Tab and outside-click
+closure. Selection and focus are distinct; a keyboard highlight is not committed
+until activated. The listbox follows the
+[WAI-ARIA listbox pattern](https://www.w3.org/WAI/ARIA/apg/patterns/listbox/).

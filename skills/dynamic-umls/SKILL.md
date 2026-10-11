@@ -31,7 +31,10 @@ Deliver an offline HTML page with playback, step navigation, clickable element
 inspector, overview and scenarios when meaningful. Show details in an info modal
 by default; opening pauses and closing restores the prior playback state. Offer
 an optional sidebar that uses diagram width. Follow active messages in the visible
-viewport and keep sequence participant headers visible. Retain the inline Ginylil logo
+viewport and keep sequence participant headers visible. For flowcharts, limit each view to seven nodes, use vertical forward paths and
+outer side loops, and compose larger flows with clickable subprocesses. Run the
+bundled `scripts/validate_flowchart.py`; rendering also enforces its checks.
+Retain the supplied embedded Ginylil coffee-and-sun logo
 linked to https://contexttemplates.com. Show the actual output and rendered proof
 when browser tools are available. Never confuse a visualization with execution of
 the modeled system. For a family review, show all six examples.

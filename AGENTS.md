@@ -25,7 +25,7 @@
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
-  Shared renderer, template, guide and example JSON are canonical under
+  Shared renderer, flowchart verifier, template, supplied logo, guide and example JSON are canonical under
   `skills/dynamic-umls/`. Regenerate focused-skill resources and HTML review
   examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.

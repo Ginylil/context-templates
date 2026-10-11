@@ -63,12 +63,27 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       assert.equal(await page.locator('#step-track button').nth(1).evaluate(el => el === document.activeElement), true);
       assert.equal(await page.locator('#step-track button').nth(1).getAttribute('aria-current'), 'true');
       if (model.scenarios.length > 1) {
-        await page.selectOption('#scenario', '1');
+        await page.locator('#scenario').click();
+        await page.locator('#scenario-menu [role=option]').nth(1).click();
         assert.match(await page.locator('#counter').textContent(), /^01/);
         assert.equal(await page.locator('#step-title').textContent(), model.scenarios[1].steps[0].title);
       }
+      // Repo-owned picker opens below the trigger, with keyboard selection and dismissal.
+      await page.locator('#scenario').focus();
+      await page.keyboard.press('ArrowDown');
+      const trigger=await page.locator('#scenario').boundingBox(), menu=await page.locator('#scenario-menu').boundingBox();
+      assert(menu.y>=trigger.y+trigger.height && menu.x>=0 && menu.x+menu.width<=1440);
+      assert.equal(await page.locator('#scenario').getAttribute('aria-expanded'),'true');
+      await page.keyboard.press('End');
+      await page.keyboard.press('Enter');
+      assert.equal(await page.locator('#scenario-value').textContent(),model.scenarios.at(-1).label);
+      await page.locator('#scenario').click();await page.keyboard.press('Escape');
+      assert.equal(await page.locator('#scenario').evaluate(el=>el===document.activeElement),true);
+      assert.equal(await page.locator('#scenario-menu').isVisible(),false);
+      await page.locator('#scenario').click();await page.locator('#overview').click();
+      assert.equal(await page.locator('#scenario-menu').isVisible(),false);
       await page.locator('#reset').click();
-      assert.equal(await page.locator('#scenario').inputValue(), '0');
+      assert.equal(await page.locator('#scenario').evaluate(el=>el.value), '0');
       await page.locator('#overview').click();
       assert.equal(await page.locator('#overview').getAttribute('aria-pressed'), 'true');
       assert.equal(await page.locator('.dim').count(), 0);
@@ -129,6 +144,44 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       await page.emulateMedia({reducedMotion:'no-preference'});
       console.log(`${kind}: offline playback, navigation, scenarios, inspector, keyboard, desktop/mobile, reduced motion passed`);
     }
+    // Composition: drill into a bounded child, then recover the parent's scenario/step.
+    await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/flowchart.html')).href);
+    await page.locator('#scenario').click();await page.locator('#scenario-menu [role=option]').nth(1).click();
+    await page.locator('#step-track button').nth(1).click();
+    const parentCounter=await page.locator('#counter').textContent();
+    await page.locator('[data-node=repair]').focus();await page.keyboard.press('Enter');
+    await page.locator('#open-subflow').click();
+    await page.waitForFunction(()=>document.getElementById('info').getAttribute('aria-expanded')==='false');
+    assert.equal(await page.locator('#title').textContent(),'Repair the failure');
+    assert.equal(await page.locator('[data-node]').count(),4);
+    assert.equal(await page.locator('#play').textContent(),'Play ▷');
+    assert.equal(await page.locator('#flow-back').evaluate(el=>el===document.activeElement),true);
+    await page.locator('#next').click();assert.match(await page.locator('#counter').textContent(),/^02/);
+    assert(await page.locator('.node.active').evaluateAll(nodes=>{const f=document.getElementById('canvas-scroll').getBoundingClientRect();return nodes.every(n=>{const b=n.getBoundingClientRect();return b.top>=f.top&&b.bottom<=Math.min(innerHeight,f.bottom);});}),'Subprocess active nodes must fit in the viewport');
+    await page.screenshot({path:path.join(output,'flowchart-subprocess-after.png'),fullPage:true});
+    await page.locator('#flow-back').click();
+    assert.equal(await page.locator('#title').textContent(),'Is this change ready?');
+    assert.equal(await page.locator('#counter').textContent(),parentCounter);
+    assert.equal(await page.locator('#scenario-value').textContent(),'A check fails');
+    assert.equal(await page.locator('[data-node=repair]').evaluate(el=>el===document.activeElement),true);
+    await page.locator('#overview').click();
+    // Match the baseline viewport, then a taller canvas capture for route inspection.
+    await page.setViewportSize({width:1440,height:960});
+    await page.locator('#reset').click();await page.locator('#overview').click();
+    await page.screenshot({path:path.join(output,'flowchart-layout-after.png'),fullPage:true});
+    await page.locator('#scenario').click();
+    await page.screenshot({path:path.join(output,'scenario-after.png')});
+    await page.keyboard.press('Escape');
+    await page.setViewportSize({width:1000,height:1400});
+    await page.waitForTimeout(100);
+    await page.screenshot({path:path.join(output,'flowchart-routes-after.png'),fullPage:true});
+    await page.setViewportSize({width:390,height:844});
+    await page.locator('#scenario').click();
+    const mobileMenu=await page.locator('#scenario-menu').boundingBox(), mobileTrigger=await page.locator('#scenario').boundingBox();
+    assert(mobileMenu.y>=mobileTrigger.y+mobileTrigger.height && mobileMenu.x+mobileMenu.width<=390 && mobileMenu.y+mobileMenu.height<=844);
+    await page.screenshot({path:path.join(output,'scenario-mobile-after.png')});
+    await page.keyboard.press('Escape');
+    console.log('Themed picker below trigger and nested subprocess return verified.');
     // Reproduce the reported fifth-message failure in a short browser window.
     await page.setViewportSize({width:1440,height:760});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);

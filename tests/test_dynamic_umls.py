@@ -106,6 +106,64 @@ class DynamicUmlTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             renderer.render(self.model(), expected='class')
 
+    def test_flowchart_rules_reject_dense_backwards_crossing_and_missing_subflows(self):
+        mutations = [
+            (lambda m: m['nodes'].extend(dict(m['nodes'][0], id='extra-'+str(i), x=120+i*220, y=700) for i in range(3)), 'exceeds 7'),
+            (lambda m: m['nodes'][1].update(y=85), 'clearance'),
+            (lambda m: m['edges'][0].update(fromPort='right'), 'orthogonal'),
+            (lambda m: m['edges'][0].update(route='loop'), 'earlier node'),
+            (lambda m: m['edges'][-1].update(toPort='top'), 'side ports|orthogonal'),
+            (lambda m: m['edges'][-1]['via'][0].update(x=790), 'orthogonal'),
+            (lambda m: m['nodes'][-1].update(subflow='missing'), 'local subflow'),
+            (lambda m: m['subflows'][0]['edges'][0].update(route='loop'), 'earlier node'),
+        ]
+        for mutate, error in mutations:
+            model = self.model('flowchart'); mutate(model)
+            with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
+                renderer.validate(model)
+        # An additional start-to-end connector overlaps the main path and crosses a node.
+        model = self.model('flowchart')
+        model['edges'].append(dict(model['edges'][0], id='shortcut', to='ready'))
+        with self.assertRaisesRegex(ValueError, 'crosses node|overlapping'):
+            renderer.validate(model)
+        # A short inner retry rail crosses the outgoing No branch.
+        model = self.model('flowchart')
+        model['edges'][-1].update(fromPort='left', toPort='right', via=[
+            {'x':500,'y':520}, {'x':500,'y':205}])
+        with self.assertRaisesRegex(ValueError, 'outer side rail'):
+            renderer.validate(model)
+
+    def test_orthogonal_geometry_detects_crossings_overlaps_and_shared_points(self):
+        layout = load(family.CANONICAL / 'scripts/validate_flowchart.py', 'flow_geometry')
+        self.assertEqual(layout.intersection(((0, 20), (80, 20)), ((40, 0), (40, 50))), (40, 20))
+        self.assertEqual(layout.intersection(((0, 20), (80, 20)), ((40, 20), (100, 20))), 'overlap')
+        self.assertIsNone(layout.intersection(((0, 20), (80, 20)), ((0, 40), (80, 40))))
+        self.assertEqual(layout.intersection(((0, 20), (40, 20)), ((40, 20), (40, 50))), (40, 20))
+        self.assertTrue(layout.touches_interior(((0, 20), (80, 20)), (30, 10, 50, 30)))
+        self.assertFalse(layout.touches_interior(((0, 10), (80, 10)), (30, 10, 50, 30)))
+        # Two disjoint node pairs whose connectors cross in otherwise empty space.
+        m = {'nodes': [{'id':'a','x':100,'y':50,'w':40,'h':40},
+                       {'id':'b','x':300,'y':350,'w':40,'h':40},
+                       {'id':'c','x':300,'y':50,'w':40,'h':40},
+                       {'id':'d','x':100,'y':350,'w':40,'h':40}],
+             'edges': [{'id':'one','from':'a','to':'b','route':'forward','fromPort':'bottom','toPort':'top','via':[{'x':100,'y':150},{'x':300,'y':150}]},
+                       {'id':'two','from':'c','to':'d','route':'forward','fromPort':'bottom','toPort':'top','via':[{'x':300,'y':250},{'x':100,'y':250}]}]}
+        with self.assertRaisesRegex(ValueError, 'edges one / two: crossing'):
+            layout.validate_layout(m)
+
+    def test_flow_validator_cli_checks_json_and_embedded_html(self):
+        validator = family.CANONICAL / 'scripts/validate_flowchart.py'
+        for path in [family.CANONICAL / 'assets/examples/flowchart.json', ROOT / 'examples/dynamic-umls/flowchart.html']:
+            result = subprocess.run([sys.executable, str(validator), str(path)], capture_output=True, text=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / 'bad.json'
+            model = self.model('flowchart'); model['subflows'][0]['nodes'][1]['y'] = 55
+            path.write_text(json.dumps(model))
+            result = subprocess.run([sys.executable, str(validator), str(path)], capture_output=True, text=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn('clearance', result.stderr)
+
     def test_class_relationship_direction_and_activity_parallelism(self):
         classes = self.model('class')
         composition = next(e for e in classes['edges'] if e['kind'] == 'composition')

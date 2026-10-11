@@ -3,7 +3,9 @@
 These are portable artifact templates, not a hosted website. A generated page is
 one HTML file; the example gallery is a local review index. The user's supplied
 sequence page informed the dark canvas, warm accent and light explanatory notes.
-The renderer and Ginylil mark are original implementations with no external assets.
+The renderer is repo-owned. The Ginylil coffee-and-sun logo is the PNG supplied
+by the owner, stored at `assets/ginylil.png` in the canonical skill and embedded
+unchanged as a data URL. A paper backing keeps its dark artwork readable.
 
 ## Visual and interaction rules
 
@@ -15,8 +17,19 @@ The renderer and Ginylil mark are original implementations with no external asse
   branding. Background `#191b19`, canvas `#202420`, paper `#f2eee5`.
 - Titles use system Georgia/serif; UI uses system sans; labels/code use system
   monospace. No font download, CDN, icon library, telemetry or network dependency.
-- The inline G mark connects copper and mint; pair it with `ginylil` and link to
+- Use the supplied Ginylil coffee-and-sun logo, linked to
   `https://contexttemplates.com`. Keep a visible footer destination as well.
+- Scenario menus belong to the page theme and open below their trigger on desktop
+  and mobile. Support keyboard selection, typeahead, Escape/Tab dismissal and
+  outside click; preserve focus and distinguish selection from keyboard focus.
+- Flowcharts read downward, with at most seven nodes per view. This is a project
+  readability limit, not a notation standard. Use double-bar subprocess nodes
+  linking to smaller embedded flows. Back restores parent context; changing
+  views pauses playback. Use orthogonal explicit ports and separate routes.
+  Returns use outer side rails and enter side ports. Reject connector crossings,
+  overlaps, routes through nodes, insufficient node spacing and invalid child links.
+  The Python verifier uses conservative bounding boxes; browser inspection still
+  checks text placement. See the authoring guide for the numeric geometry policy.
 - Play is opt-in. Previous/next, reset, speed, overview, scenario selection and
   direct step navigation share one model. Stop at the end and when the page is
   hidden. Opening details saves the playing/paused state and remaining step
@@ -41,7 +54,8 @@ The renderer and Ginylil mark are original implementations with no external asse
 
 ## Canonical sources and generated copies
 
-`skills/dynamic-umls/` owns `assets/template.html`, `scripts/render.py`,
+`skills/dynamic-umls/` owns `assets/template.html`, `assets/ginylil.png`,
+`scripts/render.py`, `scripts/validate_flowchart.py`,
 `references/authoring.md` and `assets/examples/<type>.json`. The six focused skills
 have generated copies of the shared resources plus their own `assets/example.json`
 so every downloadable skill works alone. Edit shared resources at the router,
@@ -65,6 +79,9 @@ checks actual active-message viewport bounds (including during playback); a chan
 scroll offset alone is insufficient. Dialog semantics follow the native
 [HTML dialog element](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/dialog),
 with a named title, close control, keyboard dismissal and focus restoration.
+The scenario menu keyboard/below-trigger checks and subprocess drill-down/return
+checks supplement these regressions. Matched before/after captures use 1440×960
+for the flowchart; route inspection also uses a narrower, taller viewport.
 Human inspection still checks routing and visual hierarchy. The initial reference
 was rendered separately before implementation; only sequence shares that reference
 subject. Other types have no prior shipped visual baseline. This repository has no

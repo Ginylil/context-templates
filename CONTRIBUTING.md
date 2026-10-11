@@ -85,3 +85,8 @@ rendered review. With an existing Playwright installation, run
 `node scripts/check_dynamic_umls.cjs` (see DESIGN for environment overrides).
 Keep screenshots in ignored `dist/`; do not package environment-specific proof,
 private repositories or user's generated diagrams as public skill resources.
+
+Flowchart contributions must pass the bundled Python verifier for every nested
+view, including the seven-node cap, orthogonal top-down routes and outer side
+loops. Add focused rejection cases when changing geometry policy. Preserve the
+owner-supplied Ginylil logo and its contexttemplates.com link.
