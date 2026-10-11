@@ -1,0 +1,208 @@
+{
+  "type": "class",
+  "title": "An order, made explicit",
+  "lede": "Explore ownership, cardinality, and specialization in a small commerce model.",
+  "kicker": "Dynamic UMLs / class",
+  "width": 1000,
+  "height": 560,
+  "nodes": [
+    {
+      "id": "customer",
+      "label": "Customer",
+      "kind": "class",
+      "x": 170,
+      "y": 115,
+      "detail": "A person who places orders. This model allows a customer with no orders.",
+      "w": 240,
+      "fields": [
+        "- id: UUID",
+        "- email: String"
+      ],
+      "methods": [
+        "+ placeOrder(): Order"
+      ]
+    },
+    {
+      "id": "order",
+      "label": "Order",
+      "kind": "class",
+      "x": 500,
+      "y": 115,
+      "detail": "Owns its line items; payment is modeled separately.",
+      "w": 240,
+      "fields": [
+        "- id: UUID",
+        "- status: OrderStatus"
+      ],
+      "methods": [
+        "+ total(): Money"
+      ]
+    },
+    {
+      "id": "item",
+      "label": "LineItem",
+      "kind": "class",
+      "x": 830,
+      "y": 115,
+      "detail": "A snapshot of a purchased item. Owned by exactly one order.",
+      "w": 240,
+      "fields": [
+        "- quantity: Integer",
+        "- price: Money"
+      ],
+      "methods": [
+        "+ subtotal(): Money"
+      ]
+    },
+    {
+      "id": "payment",
+      "label": "Payment",
+      "kind": "class",
+      "x": 500,
+      "y": 420,
+      "detail": "Base payment record. Zero or one payment is associated with an order in this simplified model.",
+      "w": 240,
+      "fields": [
+        "- amount: Money",
+        "- status: PaymentStatus"
+      ],
+      "methods": [
+        "+ authorize(): Result"
+      ]
+    },
+    {
+      "id": "card",
+      "label": "CardPayment",
+      "kind": "class",
+      "x": 830,
+      "y": 420,
+      "detail": "A specialized Payment handled through an external processor. No card secrets are modeled.",
+      "w": 240,
+      "fields": [
+        "- processorRef: String"
+      ],
+      "methods": [
+        "+ authorize(): Result"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "id": "places",
+      "from": "customer",
+      "to": "order",
+      "label": "places",
+      "kind": "association",
+      "detail": "One customer can place zero or more orders; an order belongs to one customer.",
+      "sourceMultiplicity": "1",
+      "targetMultiplicity": "0..*"
+    },
+    {
+      "id": "owns",
+      "from": "order",
+      "to": "item",
+      "label": "contains",
+      "kind": "composition",
+      "detail": "The filled diamond at Order denotes ownership. Each order has one or more line items.",
+      "sourceMultiplicity": "1",
+      "targetMultiplicity": "1..*"
+    },
+    {
+      "id": "paid-by",
+      "from": "order",
+      "to": "payment",
+      "label": "paid by",
+      "kind": "association",
+      "detail": "An order can be unpaid. This example permits at most one payment record.",
+      "sourceMultiplicity": "1",
+      "targetMultiplicity": "0..1",
+      "labelAt": {
+        "x": 565,
+        "y": 280
+      }
+    },
+    {
+      "id": "specializes",
+      "from": "card",
+      "to": "payment",
+      "label": "specializes",
+      "kind": "inheritance",
+      "detail": "The hollow triangle points to Payment, the general type. CardPayment specializes that type."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "structure",
+      "label": "Domain structure",
+      "steps": [
+        {
+          "title": "A customer places orders",
+          "body": "Read cardinality at each end: one customer for an order, and zero or more orders for a customer.",
+          "nodes": [
+            "customer",
+            "order"
+          ],
+          "edges": [
+            "places"
+          ]
+        },
+        {
+          "title": "Line items belong to the order",
+          "body": "Composition expresses ownership. The filled diamond sits at the whole, Order.",
+          "nodes": [
+            "order",
+            "item"
+          ],
+          "edges": [
+            "owns"
+          ]
+        },
+        {
+          "title": "Payment can be absent",
+          "body": "An order is associated with zero or one payment. The model does not pretend all orders are paid.",
+          "nodes": [
+            "order",
+            "payment"
+          ],
+          "edges": [
+            "paid-by"
+          ]
+        },
+        {
+          "title": "A card payment is a payment",
+          "body": "Generalization points from the specialized class to its parent. The walkthrough reveals structure; it is not object execution.",
+          "nodes": [
+            "card",
+            "payment"
+          ],
+          "edges": [
+            "specializes"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Illustrative domain model; not generated from a production schema.",
+    "One payment per order and owned line-item snapshots are deliberate simplifications; retries, refunds and split payments require a richer model.",
+    "UML subset: class compartments, association, composition and generalization. \u201c+\u201d is public and \u201c\u2212\u201d is private visibility."
+  ],
+  "legend": [
+    {
+      "label": "Line: association"
+    },
+    {
+      "label": "Filled diamond: composition"
+    },
+    {
+      "label": "Hollow triangle: generalization"
+    }
+  ],
+  "sources": [
+    {
+      "label": "UML 2.5.1 \u2014 diagram notation",
+      "href": "https://www.omg.org/spec/UML/2.5.1"
+    }
+  ],
+  "evidence": "Evidence: illustrative example; no application repository was supplied."
+}

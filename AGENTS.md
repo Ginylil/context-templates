@@ -17,9 +17,15 @@
   and locally edited installed copies, retain unrelated skills and removed catalog
   entries, and never execute packaged scripts during installation. Do not add force
   replacement or automatic pruning.
-- `make check` runs catalog validation and isolated installer/package tests.
+- `make check` runs canonical diagram drift checks, catalog validation, and
+  isolated installer/package/rendering tests.
   `make build` generates skill ZIPs and a checksummed JSON catalog in `dist/`.
   Run both for publishable skill changes; meaningful behavior checks supplement
   metadata checks. Local checks are not CI or proof of discovery in each agent.
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
+- Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
+  Shared renderer, template, guide and example JSON are canonical under
+  `skills/dynamic-umls/`. Regenerate focused-skill resources and HTML review
+  examples with `make examples`; never edit their generated copies manually.
+  New diagram types must have a concrete interactive example for template review.

@@ -3,11 +3,11 @@ SKILL ?=
 INSTALL_ARGS ?=
 
 .DEFAULT_GOAL := help
-.PHONY: help catalog install install-codex install-cursor install-claude check test build
+.PHONY: help catalog install install-codex install-cursor install-claude check test build examples
 
 help:
 	@$(PYTHON) scripts/skills.py --help
-	@echo "make catalog | install-codex | install-cursor | install-claude | install | check | build"
+	@echo "make catalog | install-codex | install-cursor | install-claude | install | examples | check | build"
 	@echo 'Select one skill: make install-codex SKILL=context-templates'
 	@echo 'Preview: make install INSTALL_ARGS=--dry-run'
 
@@ -26,7 +26,11 @@ install-cursor:
 install-claude:
 	$(PYTHON) scripts/skills.py install --agent claude $(if $(SKILL),--skill "$(SKILL)") $(INSTALL_ARGS)
 
+examples:
+	$(PYTHON) scripts/dynamic_umls.py
+
 check:
+	$(PYTHON) scripts/dynamic_umls.py --check
 	$(PYTHON) scripts/skills.py check
 	$(MAKE) test
 
@@ -34,4 +38,5 @@ test:
 	$(PYTHON) -m unittest discover -s tests -v
 
 build:
+	$(PYTHON) scripts/dynamic_umls.py --check
 	$(PYTHON) scripts/skills.py build

@@ -1,0 +1,294 @@
+{
+  "type": "activity",
+  "title": "Two checks, one dispatch",
+  "lede": "Stock reservation and payment authorization can run concurrently. Dispatch waits for both.",
+  "kicker": "Dynamic UMLs / activity",
+  "width": 900,
+  "height": 610,
+  "nodes": [
+    {
+      "id": "initial",
+      "label": "Initial",
+      "kind": "initial",
+      "x": 450,
+      "y": 30,
+      "detail": "Begin the activity."
+    },
+    {
+      "id": "accept",
+      "label": "Accept order",
+      "kind": "action",
+      "x": 450,
+      "y": 100,
+      "detail": "The order is admitted for preparation.",
+      "w": 210
+    },
+    {
+      "id": "fork",
+      "label": "Fork",
+      "kind": "fork",
+      "x": 450,
+      "y": 175,
+      "detail": "Split control into concurrent stock and payment actions.",
+      "w": 520
+    },
+    {
+      "id": "stock",
+      "label": "Reserve stock",
+      "kind": "action",
+      "x": 220,
+      "y": 270,
+      "detail": "Reserve the required inventory.",
+      "w": 220
+    },
+    {
+      "id": "payment",
+      "label": "Authorize payment",
+      "kind": "action",
+      "x": 680,
+      "y": 270,
+      "detail": "Authorize payment through the processor.",
+      "w": 230
+    },
+    {
+      "id": "join",
+      "label": "Join",
+      "kind": "join",
+      "x": 450,
+      "y": 375,
+      "detail": "Continue only when both successful branches finish.",
+      "w": 520
+    },
+    {
+      "id": "pack",
+      "label": "Prepare dispatch",
+      "kind": "action",
+      "x": 450,
+      "y": 465,
+      "detail": "Package the order once stock and payment are ready.",
+      "w": 230
+    },
+    {
+      "id": "final",
+      "label": "Final",
+      "kind": "final",
+      "x": 450,
+      "y": 560,
+      "detail": "The activity terminates."
+    }
+  ],
+  "edges": [
+    {
+      "id": "begin",
+      "from": "initial",
+      "to": "accept",
+      "label": "begin",
+      "kind": "flow",
+      "detail": "Start preparing an admitted order.",
+      "labelAt": {
+        "x": 500,
+        "y": 65
+      }
+    },
+    {
+      "id": "split",
+      "from": "accept",
+      "to": "fork",
+      "label": "prepare",
+      "kind": "flow",
+      "detail": "Reach the concurrency fork.",
+      "labelAt": {
+        "x": 515,
+        "y": 155
+      }
+    },
+    {
+      "id": "stock-start",
+      "from": "fork",
+      "to": "stock",
+      "label": "parallel",
+      "kind": "flow",
+      "detail": "A control token enters the stock branch.",
+      "via": [
+        {
+          "x": 220,
+          "y": 210
+        }
+      ],
+      "labelAt": {
+        "x": 260,
+        "y": 212
+      }
+    },
+    {
+      "id": "payment-start",
+      "from": "fork",
+      "to": "payment",
+      "label": "parallel",
+      "kind": "flow",
+      "detail": "A control token enters the payment branch.",
+      "via": [
+        {
+          "x": 680,
+          "y": 210
+        }
+      ],
+      "labelAt": {
+        "x": 725,
+        "y": 212
+      }
+    },
+    {
+      "id": "stock-ready",
+      "from": "stock",
+      "to": "join",
+      "label": "stock ready",
+      "kind": "flow",
+      "detail": "The inventory branch completes.",
+      "via": [
+        {
+          "x": 220,
+          "y": 340
+        }
+      ],
+      "labelAt": {
+        "x": 295,
+        "y": 340
+      }
+    },
+    {
+      "id": "payment-ready",
+      "from": "payment",
+      "to": "join",
+      "label": "payment ready",
+      "kind": "flow",
+      "detail": "The authorization branch completes.",
+      "via": [
+        {
+          "x": 680,
+          "y": 340
+        }
+      ],
+      "labelAt": {
+        "x": 760,
+        "y": 340
+      }
+    },
+    {
+      "id": "dispatch",
+      "from": "join",
+      "to": "pack",
+      "label": "both complete",
+      "kind": "flow",
+      "detail": "The join waits for both incoming branches.",
+      "labelAt": {
+        "x": 535,
+        "y": 425
+      }
+    },
+    {
+      "id": "end",
+      "from": "pack",
+      "to": "final",
+      "label": "prepared",
+      "kind": "flow",
+      "detail": "End the successful preparation activity.",
+      "labelAt": {
+        "x": 525,
+        "y": 525
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "success",
+      "label": "Successful preparation",
+      "steps": [
+        {
+          "title": "Accept the order",
+          "body": "The activity starts and admits the order for preparation.",
+          "nodes": [
+            "initial",
+            "accept"
+          ],
+          "edges": [
+            "begin"
+          ]
+        },
+        {
+          "title": "Fork the work",
+          "body": "The bar splits control into two concurrent actions. This is not a choice between them.",
+          "nodes": [
+            "accept",
+            "fork",
+            "stock",
+            "payment"
+          ],
+          "edges": [
+            "split",
+            "stock-start",
+            "payment-start"
+          ]
+        },
+        {
+          "title": "Complete both branches",
+          "body": "Both successful actions reach the join. Their display order does not impose serial execution.",
+          "nodes": [
+            "stock",
+            "payment",
+            "join"
+          ],
+          "edges": [
+            "stock-ready",
+            "payment-ready"
+          ]
+        },
+        {
+          "title": "Join before dispatch",
+          "body": "The join synchronizes both branches before the next action.",
+          "nodes": [
+            "join",
+            "pack"
+          ],
+          "edges": [
+            "dispatch"
+          ]
+        },
+        {
+          "title": "Finish preparation",
+          "body": "The final node ends the activity. Shipment and delivery follow outside this view.",
+          "nodes": [
+            "pack",
+            "final"
+          ],
+          "edges": [
+            "end"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Illustrative successful path; inventory and authorization failures require explicit exception/compensation paths in a real design.",
+    "The fork launches both branches; the join requires both to complete. Highlighting two branches means concurrent work.",
+    "UML activity subset: initial/final nodes, actions, control flows, fork and join. No swimlanes or object-flow notation."
+  ],
+  "legend": [
+    {
+      "label": "Rounded rectangle: action"
+    },
+    {
+      "label": "Bar: fork / join"
+    },
+    {
+      "label": "Arrow: control flow"
+    }
+  ],
+  "sources": [
+    {
+      "label": "UML 2.5.1 \u2014 diagram notation",
+      "href": "https://www.omg.org/spec/UML/2.5.1"
+    }
+  ],
+  "evidence": "Evidence: illustrative example; no application repository was supplied."
+}

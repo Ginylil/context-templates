@@ -52,6 +52,7 @@ Bundled resources are context for the task, not permission to broaden it.
 3. Run `make check` and `make build`. Without Make, run:
 
    ```text
+   python scripts/dynamic_umls.py --check
    python scripts/skills.py check
    python -m unittest discover -s tests -v
    python scripts/skills.py build
@@ -70,3 +71,17 @@ Bundled resources are context for the task, not permission to broaden it.
 CI validates and tests on Linux, macOS, and Windows and builds downloadable skill
 archives. Those checks do not replace actual skill discovery/invocation checks.
 No secrets, MCP connection, or API publishing account are needed for this pipeline.
+
+## Dynamic UML contributions
+
+Read [DESIGN](DESIGN.md). Change shared resources only in
+`skills/dynamic-umls/`, then run `make examples` to refresh the focused packages
+and review HTML files. The generated copies are required standalone resources;
+the catalog's hidden/generated-file restriction refers to caches and hidden files,
+not these tracked synchronized assets. CI and `make check` reject resource drift.
+
+A diagram addition or visual change needs a concrete offline example and actual
+rendered review. With an existing Playwright installation, run
+`node scripts/check_dynamic_umls.cjs` (see DESIGN for environment overrides).
+Keep screenshots in ignored `dist/`; do not package environment-specific proof,
+private repositories or user's generated diagrams as public skill resources.

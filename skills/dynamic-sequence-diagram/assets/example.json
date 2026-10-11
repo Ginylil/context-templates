@@ -1,0 +1,342 @@
+{
+  "type": "sequence",
+  "title": "The three-party sign-in",
+  "lede": "Follow the browser, your application, and an identity provider through one authorization-code sign-in.",
+  "kicker": "Dynamic UMLs / sequence",
+  "width": 900,
+  "height": 835,
+  "nodes": [
+    {
+      "id": "browser",
+      "label": "Browser",
+      "kind": "participant",
+      "x": 115,
+      "y": 45,
+      "detail": "The user agent follows redirects and holds the application session cookie.",
+      "w": 190,
+      "role": "The person"
+    },
+    {
+      "id": "app",
+      "label": "Your application",
+      "kind": "participant",
+      "x": 450,
+      "y": 45,
+      "detail": "A confidential web client keeps the PKCE verifier and credentials on its server.",
+      "w": 220,
+      "role": "Session owner"
+    },
+    {
+      "id": "identity",
+      "label": "Identity provider",
+      "kind": "participant",
+      "x": 785,
+      "y": 45,
+      "detail": "Authenticates the person and issues an authorization code and tokens.",
+      "w": 210,
+      "role": "Identity authority"
+    }
+  ],
+  "edges": [
+    {
+      "id": "start",
+      "from": "browser",
+      "to": "app",
+      "label": "Start sign-in",
+      "kind": "call",
+      "detail": "The browser asks the application to start an authentication transaction."
+    },
+    {
+      "id": "redirect",
+      "from": "app",
+      "to": "browser",
+      "label": "Redirect to provider",
+      "kind": "return",
+      "detail": "The app creates transaction-bound state, nonce and a PKCE verifier; the redirect carries the S256 challenge."
+    },
+    {
+      "id": "authorize",
+      "from": "browser",
+      "to": "identity",
+      "label": "Authorize + challenge",
+      "kind": "call",
+      "detail": "The person authenticates at the provider and grants consent if required."
+    },
+    {
+      "id": "code",
+      "from": "identity",
+      "to": "browser",
+      "label": "Redirect with code",
+      "kind": "return",
+      "detail": "The provider returns a short-lived authorization code through the browser."
+    },
+    {
+      "id": "callback",
+      "from": "browser",
+      "to": "app",
+      "label": "Callback: code + state",
+      "kind": "call",
+      "detail": "The browser follows the registered callback URI with the authorization response."
+    },
+    {
+      "id": "response-check",
+      "from": "app",
+      "to": "app",
+      "label": "Check response binding",
+      "kind": "call",
+      "detail": "The application verifies the transaction and response binding before exchanging the code.",
+      "labelAt": {
+        "x": 620,
+        "y": 475
+      }
+    },
+    {
+      "id": "exchange",
+      "from": "app",
+      "to": "identity",
+      "label": "Code + PKCE verifier",
+      "kind": "call",
+      "detail": "The server exchanges the code at the token endpoint using the saved verifier and its client authentication."
+    },
+    {
+      "id": "tokens",
+      "from": "identity",
+      "to": "app",
+      "label": "ID + access tokens",
+      "kind": "return",
+      "detail": "Tokens return directly to the application server, not through the redirect."
+    },
+    {
+      "id": "token-check",
+      "from": "app",
+      "to": "app",
+      "label": "Validate ID token",
+      "kind": "call",
+      "detail": "Validate signature, issuer, audience, expiration and nonce. Invalid results stop sign-in.",
+      "labelAt": {
+        "x": 620,
+        "y": 679
+      }
+    },
+    {
+      "id": "session",
+      "from": "app",
+      "to": "browser",
+      "label": "Create application session",
+      "kind": "return",
+      "detail": "Only after validation does the app create its own session and send a Secure, HttpOnly session cookie."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "sign-in",
+      "label": "Sign in",
+      "steps": [
+        {
+          "title": "Start at your application",
+          "body": "A click begins a transaction owned by the application. The browser does not send its password to your application.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "start"
+          ]
+        },
+        {
+          "title": "Bind this sign-in attempt",
+          "body": "The server stores state, nonce and the PKCE verifier. It redirects the browser with a transaction-specific S256 challenge.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "redirect"
+          ]
+        },
+        {
+          "title": "Authenticate at the provider",
+          "body": "The browser visits the identity provider. Authentication and consent are collapsed into this hop; they are not implemented by this page.",
+          "nodes": [
+            "browser",
+            "identity"
+          ],
+          "edges": [
+            "authorize"
+          ]
+        },
+        {
+          "title": "Return an authorization code",
+          "body": "The provider redirects to the registered callback. This carries a code rather than the identity tokens.",
+          "nodes": [
+            "identity",
+            "browser"
+          ],
+          "edges": [
+            "code"
+          ]
+        },
+        {
+          "title": "Deliver the callback",
+          "body": "The browser follows the callback URL and returns the response to the application.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "callback"
+          ]
+        },
+        {
+          "title": "Check transaction binding",
+          "body": "The application validates the saved transaction and returned state. An invalid or abandoned response stops here.",
+          "nodes": [
+            "app"
+          ],
+          "edges": [
+            "response-check"
+          ]
+        },
+        {
+          "title": "Exchange on the server",
+          "body": "The application sends the code and saved verifier to the token endpoint over TLS, using the appropriate client authentication.",
+          "nodes": [
+            "app",
+            "identity"
+          ],
+          "edges": [
+            "exchange"
+          ]
+        },
+        {
+          "title": "Receive tokens privately",
+          "body": "The provider returns tokens on the server connection. The browser redirect is not the token delivery channel.",
+          "nodes": [
+            "identity",
+            "app"
+          ],
+          "edges": [
+            "tokens"
+          ]
+        },
+        {
+          "title": "Validate identity claims",
+          "body": "The application verifies the ID token, including signature, issuer, audience, expiration and nonce, before trusting the identity.",
+          "nodes": [
+            "app"
+          ],
+          "edges": [
+            "token-check"
+          ]
+        },
+        {
+          "title": "Create your own session",
+          "body": "With validation complete, the application establishes its session. Session expiry and logout are outside this focused example.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "session"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "safeguards",
+      "label": "Inspect safeguards",
+      "steps": [
+        {
+          "title": "Bind this sign-in attempt",
+          "body": "The server stores state, nonce and the PKCE verifier. It redirects the browser with a transaction-specific S256 challenge.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "redirect"
+          ]
+        },
+        {
+          "title": "Check transaction binding",
+          "body": "The application validates the saved transaction and returned state. An invalid or abandoned response stops here.",
+          "nodes": [
+            "app"
+          ],
+          "edges": [
+            "response-check"
+          ]
+        },
+        {
+          "title": "Exchange on the server",
+          "body": "The application sends the code and saved verifier to the token endpoint over TLS, using the appropriate client authentication.",
+          "nodes": [
+            "app",
+            "identity"
+          ],
+          "edges": [
+            "exchange"
+          ]
+        },
+        {
+          "title": "Validate identity claims",
+          "body": "The application verifies the ID token, including signature, issuer, audience, expiration and nonce, before trusting the identity.",
+          "nodes": [
+            "app"
+          ],
+          "edges": [
+            "token-check"
+          ]
+        },
+        {
+          "title": "Create your own session",
+          "body": "With validation complete, the application establishes its session. Session expiry and logout are outside this focused example.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "session"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "\u201cThree-party\u201d means browser / application / provider, not the TCP three-way handshake and not three messages.",
+    "Illustrative confidential web application using OpenID Connect authorization code and S256 PKCE over TLS.",
+    "Authentication UI, failures, token renewal and logout are omitted. Arrows show message direction; redirects are browser-mediated.",
+    "This is a focused sequence view: no activation bars or combined fragments. The page demonstrates a protocol; it does not execute a login."
+  ],
+  "legend": [
+    {
+      "label": "Solid filled arrow: call"
+    },
+    {
+      "label": "Dashed open arrow: return",
+      "dashed": true
+    },
+    {
+      "label": "Loop: self-call"
+    }
+  ],
+  "sources": [
+    {
+      "label": "OpenID Connect Core \u2014 authorization code flow",
+      "href": "https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth"
+    },
+    {
+      "label": "RFC 7636 \u2014 Proof Key for Code Exchange",
+      "href": "https://www.rfc-editor.org/rfc/rfc7636"
+    },
+    {
+      "label": "RFC 9700 \u2014 OAuth security best current practice",
+      "href": "https://www.rfc-editor.org/rfc/rfc9700"
+    },
+    {
+      "label": "UML 2.5.1 \u2014 diagram notation",
+      "href": "https://www.omg.org/spec/UML/2.5.1"
+    }
+  ],
+  "evidence": "Evidence: illustrative example; no application repository was supplied."
+}

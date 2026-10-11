@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dynamic Activity Diagram"
+  short_description: "Explain actions, parallel branches and synchronization"
+  default_prompt: "Use $dynamic-activity-diagram to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

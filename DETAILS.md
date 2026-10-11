@@ -60,3 +60,24 @@ no credentials and does not require another skill or connector.
 these checks on Linux, macOS, and Windows. Local results, CI, file installation,
 agent discovery, invocation, PR submission, and maintainer acceptance are distinct
 proof stages. There is no staging environment for this repository.
+
+## Dynamic UMLs
+
+The router skill owns the shared HTML renderer, standard-library generator,
+authoring guide and six example JSON models. `scripts/dynamic_umls.py` deterministically
+copies these resources into the focused skill folders and generates standalone
+review pages plus a local gallery. No hosted website or publishing flow is added.
+
+`make examples` refreshes generated files; check mode fails on drift. Each focused
+skill installs and renders independently with no dependency on the router being
+installed. `scripts/render.py` checks model identifiers, notation, bounds, active
+edge endpoints, source link schemes and required scope text. It safely embeds
+JSON, renders model text through DOM textContent, and exclusively creates output
+files to preserve user artifacts. Coordinates and line routes are authored rather
+than automatically laid out; validation cannot prove there are no label collisions.
+
+The test suite exercises all six renderers from isolated destinations for all three
+agents, preserves existing HTML files, rejects unsafe/invalid model content and
+checks canonical copies. Optional browser proof uses an existing Playwright runtime
+and verifies local offline interaction and responsive layouts. Neither lane proves
+that a real agent discovered the skill or followed the investigation/question policy.

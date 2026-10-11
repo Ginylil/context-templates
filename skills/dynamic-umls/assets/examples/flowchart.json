@@ -1,0 +1,270 @@
+{
+  "type": "flowchart",
+  "title": "Is this change ready?",
+  "lede": "A decision path from a local change to review, with a visible repair loop.",
+  "kicker": "Dynamic UMLs / flowchart",
+  "width": 960,
+  "height": 510,
+  "nodes": [
+    {
+      "id": "start",
+      "label": "Change ready",
+      "kind": "terminal",
+      "x": 130,
+      "y": 100,
+      "detail": "A local change is ready for its required checks."
+    },
+    {
+      "id": "checks",
+      "label": "Run required checks",
+      "kind": "process",
+      "x": 365,
+      "y": 100,
+      "detail": "Run the checks the repository actually defines; do not substitute invented gates.",
+      "w": 215
+    },
+    {
+      "id": "decision",
+      "label": "All checks pass?",
+      "kind": "decision",
+      "x": 650,
+      "y": 100,
+      "detail": "A branch on the observed check results.",
+      "w": 210,
+      "h": 105
+    },
+    {
+      "id": "ready",
+      "label": "Ready for review",
+      "kind": "terminal",
+      "x": 810,
+      "y": 385,
+      "detail": "The change may be reviewed. This does not imply merge or production acceptance.",
+      "w": 190
+    },
+    {
+      "id": "fix",
+      "label": "Fix the failure",
+      "kind": "process",
+      "x": 260,
+      "y": 385,
+      "detail": "Use the failing evidence to make a focused correction.",
+      "w": 210
+    },
+    {
+      "id": "rerun",
+      "label": "Rerun affected checks",
+      "kind": "process",
+      "x": 545,
+      "y": 385,
+      "detail": "Rerun checks affected by the fix and other required repository checks.",
+      "w": 230
+    }
+  ],
+  "edges": [
+    {
+      "id": "run",
+      "from": "start",
+      "to": "checks",
+      "label": "validate",
+      "kind": "flow",
+      "detail": "Proceed to the defined validation commands.",
+      "labelAt": {
+        "x": 235,
+        "y": 45
+      }
+    },
+    {
+      "id": "evaluate",
+      "from": "checks",
+      "to": "decision",
+      "label": "results",
+      "kind": "flow",
+      "detail": "Inspect actual results, including skipped and unavailable checks."
+    },
+    {
+      "id": "pass",
+      "from": "decision",
+      "to": "ready",
+      "label": "Yes",
+      "kind": "flow",
+      "detail": "All required checks pass; hand off for review.",
+      "via": [
+        {
+          "x": 810,
+          "y": 100
+        }
+      ],
+      "labelAt": {
+        "x": 810,
+        "y": 210
+      }
+    },
+    {
+      "id": "fail",
+      "from": "decision",
+      "to": "fix",
+      "label": "No",
+      "kind": "flow",
+      "detail": "At least one required check failed.",
+      "via": [
+        {
+          "x": 650,
+          "y": 245
+        },
+        {
+          "x": 260,
+          "y": 245
+        }
+      ],
+      "labelAt": {
+        "x": 455,
+        "y": 230
+      }
+    },
+    {
+      "id": "repair",
+      "from": "fix",
+      "to": "rerun",
+      "label": "correct",
+      "kind": "flow",
+      "detail": "Make and validate the smallest correction."
+    },
+    {
+      "id": "retry",
+      "from": "rerun",
+      "to": "decision",
+      "label": "new results",
+      "kind": "flow",
+      "detail": "Evaluate fresh results rather than reusing stale evidence.",
+      "via": [
+        {
+          "x": 545,
+          "y": 215
+        },
+        {
+          "x": 650,
+          "y": 215
+        }
+      ],
+      "labelAt": {
+        "x": 600,
+        "y": 200
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "pass",
+      "label": "Checks pass",
+      "steps": [
+        {
+          "title": "Run the required checks",
+          "body": "Start from a ready change and gather the repository-defined validation evidence.",
+          "nodes": [
+            "start",
+            "checks"
+          ],
+          "edges": [
+            "run"
+          ]
+        },
+        {
+          "title": "Evaluate observed results",
+          "body": "Check the outputs, not just whether a command was started.",
+          "nodes": [
+            "checks",
+            "decision"
+          ],
+          "edges": [
+            "evaluate"
+          ]
+        },
+        {
+          "title": "Hand off for review",
+          "body": "All required checks pass. Review, deployment and user acceptance remain separate stages.",
+          "nodes": [
+            "decision",
+            "ready"
+          ],
+          "edges": [
+            "pass"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fail",
+      "label": "A check fails",
+      "steps": [
+        {
+          "title": "Find the failing result",
+          "body": "The decision follows the observed result. A failed required check takes the repair branch.",
+          "nodes": [
+            "checks",
+            "decision"
+          ],
+          "edges": [
+            "evaluate"
+          ]
+        },
+        {
+          "title": "Make a focused correction",
+          "body": "Use the failure to identify the cause rather than broadening the work.",
+          "nodes": [
+            "decision",
+            "fix"
+          ],
+          "edges": [
+            "fail"
+          ]
+        },
+        {
+          "title": "Rerun affected checks",
+          "body": "Gather fresh evidence after the correction.",
+          "nodes": [
+            "fix",
+            "rerun"
+          ],
+          "edges": [
+            "repair"
+          ]
+        },
+        {
+          "title": "Evaluate again",
+          "body": "This loop can repeat; passing it makes the change ready for review.",
+          "nodes": [
+            "rerun",
+            "decision"
+          ],
+          "edges": [
+            "retry"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Illustrative development process; required checks depend on the repository.",
+    "\u201cReady for review\u201d is not merged, deployed or accepted in production.",
+    "Flowcharts are process diagrams, not a UML diagram type. Diamonds are decisions and rounded terminals are start/end points."
+  ],
+  "legend": [
+    {
+      "label": "Arrow: next action"
+    },
+    {
+      "label": "Diamond: decision"
+    },
+    {
+      "label": "Yes / No: guarded branch"
+    }
+  ],
+  "sources": [
+    {
+      "label": "UML 2.5.1 \u2014 diagram notation",
+      "href": "https://www.omg.org/spec/UML/2.5.1"
+    }
+  ],
+  "evidence": "Evidence: illustrative example; no application repository was supplied."
+}

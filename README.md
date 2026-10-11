@@ -14,8 +14,56 @@ to your agent and ask:
 
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
-contribute improvements or new skills through a pull request. It is currently
-the first published skill; additional skills are reviewed and added individually.
+contribute improvements or new skills through a pull request. The catalog includes the bootstrap and the Dynamic UMLs family described below;
+additional skills are reviewed and added individually.
+
+## Dynamic UMLs
+
+Create a standalone HTML page that explains a system through an interactive
+walkthrough. Each skill investigates the supplied context, makes minimal explicit
+assumptions, and asks **at most five questions** for material unknowns. Pages include
+playback, step navigation, an element inspector, overview, meaningful alternate
+scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com).
+They open locally and work offline, without a server or external dependencies.
+
+| Skill / command | Example to download and open locally |
+| --- | --- |
+| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Six-example gallery](examples/dynamic-umls/index.html) |
+| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](examples/dynamic-umls/sequence.html) |
+| [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](examples/dynamic-umls/class.html) |
+| [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](examples/dynamic-umls/flowchart.html) |
+| [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](examples/dynamic-umls/state.html) |
+| [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](examples/dynamic-umls/activity.html) |
+| [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](examples/dynamic-umls/component.html) |
+
+GitHub displays HTML source; download the raw example or open it from your clone
+in a browser. The examples are for design review, not a deployed website. These
+are a focused UML subset; flowcharts are general process notation.
+
+Install the complete folder for the skill you choose, including its resources:
+
+```sh
+make install-codex SKILL=dynamic-sequence-diagram
+```
+
+Then ask your agent:
+
+```text
+/dynamic-sequence-diagram for 3 way handshake login
+/dynamic-class-diagram for this project's billing model
+/dynamic-flowchart for the failed-payment recovery process
+```
+
+Use `$dynamic-sequence-diagram` or its name in prose if your agent does not expose
+slash invocation. Invocation syntax and discovery must be checked in your agent.
+The login request should clarify TCP versus browser/app/provider sign-in when
+context leaves it ambiguous. Generating a page uses Python 3.10+; the resulting
+HTML requires only a browser. Existing output files are never silently replaced.
+
+Each focused skill works independently. Shared resources have one canonical source
+under `skills/dynamic-umls/`; synchronized copies make every ZIP self-contained.
+Use `make examples` after changing canonical resources or example JSON, then
+`make check` to catch drift. See [DESIGN](DESIGN.md) for visual and browser checks.
 
 ## Install locally
 
