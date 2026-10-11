@@ -1,0 +1,4 @@
+interface:
+  display_name: "Context Templates"
+  short_description: "Install public skills and contribute changes through PRs"
+  default_prompt: "Use $context-templates to find and install skills, or contribute an improvement through a pull request."

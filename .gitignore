@@ -1,6 +1,11 @@
-.*
-!.*ignore*
-!.github
-!.detailer
-
-.detailer/plans
+# Local configuration and generated files
+.env
+.env.*
+.venv/
+.VENV/
+__pycache__/
+*.py[cod]
+dist/
+.DS_Store
+# Preserve existing local plans from the retired tooling; never publish them.
+.detailer/
