@@ -67,15 +67,15 @@ coffee-and-sun logo as a small, subdued transparent mark in both header and foot
 State diagrams fit the available width when readable. Diagram canvases have no inner vertical scrollbar.
 Pages open locally and work offline, without a server or external dependencies.
 
-| Skill / command | Example to download and open locally |
+| Skill / command | View example in browser |
 | --- | --- |
-| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Example gallery](examples/dynamic-umls/index.html) |
-| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](examples/dynamic-umls/sequence-long.html) |
-| [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](examples/dynamic-umls/class.html) |
-| [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](examples/dynamic-umls/flowchart.html) |
-| [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](examples/dynamic-umls/state.html) |
-| [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](examples/dynamic-umls/activity.html) |
-| [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](examples/dynamic-umls/component.html) |
+| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html) |
+| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence-long.html) |
+| [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](https://ginylil.github.io/context-templates/examples/dynamic-umls/class.html) |
+| [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](https://ginylil.github.io/context-templates/examples/dynamic-umls/flowchart.html) |
+| [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](https://ginylil.github.io/context-templates/examples/dynamic-umls/state.html) |
+| [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](https://ginylil.github.io/context-templates/examples/dynamic-umls/activity.html) |
+| [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](https://ginylil.github.io/context-templates/examples/dynamic-umls/component.html) |
 
 [Open the interactive example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html)
 to try all six views and the long sequence in your browser. The repository's
