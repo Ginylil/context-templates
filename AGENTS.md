@@ -1,7 +1,8 @@
 # Context Templates
 
 - This is the public skill catalog for Codex, Cursor, and Claude Code. GitHub is
-  the source of truth; there is no website build, MCP server, or API publisher.
+  the source of truth. Existing GitHub Pages hosting mirrors static examples;
+  there is no separate website application, MCP server, or API publisher.
 - Canonical skills live in `skills/<name>/SKILL.md`. Keep shared instructions
   portable and put substantial supporting content in references, assets, or
   scripts. Agent-specific UI metadata belongs in `agents/`.
