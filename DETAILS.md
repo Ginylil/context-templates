@@ -2,7 +2,9 @@
 
 The public GitHub repository contains canonical `skills/<name>/SKILL.md` folders.
 The README links directly to the self-contained bootstrap skill. There is no
-MCP/API publisher or website application. Private skills and personal context
+MCP/API publisher or separate website application. Existing GitHub Pages hosting
+serves the public static examples from `main`; it is configured outside the
+repo-owned Makefile workflow. Private skills and personal context
 belong in a separate private repository.
 
 ## Catalog and packages
@@ -70,7 +72,8 @@ The router skill owns the shared HTML renderer, standard-library generator,
 authoring guide, supplied Ginylil PNG, flowchart verifier, six diagram-type examples
 and an additional long sequence model (32 messages, six participants). `scripts/dynamic_umls.py` deterministically
 copies these resources into the focused skill folders and generates standalone
-review pages plus a local gallery. No hosted website or publishing flow is added.
+review pages plus a gallery. The files work offline and are also served by the
+repository's existing GitHub Pages hosting; generation does not configure hosting.
 
 `make examples` refreshes generated files; check mode fails on drift. Each focused
 skill installs and renders independently with no dependency on the router being

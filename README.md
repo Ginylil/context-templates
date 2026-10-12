@@ -77,9 +77,11 @@ Pages open locally and work offline, without a server or external dependencies.
 | [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](examples/dynamic-umls/activity.html) |
 | [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](examples/dynamic-umls/component.html) |
 
-GitHub displays HTML source; download the raw example or open it from your clone
-in a browser. The examples are for design review, not a deployed website. These
-are a focused UML subset; flowcharts are general process notation.
+[Open the interactive example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html)
+to try all six views and the long sequence in your browser. The repository's
+existing GitHub Pages hosting serves these static examples. You can also download
+the HTML or open it from your clone to use it offline; GitHub's file view displays
+the source. These are a focused UML subset; flowcharts are general process notation.
 
 Install the complete folder for the skill you choose, including its resources:
 
@@ -205,8 +207,9 @@ make build
 Builds produce a ZIP for each complete skill plus a checksummed `catalog.json`
 in `dist/`. These files are reproducible local outputs and are also retained as
 CI artifacts. A GitHub Actions artifact download may require signing in; the raw
-bootstrap link above is public. There is no website build or automatic release
-publication. Only `skills/` is packaged; private experiments belong in a separate
+bootstrap link above is public. Existing GitHub Pages hosting serves the example
+files; there is no separate website application or automatic release publication.
+Only `skills/` is packaged; private experiments belong in a separate
 private repository and must never be copied here as part of an install or build.
 
 The previous YAML template collection and MCP/API publishing flow have been
