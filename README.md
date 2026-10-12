@@ -3,14 +3,21 @@
 Public agent skills for **Codex, Cursor, and Claude Code**. GitHub is the source
 of truth. [contexttemplates.com](https://contexttemplates.com) leads here.
 
-## Start with the downloadable skill
+## Quick start — copy into your agent
 
-[Download the Context Templates skill](https://raw.githubusercontent.com/Ginylil/context-templates/main/skills/context-templates/SKILL.md)
-([view its source](skills/context-templates/SKILL.md)). Give that file or its URL
-to your agent and ask:
+Copy and paste this prompt into Codex, Cursor, or Claude Code:
 
-> Use this skill to list the available Context Templates skills and install the
-> ones I choose for this agent. Preview the installation first.
+```text
+Please read this skill:
+https://raw.githubusercontent.com/Ginylil/context-templates/main/skills/context-templates/SKILL.md
+
+Review the available skills and recommend which ones to install locally for my work.
+Briefly explain each recommendation. Wait for me to choose, then preview the
+installation before installing the selected skills for this agent.
+```
+
+You can also [download the skill](https://raw.githubusercontent.com/Ginylil/context-templates/main/skills/context-templates/SKILL.md)
+and attach it to your agent ([view its source](skills/context-templates/SKILL.md)).
 
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
