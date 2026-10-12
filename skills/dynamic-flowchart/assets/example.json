@@ -1,0 +1,421 @@
+{
+  "type": "flowchart",
+  "title": "Is this change ready?",
+  "lede": "Read downward. Explore the repair subprocess, then follow the outer retry rail back to validation.",
+  "kicker": "Dynamic UMLs / flowchart",
+  "width": 940,
+  "height": 740,
+  "nodes": [
+    {
+      "id": "start",
+      "label": "Change ready",
+      "kind": "terminal",
+      "x": 290,
+      "y": 65,
+      "detail": "A local change is ready for repository-defined checks.",
+      "w": 220
+    },
+    {
+      "id": "checks",
+      "label": "Run required checks",
+      "kind": "process",
+      "x": 290,
+      "y": 205,
+      "detail": "Run actual required checks and inspect their output.",
+      "w": 240
+    },
+    {
+      "id": "decision",
+      "label": "All checks pass?",
+      "kind": "decision",
+      "x": 290,
+      "y": 385,
+      "detail": "Branch on observed validation results.",
+      "w": 220,
+      "h": 110
+    },
+    {
+      "id": "ready",
+      "label": "Ready for review",
+      "kind": "terminal",
+      "x": 290,
+      "y": 650,
+      "detail": "Review readiness does not imply merge, deployment or user acceptance.",
+      "w": 220
+    },
+    {
+      "id": "repair",
+      "label": "Repair the failure",
+      "kind": "subprocess",
+      "x": 655,
+      "y": 520,
+      "detail": "Open the smaller repair flow to investigate and make a focused correction.",
+      "w": 240,
+      "h": 82,
+      "role": "Explore subprocess \u2193",
+      "subflow": "repair-flow"
+    }
+  ],
+  "edges": [
+    {
+      "id": "run",
+      "from": "start",
+      "to": "checks",
+      "label": "validate",
+      "detail": "validate",
+      "kind": "flow",
+      "route": "forward",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "labelAt": {
+        "x": 355,
+        "y": 143
+      }
+    },
+    {
+      "id": "evaluate",
+      "from": "checks",
+      "to": "decision",
+      "label": "results",
+      "detail": "results",
+      "kind": "flow",
+      "route": "forward",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "labelAt": {
+        "x": 355,
+        "y": 283
+      }
+    },
+    {
+      "id": "pass",
+      "from": "decision",
+      "to": "ready",
+      "label": "Yes",
+      "detail": "Yes",
+      "kind": "flow",
+      "route": "forward",
+      "fromPort": "bottom",
+      "toPort": "top",
+      "labelAt": {
+        "x": 325,
+        "y": 525
+      }
+    },
+    {
+      "id": "fail",
+      "from": "decision",
+      "to": "repair",
+      "label": "No",
+      "detail": "No",
+      "kind": "flow",
+      "route": "forward",
+      "fromPort": "right",
+      "toPort": "top",
+      "via": [
+        {
+          "x": 655,
+          "y": 385
+        }
+      ],
+      "labelAt": {
+        "x": 500,
+        "y": 370
+      }
+    },
+    {
+      "id": "retry",
+      "from": "repair",
+      "to": "checks",
+      "label": "Retry checks",
+      "detail": "Retry checks",
+      "kind": "flow",
+      "route": "loop",
+      "fromPort": "right",
+      "toPort": "right",
+      "via": [
+        {
+          "x": 850,
+          "y": 520
+        },
+        {
+          "x": 850,
+          "y": 205
+        }
+      ],
+      "labelAt": {
+        "x": 660,
+        "y": 190
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "pass",
+      "label": "Checks pass",
+      "steps": [
+        {
+          "title": "Run the required checks",
+          "body": "Start from a ready change and gather the repository-defined validation evidence.",
+          "nodes": [
+            "start",
+            "checks"
+          ],
+          "edges": [
+            "run"
+          ]
+        },
+        {
+          "title": "Evaluate observed results",
+          "body": "Check the outputs, not just whether a command was started.",
+          "nodes": [
+            "checks",
+            "decision"
+          ],
+          "edges": [
+            "evaluate"
+          ]
+        },
+        {
+          "title": "Hand off for review",
+          "body": "All required checks pass. Review, deployment and user acceptance remain separate stages.",
+          "nodes": [
+            "decision",
+            "ready"
+          ],
+          "edges": [
+            "pass"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fail",
+      "label": "A check fails",
+      "steps": [
+        {
+          "title": "Find the failing result",
+          "body": "A failed required check follows the No branch.",
+          "nodes": [
+            "checks",
+            "decision"
+          ],
+          "edges": [
+            "evaluate"
+          ]
+        },
+        {
+          "title": "Explore the repair subprocess",
+          "body": "Select the double-bordered process and choose Explore subprocess to inspect its smaller flow.",
+          "nodes": [
+            "decision",
+            "repair"
+          ],
+          "edges": [
+            "fail"
+          ]
+        },
+        {
+          "title": "Retry with fresh evidence",
+          "body": "The outer side rail returns to validation without crossing another connector.",
+          "nodes": [
+            "repair",
+            "checks"
+          ],
+          "edges": [
+            "retry"
+          ]
+        },
+        {
+          "title": "Evaluate again",
+          "body": "The loop can repeat. Review readiness requires fresh passing checks.",
+          "nodes": [
+            "checks",
+            "decision"
+          ],
+          "edges": [
+            "evaluate"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Illustrative development process; required checks depend on the repository.",
+    "\u201cReady for review\u201d is not merged, deployed or accepted in production.",
+    "Flowcharts are process diagrams, not a UML diagram type. Diamonds are decisions and rounded terminals are start/end points.",
+    "Each flow contains at most seven nodes; this is a project readability policy, not a notation standard."
+  ],
+  "legend": [
+    {
+      "label": "Downward arrow: next action"
+    },
+    {
+      "label": "Diamond: Yes / No decision"
+    },
+    {
+      "label": "Double bars: clickable subprocess"
+    },
+    {
+      "label": "Outer side rail: retry"
+    }
+  ],
+  "sources": [
+    {
+      "label": "draw.io \u2014 flowcharts and subprocesses",
+      "href": "https://www.drawio.com/docs/best-practice/process-map-flowchart/"
+    },
+    {
+      "label": "draw.io \u2014 fixed connectors and waypoints",
+      "href": "https://www.drawio.com/docs/manual/connectors/"
+    }
+  ],
+  "evidence": "Evidence: illustrative example; no application repository was supplied.",
+  "subflows": [
+    {
+      "id": "repair-flow",
+      "type": "flowchart",
+      "title": "Repair the failure",
+      "lede": "A focused correction, followed by fresh validation in the parent flow.",
+      "width": 500,
+      "height": 530,
+      "kicker": "Subprocess / repair",
+      "evidence": "Illustrative repair subprocess; no repository behavior claimed.",
+      "nodes": [
+        {
+          "id": "begin",
+          "label": "Failure observed",
+          "kind": "terminal",
+          "x": 250,
+          "y": 55,
+          "detail": "Start with actual failing evidence.",
+          "w": 220
+        },
+        {
+          "id": "investigate",
+          "label": "Find the cause",
+          "kind": "process",
+          "x": 250,
+          "y": 190,
+          "detail": "Read the failure output and relevant code.",
+          "w": 240
+        },
+        {
+          "id": "fix",
+          "label": "Make a focused fix",
+          "kind": "process",
+          "x": 250,
+          "y": 330,
+          "detail": "Correct the cause and preserve unrelated work.",
+          "w": 240
+        },
+        {
+          "id": "return",
+          "label": "Return for validation",
+          "kind": "terminal",
+          "x": 250,
+          "y": 475,
+          "detail": "Return to the parent and run required checks again.",
+          "w": 240
+        }
+      ],
+      "edges": [
+        {
+          "id": "read",
+          "from": "begin",
+          "to": "investigate",
+          "label": "inspect",
+          "detail": "inspect",
+          "kind": "flow",
+          "route": "forward",
+          "fromPort": "bottom",
+          "toPort": "top",
+          "labelAt": {
+            "x": 315,
+            "y": 125
+          }
+        },
+        {
+          "id": "correct",
+          "from": "investigate",
+          "to": "fix",
+          "label": "correct",
+          "detail": "correct",
+          "kind": "flow",
+          "route": "forward",
+          "fromPort": "bottom",
+          "toPort": "top",
+          "labelAt": {
+            "x": 315,
+            "y": 265
+          }
+        },
+        {
+          "id": "return",
+          "from": "fix",
+          "to": "return",
+          "label": "validate next",
+          "detail": "validate next",
+          "kind": "flow",
+          "route": "forward",
+          "fromPort": "bottom",
+          "toPort": "top",
+          "labelAt": {
+            "x": 340,
+            "y": 405
+          }
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "repair",
+          "label": "Focused correction",
+          "steps": [
+            {
+              "title": "Investigate the failure",
+              "body": "Start with the observed output and find the cause.",
+              "nodes": [
+                "begin",
+                "investigate"
+              ],
+              "edges": [
+                "read"
+              ]
+            },
+            {
+              "title": "Make a focused correction",
+              "body": "Change only what the failure evidence justifies.",
+              "nodes": [
+                "investigate",
+                "fix"
+              ],
+              "edges": [
+                "correct"
+              ]
+            },
+            {
+              "title": "Return to the parent",
+              "body": "Go back to run fresh required checks; the subprocess does not claim they passed.",
+              "nodes": [
+                "fix",
+                "return"
+              ],
+              "edges": [
+                "return"
+              ]
+            }
+          ]
+        }
+      ],
+      "assumptions": [
+        "A correction is not successful until fresh checks pass in the parent flow."
+      ],
+      "sources": [],
+      "legend": [
+        {
+          "label": "Downward arrow: next action"
+        }
+      ]
+    }
+  ]
+}

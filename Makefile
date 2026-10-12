@@ -1,132 +1,42 @@
-#!make
-.ONESHELL:
-.EXPORT_ALL_VARIABLES:
-.PHONY: all $(MAKECMDGOALS)
+PYTHON ?= python3
+SKILL ?=
+INSTALL_ARGS ?=
 
+.DEFAULT_GOAL := help
+.PHONY: help catalog install install-codex install-cursor install-claude check test build examples
 
-UNAME := $(shell uname)
-BASH_PATH:=$(shell which bash)
-ROOT_DIR:=${CURDIR}
+help:
+	@$(PYTHON) scripts/skills.py --help
+	@echo "make catalog | install-codex | install-cursor | install-claude | install | examples | check | build"
+	@echo 'Select one skill: make install-codex SKILL=context-templates'
+	@echo 'Preview: make install INSTALL_ARGS=--dry-run'
 
-# Global .env
-ifneq ("$(wildcard ${ROOT_DIR}/.env)","")
-include ${ROOT_DIR}/.env
-endif
+catalog:
+	$(PYTHON) scripts/skills.py list
 
-VENV_DIR_PATH:=${ROOT_DIR}/.VENV
+install:
+	$(PYTHON) scripts/skills.py install --agent all $(if $(SKILL),--skill "$(SKILL)") $(INSTALL_ARGS)
 
-ifndef REQUIREMENTS_FILE_PATH
-REQUIREMENTS_FILE_PATH:=${ROOT_DIR}/requirements.txt
-endif
+install-codex:
+	$(PYTHON) scripts/skills.py install --agent codex $(if $(SKILL),--skill "$(SKILL)") $(INSTALL_ARGS)
 
-# --- OS Settings --- START ------------------------------------------------------------
-# Windows
-ifneq (,$(findstring NT, $(UNAME)))
-_OS:=windows
-VENV_BIN_ACTIVATE:=${VENV_DIR_PATH}/Scripts/activate.bat
-endif
-# macOS
-ifneq (,$(findstring Darwin, $(UNAME)))
-_OS:=macos
-VENV_BIN_ACTIVATE:=${VENV_DIR_PATH}/bin/activate
-endif
+install-cursor:
+	$(PYTHON) scripts/skills.py install --agent cursor $(if $(SKILL),--skill "$(SKILL)") $(INSTALL_ARGS)
 
-ifneq (,$(findstring Linux, $(UNAME)))
-_OS:=linux
-VENV_BIN_ACTIVATE:=${VENV_DIR_PATH}/bin/activate
-endif
-# --- OS Settings --- END --------------------------------------------------------------
+install-claude:
+	$(PYTHON) scripts/skills.py install --agent claude $(if $(SKILL),--skill "$(SKILL)") $(INSTALL_ARGS)
 
-SHELL:=${BASH_PATH}
+examples:
+	$(PYTHON) scripts/dynamic_umls.py
 
-# Automatically activate virtual environment if it exists
-ifneq (,$(wildcard ${VENV_BIN_ACTIVATE}))
-ifeq (${_OS},macos)
-SHELL:=source ${VENV_BIN_ACTIVATE} && ${SHELL}
-endif
-ifeq (${_OS},windows)
-SHELL:=${VENV_BIN_ACTIVATE} && ${SHELL}
-endif
-ifeq (${_OS},linux)
-SHELL:=source ${VENV_BIN_ACTIVATE} && ${SHELL}
-endif
-endif
+check:
+	$(PYTHON) scripts/dynamic_umls.py --check
+	$(PYTHON) scripts/skills.py check
+	$(MAKE) test
 
-ifeq (${CI},true)
-SHELL:=${BASH_PATH}
-endif
+test:
+	$(PYTHON) -m unittest discover -s tests -v
 
-# Removes blank rows - fgrep -v fgrep
-# Replace ":" with "" (nothing)
-# Print a beautiful table with column
-help: ## Print this menu
-	@echo
-	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's~:.* #~~' | column -t -s'#'
-	@echo
-usage: help
-
-
-# To validate env vars, add "validate-MY_ENV_VAR"
-# as a prerequisite to the relevant target/step
-validate-%:
-	@if [[ -z '${${*}}' ]]; then \
-		echo 'ERROR: Environment variable $* not set' && \
-		exit 1 ; \
-	fi
-
-print-vars: ## Print env vars
-	@echo "VENV_BIN_ACTIVATE=${VENV_BIN_ACTIVATE}"
-	@echo "REQUIREMENTS_FILE_PATH=${REQUIREMENTS_FILE_PATH}"
-	@echo "VENV_DIR_PATH=${VENV_DIR_PATH}"
-	@echo "CI=${CI}"
-
-
-prepare-dotenv:
-	@if [ -f .env ] ; then : ; else ${ROOT_DIR}/scripts/dotenv.sh ${ROOT_DIR}/env.template ${ROOT_DIR}/.env ; fi
-
-
-# --- VENV --- START ------------------------------------------------------------
-## 
-##VENV
-##----
-prepare: ## Create a Python virtual environment with venv
-	python -m venv ${VENV_DIR_PATH} && \
-	python -m pip install -U pip wheel setuptools build twine ruff && \
-	ls ${VENV_DIR_PATH}
-
-install: ## Install Python packages
-## Provide PACKAGE_NAME=<package_name> to install a specific package
-## Example: make venv-install PACKAGE_NAME=requests
-	@cd ${ROOT_DIR} && \
-	if [[ -f "${REQUIREMENTS_FILE_PATH}" ]]; then \
-		echo "Installing packages from ${REQUIREMENTS_FILE_PATH}" && \
-		ls ${REQUIREMENTS_FILE_PATH} && \
-		pip install -r "${REQUIREMENTS_FILE_PATH}" ${PACKAGE_NAME} ; \
-	elif [[ -n "${PACKAGE_NAME}" ]]; then \
-		echo "Installing package ${PACKAGE_NAME}" ; \
-		pip install -U ${PACKAGE_NAME} ; \
-	else \
-		echo "ERROR: No requirements.txt file found and no package name provided" ; \
-		exit 1 ; \
-	fi
-
-requirements-update: ## Update requirements.txt with current packages
-	cd ${ROOT_DIR} && \
-	pip freeze | grep -v '\-e' > ${REQUIREMENTS_FILE_PATH} && \
-	cat ${REQUIREMENTS_FILE_PATH}
-
-venv-freeze: ## List installed packages
-	cd ${ROOT_DIR} && \
-	pip freeze
-
-
-format: ## Format code
-	ruff format .
-
-lint: ## Lint code
-	ruff check --fix .
-
-push-templates:
-	cd ${ROOT_DIR} && \
-		python scripts/push_templates.py
-# --- VENV --- END --------------------------------------------------------------
+build:
+	$(PYTHON) scripts/dynamic_umls.py --check
+	$(PYTHON) scripts/skills.py build

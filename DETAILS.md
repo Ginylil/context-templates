@@ -1,312 +1,136 @@
-# DETAILS.md
-
-🔍 **Powered by [Detailer](https://detailer.ginylil.com)** - Smart agent-compatible documentation
-
-
-
----
-
-## 1. Project Overview
-
-### Purpose & Domain
-
-**context-templates** is a **YAML-driven configuration and templating system** designed to define, manage, and enforce **coding standards, best practices, workflow automation, and documentation templates** across multiple programming languages and technology stacks.
-
-- **Problem Addressed:**  
-  Ensures consistent application of coding standards, project workflows, and documentation practices by externalizing rules and templates into declarative YAML files. This reduces manual enforcement overhead, improves code quality, and accelerates developer onboarding.
-
-- **Target Users:**  
-  - Developers and teams working across diverse tech stacks (Python, JavaScript, Rust, Vue, React, Tailwind CSS, etc.)  
-  - DevOps and CI/CD engineers automating code quality checks and deployment workflows  
-  - Documentation engineers and AI-assisted tooling systems that generate or validate project documentation and changelogs  
-  - Tool builders integrating static analysis, linting, or template generation engines
-
-- **Use Cases:**  
-  - Defining and enforcing language/framework-specific coding standards  
-  - Automating generation of documentation, changelogs, and test skeletons via shortcut templates  
-  - Integrating with CI/CD pipelines to validate and push templates automatically  
-  - Serving as a backend for AI-powered assistants or static analysis tools (e.g., Detailer) to guide developers
-
-- **Core Business Logic & Domain Models:**  
-  The project does not contain executable business logic but models **rules, shortcuts, and workflows as YAML templates** with rich metadata. These templates encapsulate domain knowledge such as SDK usage, code quality guidelines, project structures, and automation workflows.
-
----
-
-## 2. Architecture and Structure
-
-### High-Level Architecture
-
-- **Template-Driven Configuration System:**  
-  The entire project is architected around **declarative YAML templates** that define rules, shortcuts, and workflows. These templates are consumed by external tools or automation engines to enforce standards, generate content, or automate processes.
-
-- **Separation of Concerns:**  
-  - **Rules Templates (`templates/rules/cursor/`):** Define coding standards and best practices per language or framework.  
-  - **Shortcuts Templates (`templates/shortcuts/`):** Define reusable automation snippets for documentation, changelogs, and testing.  
-  - **Workflows Templates (`templates/workflows/`):** Define process automation steps and CI/CD workflows.  
-  - **Scripts (`scripts/`):** Provide utility functions for environment setup, template preparation, and pushing templates to external APIs.  
-  - **CI/CD (`.github/workflows/`):** Automate template deployment and validation.
-
-- **Integration Points:**  
-  The system integrates with external APIs (for pushing templates), CI/CD pipelines (GitHub Actions), and likely AI or static analysis tools (e.g., Detailer) that consume these YAML templates.
-
----
-
-### Complete Repository Structure
-
-```
-.
-├── .github/
-│   └── workflows/
-│       └── push_templates.yml
-├── scripts/
-│   ├── dotenv.sh
-│   ├── prepare_rules.py
-│   └── push_templates.py
-├── templates/ (36 items)
-│   ├── rules/ (21 items)
-│   │   ├── cursor/ (18 items)
-│   │   │   ├── beefreeSDK.yml
-│   │   │   ├── clean-code.yml
-│   │   │   ├── codequality.yml
-│   │   │   ├── cpp.yml
-│   │   │   ├── database.yml
-│   │   │   ├── fastapi.yml
-│   │   │   ├── gitflow.yml
-│   │   │   ├── medusa.yml
-│   │   │   ├── nativescript.yml
-│   │   │   ├── nextjs.yml
-│   │   │   ├── node-express.yml
-│   │   │   ├── python.yml
-│   │   │   ├── react.yml
-│   │   │   ├── rust.yml
-│   │   │   ├── svelte.yml
-│   │   │   ├── tailwind.yml
-│   │   │   ├── typescript.yml
-│   │   │   └── vue.yml
-│   │   ├── example-rule.yml
-│   │   └── schema.yml
-│   ├── shortcuts/ (10 items)
-│   │   ├── api_endpoint_doc.yml
-│   │   ├── bug_repro_template.yml
-│   │   ├── changelog_entry.yml
-│   │   ├── code_review_checklist.yml
-│   │   ├── env_cheatsheet.yml
-│   │   ├── example-shortcut.yml
-│   │   ├── pr_description_generation.yml
-│   │   ├── schema.yml
-│   │   ├── task_planning_and_feature_development.yml
-│   │   └── unit_test_skeleton.yml
-│   └── workflows/
-│       ├── example-workflow.yml
-│       └── schema.yml
-├── .gitignore
-├── Makefile
-├── README.md
-├── env.template
-└── requirements.txt
-```
-
----
-
-### Directory Responsibilities
-
-| Directory / File Path           | Responsibility / Role                                                                                  |
-|--------------------------------|------------------------------------------------------------------------------------------------------|
-| `.github/workflows/`            | GitHub Actions workflows for CI/CD automation (e.g., pushing templates)                              |
-| `scripts/`                     | Utility scripts for environment setup (`dotenv.sh`), rule preparation (`prepare_rules.py`), and pushing templates (`push_templates.py`) |
-| `templates/rules/cursor/`       | YAML rule templates defining coding standards and best practices per language/framework               |
-| `templates/shortcuts/`          | YAML shortcut templates for automating documentation, changelogs, code reviews, and test skeletons   |
-| `templates/workflows/`          | Workflow templates defining automation steps and processes                                           |
-| `Makefile`                     | Project-level automation for environment setup, dependency management, formatting, linting, and deployment |
-| `env.template`                 | Template for environment variable configuration                                                      |
-| `requirements.txt`             | Python dependencies for scripts and tooling                                                          |
-
----
-
-## 3. Technical Implementation Details
-
-### Template Types & Content
-
-- **Rule Templates (`templates/rules/cursor/*.yml`):**  
-  - Define **best practices, coding standards, and project conventions** for specific languages or frameworks (e.g., FastAPI, Gitflow, Tailwind CSS, TypeScript, Vue).  
-  - Contain metadata fields:  
-    - `template_type: "rule"`  
-    - `template_subtype: "cursor"`  
-    - `name`, `description`, `language`, `scope` (usually `"file"`)  
-    - `globs`: file patterns to which the rules apply (e.g., `**/*.py`, `src/**/*.ts`)  
-  - Content is structured as markdown-like bullet points describing guidelines, project structure, security, testing, deployment, and workflow rules.  
-  - No executable code; purely declarative.
-
-- **Shortcut Templates (`templates/shortcuts/*.yml`):**  
-  - Define **automation snippets or templates** for generating documentation, changelogs, bug reports, API docs, and test skeletons.  
-  - Metadata includes:  
-    - `template_type: "shortcut"`  
-    - `name`, `filename`, `short_description`, `long_description`  
-    - `when`: triggers or user prompts activating the shortcut  
-    - `then`: instructions or actions to perform  
-    - `examples` and `output_example` for usage illustration  
-  - Used by template engines or AI assistants to generate content based on user input or system events.
-
-- **Workflow Templates (`templates/workflows/*.yml`):**  
-  - Define **process automation steps** for CI/CD or internal workflows.  
-  - Include ordered `steps` with instructions and conditions.  
-  - Validated against schemas to ensure consistency.
-
----
-
-### Scripts & Automation
-
-- **`scripts/dotenv.sh`**  
-  - Shell script that reads environment variables from a source file and updates a target `.env` file accordingly.  
-  - Supports environment setup for local development or CI.
-
-- **`scripts/prepare_rules.py`**  
-  - Python script that converts raw markdown rule files (`.mdc`) into enriched YAML files with metadata frontmatter.  
-  - Automates standardization of rule templates.
-
-- **`scripts/push_templates.py`**  
-  - Python script that reads templates from the `templates/` directory and pushes them to an external API endpoint.  
-  - Handles authentication via environment variables and error handling.
-
----
-
-### Makefile
-
-- Provides **developer and CI automation** for:  
-  - Environment preparation (`prepare`, `prepare-dotenv`)  
-  - Dependency installation (`install`, `requirements-update`)  
-  - Code formatting and linting (`format`, `lint`)  
-  - Template deployment (`push-templates`)  
-- Detects OS and adapts virtual environment activation accordingly.  
-- Validates required environment variables before running commands.
-
----
-
-## 4. Development Patterns and Standards
-
-### Code Organization Principles
-
-- **Declarative Configuration:**  
-  All rules, shortcuts, and workflows are defined as YAML templates, separating configuration from code logic.
-
-- **Modularity:**  
-  Rules and shortcuts are organized by technology and purpose, enabling easy extension and maintenance.
-
-- **Schema-Driven Validation:**  
-  Schema files (`schema.yml`) define the structure and required fields for templates, ensuring consistency.
-
-- **Separation of Concerns:**  
-  - Rules focus on standards and best practices.  
-  - Shortcuts focus on automation and content generation.  
-  - Workflows focus on process automation.
-
-### Testing Strategies
-
-- No explicit test code present in the repository.  
-- Quality is enforced via linting (`ruff`) and formatting targets in the Makefile.  
-- Rules and shortcuts serve as documentation and guidance, indirectly supporting quality.
-
-### Error Handling and Logging
-
-- Scripts (`push_templates.py`) include error handling for API interactions and file parsing.  
-- `dotenv.sh` logs info and errors during environment variable injection.  
-- Makefile targets validate environment variables before execution.
-
-### Configuration Management
-
-- Environment variables are managed via `.env` files, with templates provided (`env.template`).  
-- Makefile automates `.env` preparation and environment setup.  
-- Scripts and workflows rely on environment variables for API URLs and tokens.
-
----
-
-## 5. Integration and Dependencies
-
-### External Libraries and Tools
-
-- **Python Libraries:**  
-  - `PyYAML` for YAML parsing and dumping in scripts.  
-  - `requests` for HTTP API interactions in `push_templates.py`.
-
-- **CLI Tools:**  
-  - `python` and `pip` for environment and dependency management.  
-  - `ruff` for code formatting and linting.
-
-- **GitHub Actions:**  
-  - `.github/workflows/push_templates.yml` automates template deployment in CI.
-
-### Database or Storage
-
-- No direct database integration; templates are stored as files in the repository.
-
-### API Dependencies
-
-- External API endpoints for pushing templates, configured via environment variables (`TEMPLATE_API_URL`, `TEMPLATE_API_TOKEN`).
-
-### Build and Deployment Dependencies
-
-- Makefile orchestrates build and deployment steps.  
-- CI/CD pipeline uses GitHub Actions to run Makefile targets.
-
----
-
-## 6. Usage and Operational Guidance
-
-### Getting Started
-
-1. **Setup Environment:**  
-   - Copy `env.template` to `.env` and fill in required variables (e.g., API tokens).  
-   - Run `make prepare` to create and activate a Python virtual environment.  
-   - Run `make install` to install dependencies.
-
-2. **Working with Templates:**  
-   - Rule templates are located in `templates/rules/cursor/`.  
-   - Shortcut templates are in `templates/shortcuts/`.  
-   - Workflow templates are in `templates/workflows/`.
-
-3. **Generating or Updating Rules:**  
-   - Use `scripts/prepare_rules.py` to convert raw markdown rules into YAML templates.
-
-4. **Pushing Templates:**  
-   - Run `make push-templates` to deploy templates to the configured API.
-
-5. **Code Quality:**  
-   - Use `make format` and `make lint` to format and lint code/scripts.
-
-### Extending the Project
-
-- **Adding New Rules or Shortcuts:**  
-  - Create new YAML files following the existing schema in the appropriate directory.  
-  - Validate against `schema.yml` to ensure correctness.
-
-- **Modifying Scripts:**  
-  - Scripts are self-contained and can be extended for additional automation tasks.
-
-- **CI/CD Integration:**  
-  - Modify `.github/workflows/push_templates.yml` to customize deployment workflows.
-
-### Performance and Scalability
-
-- The project is primarily configuration-driven; performance depends on the consuming tools and APIs.  
-- Scalability is supported by modular templates and schema validation, enabling large-scale multi-language support.
-
-### Security Considerations
-
-- API tokens and sensitive data are managed via environment variables and `.env` files.  
-- Scripts and workflows avoid hardcoding secrets.  
-- Guidelines in rule templates include security best practices for various frameworks.
-
-### Monitoring and Observability
-
-- No explicit monitoring tools included; observability depends on external CI/CD and API systems.  
-- Logs from scripts and CI runs provide operational insights.
-
----
-
-## Summary
-
-**context-templates** is a **comprehensive YAML-based templating and rules system** designed to standardize coding practices, automate documentation and workflows, and integrate with CI/CD pipelines and AI-assisted tooling. Its modular, declarative architecture enables multi-language support and flexible extension, making it a powerful foundation for enforcing quality and accelerating development workflows in diverse projects.
-
----
-
-# End of DETAILS.md
+# Implementation details
+
+The public GitHub repository contains canonical `skills/<name>/SKILL.md` folders.
+The README links directly to the self-contained bootstrap skill. There is no
+MCP/API publisher or website application. Private skills and personal context
+belong in a separate private repository.
+
+## Catalog and packages
+
+`scripts/skills.py` uses Python 3.10+ and only the standard library. `list` reads
+names and descriptions directly from canonical skills; no separate editable
+catalog duplicates them. `check` validates the restricted frontmatter described
+in CONTRIBUTING, names, package layout, and absence of symlinks and hidden or
+generated files (including Windows junctions/reparse points). It does not execute
+skills or certify their instructions.
+
+`build` creates one ZIP per skill and a SHA-256 catalog in `dist/`. It packages
+only skill folders and their supporting resources, with stable ordering,
+timestamps, and executable flags. These outputs are ignored by Git. CI keeps
+builds as artifacts; publishing a GitHub Release is a separate operation.
+`.gitattributes` keeps text files at LF on every platform and marks PNG/ZIP
+assets as binary, preserving canonical generated bytes on Windows checkouts too.
+
+## Safe installation
+
+`install` targets the user-level paths listed in README. It explicitly installs
+requested agents without guessing whether their apps are installed. `--skill`
+selects individual catalog entries; without it the current catalog is selected.
+`--home` supports isolated tests and `--dry-run` makes no filesystem changes.
+
+The installer preflights every requested skill and target before making changes.
+Each target directory holds `.context-templates-install.json`, identifying this
+repository and recording content hashes and executable flags for managed copies.
+It refuses same-name files, directories, or links without a valid managed record.
+For managed copies it rejects edited, added, removed, or executable-bit-changed
+files and directory additions/removals. Unchanged copies are left untouched.
+
+Updates stage a complete copy, verify it, recheck the destination, then replace
+it while retaining the previous copy until the ownership receipt is written.
+Failure writing that receipt restores the previous copy. Errors stop the run;
+if an unexpected I/O failure happens after earlier targets completed, those
+completed targets remain installed. A subsequent safe rerun resumes. Run only
+one installer process per destination at a time.
+
+No unrelated skill is scanned for removal. Skills removed from the source catalog
+are not automatically pruned from machines. Keep the ownership receipt: losing
+it makes an existing same-name skill an unmanaged conflict. Never change it to
+silence a real local-edit conflict. Installed copies are snapshots, so local edits
+do not modify the canonical repository and Git changes do not silently alter
+installed instructions.
+
+## Contribution and validation boundary
+
+The bootstrap skill distinguishes local updates from upstream improvements.
+Only an authorized contribution creates a branch, commit, push, and PR. It uses
+GitHub CLI when available, forks for contributors without upstream write access,
+checks for duplicate PRs, and leaves merge decisions to maintainers. It carries
+no credentials and does not require another skill or connector.
+
+`make check` runs canonical diagram drift checks, catalog validation, and isolated
+installer/package/rendering tests.
+`make build` exercises packaging. The read-only GitHub Actions workflow runs
+these checks on Linux, macOS, and Windows. Local results, CI, file installation,
+agent discovery, invocation, PR submission, and maintainer acceptance are distinct
+proof stages. There is no staging environment for this repository.
+
+## Dynamic UMLs
+
+The router skill owns the shared HTML renderer, standard-library generator,
+authoring guide, supplied Ginylil PNG, flowchart verifier, six diagram-type examples
+and an additional long sequence model (32 messages, six participants). `scripts/dynamic_umls.py` deterministically
+copies these resources into the focused skill folders and generates standalone
+review pages plus a local gallery. No hosted website or publishing flow is added.
+
+`make examples` refreshes generated files; check mode fails on drift. Each focused
+skill installs and renders independently with no dependency on the router being
+installed. `scripts/render.py` checks model identifiers, notation, bounds, active
+edge endpoints, source link schemes and required scope text. It safely embeds
+JSON, renders model text through DOM textContent, and exclusively creates output
+files to preserve user artifacts. Coordinates and line routes are authored rather
+than automatically laid out. Flowchart validation enforces at most seven nodes
+per view, downward forward routes, orthogonal explicit ports, outer side loops,
+node spacing, no connector overlaps/crossings and no routes through nodes. The
+standalone `scripts/validate_flowchart.py` accepts JSON or emitted HTML and checks
+every child view. It uses conservative node bounds; typography-dependent label
+collisions still require rendered inspection. Nested `subflows` are embedded full
+models referenced by double-bar subprocess nodes, with local references and
+maximum nesting depth four. State diagrams use the same geometry policy,
+with horizontal or vertical orientations, outer returns, self-transitions and
+state-only detail views. `scripts/validate_state.py` verifies state JSON or HTML;
+`labelOn` selects an actual straight segment, with conservative text-fit and
+collision checks. The SVG viewer measures actual text for its opaque backing.
+Floating state `labelAt` coordinates are rejected. State detail views explain
+structure without simulating hierarchical execution semantics.
+
+The test suite exercises all six renderers from isolated destinations for all three
+agents, preserves existing HTML files, rejects unsafe/invalid model content and
+checks canonical copies. Optional browser proof uses an existing Playwright runtime
+and verifies local offline interaction and responsive layouts. Neither lane proves
+that a real agent discovered the skill or followed the investigation/question policy.
+
+The viewer defaults to a full-width diagram with details disclosed through an info
+modal. Opening it pauses the current timer and saves its remaining duration; close
+or Escape restores prior playback intent. A manually paused walkthrough stays
+paused. The optional sidebar uses the same details DOM, narrows the diagram and
+keeps its contents current. All six diagram canvases expand to their content height;
+the document owns vertical scrolling. Narrow views pan horizontally without an
+inner vertical canvas scrollbar. Sequence headers sit outside the horizontal
+overflow container and stick below the playback controls; their width and pan
+position stay aligned with the lifelines. Auto-follow checks the active message's
+geometry in the visible window, accounting for both sticky regions. Sequence
+auto-follow includes visible previous/next arrows when the combined height fits;
+otherwise it prioritizes the active exchange. Structural views prioritize the
+destination when a transition spans more than one viewport.
+State diagrams fit the available width when event labels stay at least 10px.
+Sequence walkthroughs always retain the active step participants and message
+endpoints. Add participants from the previous and next chronological messages
+first, then nearby participants while readable boxes and omission markers fit.
+Show the entire sequence when it fits; only overflow groups become selectable
+ellipses, preserving source order. Recalculate on step changes, window resize and
+sidebar toggles. At very narrow sidebar widths, outer omission markers yield space to participant
+names; internal omission markers remain. Only arrows whose endpoints are shown
+remain visible; message numbers and chronological vertical positions are
+preserved. Headers and arrows adapt to the canvas width without horizontal
+panning. Overview restores the canonical full
+layout and every message, with a visible horizontal-pan hint when needed.
+
+Scenario selection uses a themed button/listbox below the trigger, with keyboard
+navigation, committed selection, typeahead and dismissal. Subprocess inspection
+offers Explore subprocess; changing views pauses playback. Back restores parent
+scenario, step, overview, scroll and originating node focus. The supplied logo
+is embedded unchanged as a PNG data URL, including in the local gallery. The
+transparent mark is 40px (32px on narrow diagram pages), with 80% opacity and no
+backing tile. Every diagram footer repeats the same embedded logo as a 32px
+mark beside the domain link. Back also restores the parent document scroll
+position for nested views.

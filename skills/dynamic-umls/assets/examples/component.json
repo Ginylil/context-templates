@@ -1,0 +1,278 @@
+{
+  "type": "component",
+  "title": "One source, three agents",
+  "lede": "A structural view of this repository\u2019s direct skill installation and packaging.",
+  "kicker": "Dynamic UMLs / component",
+  "width": 1000,
+  "height": 640,
+  "nodes": [
+    {
+      "id": "catalog",
+      "label": "Skill catalog",
+      "kind": "component",
+      "x": 165,
+      "y": 100,
+      "detail": "Canonical skills/<name>/ folders in the local repository.",
+      "w": 240,
+      "role": "Git source"
+    },
+    {
+      "id": "validator",
+      "label": "Catalog validator",
+      "kind": "component",
+      "x": 500,
+      "y": 100,
+      "detail": "scripts/skills.py check validates names, metadata and packaged paths.",
+      "w": 250,
+      "role": "Python / standard library"
+    },
+    {
+      "id": "archives",
+      "label": "Skill ZIPs",
+      "kind": "component",
+      "x": 835,
+      "y": 100,
+      "detail": "scripts/skills.py build creates reproducible ZIPs plus checksums.",
+      "w": 240,
+      "role": "Downloadable artifacts"
+    },
+    {
+      "id": "installer",
+      "label": "Safe installer",
+      "kind": "component",
+      "x": 500,
+      "y": 320,
+      "detail": "Preflights destination conflicts and managed hashes before copying resources. It does not execute skill scripts.",
+      "w": 260,
+      "role": "Ownership + snapshots"
+    },
+    {
+      "id": "codex",
+      "label": "Codex skills",
+      "kind": "component",
+      "x": 165,
+      "y": 550,
+      "detail": "User-level .agents/skills/<name>/ destination. File installation does not prove discovery.",
+      "w": 230,
+      "role": "Local files"
+    },
+    {
+      "id": "cursor",
+      "label": "Cursor skills",
+      "kind": "component",
+      "x": 500,
+      "y": 550,
+      "detail": "User-level .cursor/skills/<name>/ destination. Skills remain independent copies.",
+      "w": 230,
+      "role": "Local files"
+    },
+    {
+      "id": "claude",
+      "label": "Claude Code skills",
+      "kind": "component",
+      "x": 835,
+      "y": 550,
+      "detail": "User-level .claude/skills/<name>/ destination. Local edits block managed updates.",
+      "w": 230,
+      "role": "Local files"
+    }
+  ],
+  "edges": [
+    {
+      "id": "validate",
+      "from": "validator",
+      "to": "catalog",
+      "label": "reads",
+      "kind": "dependency",
+      "detail": "The validator depends on the canonical skill catalog."
+    },
+    {
+      "id": "package",
+      "from": "archives",
+      "to": "catalog",
+      "label": "built from",
+      "kind": "dependency",
+      "detail": "ZIPs are built from validated catalog content.",
+      "via": [
+        {
+          "x": 835,
+          "y": 30
+        },
+        {
+          "x": 165,
+          "y": 30
+        }
+      ],
+      "labelAt": {
+        "x": 500,
+        "y": 22
+      }
+    },
+    {
+      "id": "install-source",
+      "from": "installer",
+      "to": "catalog",
+      "label": "reads catalog",
+      "kind": "dependency",
+      "detail": "The installer validates and snapshots selected catalog entries.",
+      "via": [
+        {
+          "x": 165,
+          "y": 320
+        }
+      ],
+      "labelAt": {
+        "x": 290,
+        "y": 305
+      }
+    },
+    {
+      "id": "codex-target",
+      "from": "codex",
+      "to": "installer",
+      "label": "installed by",
+      "kind": "dependency",
+      "detail": "The installer copies selected skills into the Codex user destination.",
+      "via": [
+        {
+          "x": 165,
+          "y": 440
+        }
+      ],
+      "labelAt": {
+        "x": 270,
+        "y": 425
+      }
+    },
+    {
+      "id": "cursor-target",
+      "from": "cursor",
+      "to": "installer",
+      "label": "installed by",
+      "kind": "dependency",
+      "detail": "The same canonical source is copied into the Cursor destination.",
+      "labelAt": {
+        "x": 570,
+        "y": 435
+      }
+    },
+    {
+      "id": "claude-target",
+      "from": "claude",
+      "to": "installer",
+      "label": "installed by",
+      "kind": "dependency",
+      "detail": "The same canonical source is copied into the Claude Code destination.",
+      "via": [
+        {
+          "x": 835,
+          "y": 440
+        }
+      ],
+      "labelAt": {
+        "x": 745,
+        "y": 425
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "install",
+      "label": "Install selected skills",
+      "steps": [
+        {
+          "title": "Start from the canonical catalog",
+          "body": "Public skills are folders in Git. Private experiments live elsewhere.",
+          "nodes": [
+            "catalog"
+          ],
+          "edges": []
+        },
+        {
+          "title": "Validate before copying",
+          "body": "The checker validates the restricted metadata and resource paths.",
+          "nodes": [
+            "validator",
+            "catalog"
+          ],
+          "edges": [
+            "validate"
+          ]
+        },
+        {
+          "title": "Preflight installation",
+          "body": "The installer snapshots the selected sources and rejects conflicting or locally edited destinations.",
+          "nodes": [
+            "installer",
+            "catalog"
+          ],
+          "edges": [
+            "install-source"
+          ]
+        },
+        {
+          "title": "Copy to the chosen agents",
+          "body": "These user-level destinations receive independent copies. This diagram is a dependency view, not message direction or proof of agent discovery.",
+          "nodes": [
+            "installer",
+            "codex",
+            "cursor",
+            "claude"
+          ],
+          "edges": [
+            "codex-target",
+            "cursor-target",
+            "claude-target"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "download",
+      "label": "Build downloads",
+      "steps": [
+        {
+          "title": "Read the canonical catalog",
+          "body": "The ZIP builder reads public skill resources from the catalog.",
+          "nodes": [
+            "catalog",
+            "archives"
+          ],
+          "edges": [
+            "package"
+          ]
+        },
+        {
+          "title": "Produce reproducible archives",
+          "body": "A checksum catalog and complete per-skill ZIPs are local outputs. Publishing a release is a separate action.",
+          "nodes": [
+            "archives"
+          ],
+          "edges": []
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Derived from the local scripts/skills.py and Makefile implementation; hosted main may differ until this branch is published.",
+    "Dashed dependency arrows point from the dependent component to its supplier, not in the direction of file transfer.",
+    "Boxes group responsibilities rather than deployed services. The catalog is local Git content; no MCP or API server participates.",
+    "The diagram abstracts staging, ownership receipts and rollback details. It does not imply runtime agent integration was tested."
+  ],
+  "legend": [
+    {
+      "label": "Dashed arrow: depends on",
+      "dashed": true
+    },
+    {
+      "label": "Glyph: component boundary"
+    }
+  ],
+  "sources": [
+    {
+      "label": "UML 2.5.1 \u2014 diagram notation",
+      "href": "https://www.omg.org/spec/UML/2.5.1"
+    }
+  ],
+  "evidence": "Evidence: inspected local scripts/skills.py, Makefile and DETAILS.md. Structural simplification."
+}

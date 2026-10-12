@@ -1,255 +1,220 @@
-# context-templates
+# Context Templates
 
-## Context Templates for Detailer MCP
+Public agent skills for **Codex, Cursor, and Claude Code**. GitHub is the source
+of truth. [contexttemplates.com](https://contexttemplates.com) leads here.
 
-This repository contains the official collection of context templates for the [Detailer MCP](https://detailer.ginylil.com), an AI-powered co-pilot for developers. These templates provide reusable prompts, configurations, and workflows to accelerate development tasks.
+## Start with the downloadable skill
 
-## What are Context Templates?
+[Download the Context Templates skill](https://raw.githubusercontent.com/Ginylil/context-templates/main/skills/context-templates/SKILL.md)
+([view its source](skills/context-templates/SKILL.md)). Give that file or its URL
+to your agent and ask:
 
-Context templates are structured files (YAML or Markdown) that define specific instructions and context for the Detailer MCP. They are designed to help with a variety of tasks, from enforcing coding standards to automating common workflows like generating pull request descriptions.
+> Use this skill to list the available Context Templates skills and install the
+> ones I choose for this agent. Preview the installation first.
 
-## How to Use These Templates
+The bootstrap file is self-contained. Your agent can read it before installing
+anything. It explains discovery, safe local installation, updates, and how to
+contribute improvements or new skills through a pull request. The catalog includes the bootstrap and the Dynamic UMLs family described below;
+additional skills are reviewed and added individually.
 
-The templates in this repository are accessed through the Detailer MCP using a set of powerful tools:
+## How skills and scripts work together
 
-### `list_templates`
-Discover all available templates. You can see their names, descriptions, and types. This helps you find the right template for your task.
+Each skill is a complete folder: `SKILL.md` tells your agent when and how to use
+it, while optional `references/`, `assets/`, and `scripts/` provide supporting
+guidance, templates, and deterministic tools. For Dynamic UMLs, the agent
+investigates your question and prepares a diagram model; bundled Python scripts
+validate that model and render one interactive HTML file you can open locally.
+The page works offline, with no Python runtime needed to view it.
 
-### `get_template`
-Download a template's raw content directly into your workspace. This is useful when you want to view or customize a template to fit your specific needs.
+The Makefile is a convenient interface to the Python installer. Choose your
+preferred agent with `make install-codex`, `make install-cursor`, or
+`make install-claude`; `make install` installs for all three. Add `SKILL=<name>`
+to install one skill. Installation copies the complete folder, including any
+scripts and resources, into that agent's local skills directory. It does not
+run bundled skill scripts; your agent uses them when carrying out the skill.
+Python 3.10+ is required for installation and UML generation. Make is optional:
+the equivalent Python commands are listed under [Install locally](#install-locally).
 
-### `do_template`
-Execute a template directly and receive immediate, context-aware output. Instead of just getting the template file, `do_template` processes it and provides you with the generated result, such as a feature plan or a list of best practices.
+## Dynamic UMLs
 
-## Using Context Templates with MCP Public Token
+Use Dynamic UMLs to explain how a system works: messages over time, types and
+relationships, decision paths, state changes, parallel activities, or component
+boundaries. Ask for a diagram in plain language, for example
+`/dynamic-sequence-diagram for a browser, application, and identity-provider login`.
+Choose a focused skill below, or use `dynamic-umls` to select a suitable view.
 
-You can access context templates directly via MCP (Model Context Protocol) using the public token. This allows you to use templates across different AI development platforms without needing to clone this repository.
+Each produces a standalone HTML page with an interactive
+walkthrough. Each skill investigates the supplied context, makes minimal explicit
+assumptions, and asks **at most five questions** for material unknowns. Pages include
+playback, step navigation, an element inspector, overview, meaningful alternate
+scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com).
+Details open from the info icon in a modal: playback pauses while you read and
+resumes on close only if it was playing. The optional Sidebar trades canvas width
+for persistent details. All six types use the page for vertical scrolling, with
+horizontal panning when needed. Sequence walkthroughs show as many participants
+as fit, prioritizing the active exchange and previous/next messages. Only groups
+that exceed the available width collapse into `…`. Select the dots or
+Overview to see all participants and messages; the full view can pan horizontally.
+Playback follows the active message or state, with sticky controls and sequence
+participant labels.
+Scenario menus open below the trigger in the page theme. Flowcharts read
+vertically, keep retries on outer side rails, and compose larger processes as
+clickable subprocesses, with a maximum of seven nodes per view. A bundled Python
+verifier checks these rules before rendering. State diagrams share the node limit
+and routing checks, allow horizontal layouts and expandable state detail views,
+and place transition causes directly on their arrows. Pages use the supplied Ginylil
+coffee-and-sun logo as a small, subdued transparent mark in both header and footer.
+State diagrams fit the available width when readable. Diagram canvases have no inner vertical scrollbar.
+Pages open locally and work offline, without a server or external dependencies.
 
-### Public Token
+| Skill / command | Example to download and open locally |
+| --- | --- |
+| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Example gallery](examples/dynamic-umls/index.html) |
+| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](examples/dynamic-umls/sequence-long.html) |
+| [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](examples/dynamic-umls/class.html) |
+| [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](examples/dynamic-umls/flowchart.html) |
+| [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](examples/dynamic-umls/state.html) |
+| [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](examples/dynamic-umls/activity.html) |
+| [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](examples/dynamic-umls/component.html) |
 
-```
-dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6
-```
+GitHub displays HTML source; download the raw example or open it from your clone
+in a browser. The examples are for design review, not a deployed website. These
+are a focused UML subset; flowcharts are general process notation.
 
-**MCP Server URL:** `https://detailer-api.supabase.co/functions/v1/mcp`
+Install the complete folder for the skill you choose, including its resources:
 
-### Platform-Specific Setup
-
-Choose your platform to see the configuration instructions:
-
-<details open>
-<summary><strong>⚡ Kiro (One-Click Install)</strong></summary>
-
-Click the button below for instant installation:
-
-[![Add to Kiro](https://kiro.dev/images/add-to-kiro.svg)](https://Ginylil.github.io/context-templates/add-to-kiro.html)
-
-This will open a page that redirects to Kiro and prompts you to install the context-templates MCP server automatically.
-
-</details>
-
-<details>
-<summary><strong>🎯 Cursor IDE</strong></summary>
-
-#### Option 1: Using Cursor's MCP Settings UI (Recommended)
-
-1. Open Cursor IDE
-2. Click the **Settings/Cog icon (⚙️)** in the top-right corner
-3. Select **"MCP"** from the sidebar
-4. Click **"Add new global MCP server"**
-5. This will open your `mcp.json` configuration file
-6. Add the configuration below
-
-#### Option 2: Manual Configuration
-
-Directly edit your Cursor MCP settings file at the following location:
-
-**macOS/Linux:** `~/.cursor/mcp.json`  
-**Windows:** `%USERPROFILE%\.cursor\mcp.json`
-
-Add the following configuration:
-
-```json
-{
-  "mcpServers": {
-    "context-templates": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://detailer-api.supabase.co/functions/v1/mcp",
-        "--header",
-        "Authorization:${AUTH_HEADER}",
-        "--allow-http"
-      ],
-      "env": {
-        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
-      }
-    }
-  }
-}
+```sh
+make install-codex SKILL=dynamic-sequence-diagram
 ```
 
-**After configuration:**
-- Save the file
-- Restart Cursor IDE completely to load the new MCP server
-- The MCP server indicator should appear in the Cursor interface
+Then ask your agent:
 
-</details>
-
-<details>
-<summary><strong>🌊 Windsurf IDE</strong></summary>
-
-#### Option 1: Using Windsurf's MCP Settings UI (Recommended)
-
-1. Open Windsurf IDE
-2. Press `Cmd/Ctrl + ,` to open **Windsurf Settings**
-3. Scroll down to the **Cascade** section
-4. Find **"Plugins (MCP servers)"** or **"Model Context Protocol (MCP) Servers"**
-5. Click **"Manage Plugins"**
-6. Click **"View raw config"** or **"Add custom server"**
-7. Add the configuration below
-8. Click the **Refresh** button after saving
-
-#### Option 2: Manual Configuration
-
-Directly edit your Windsurf MCP configuration file at the following location:
-
-**macOS:** `~/.codeium/windsurf/mcp_config.json`  
-**Windows:** `%APPDATA%\Codeium\Windsurf\mcp_config.json`  
-**Linux:** `~/.config/Codeium/Windsurf/mcp_config.json` or `~/.codeium/windsurf/mcp_config.json`
-
-Add the following configuration:
-
-```json
-{
-  "mcpServers": {
-    "context-templates": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://detailer-api.supabase.co/functions/v1/mcp",
-        "--header",
-        "Authorization:${AUTH_HEADER}",
-        "--allow-http"
-      ],
-      "env": {
-        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
-      }
-    }
-  }
-}
+```text
+/dynamic-sequence-diagram for 3 way handshake login
+/dynamic-class-diagram for this project's billing model
+/dynamic-flowchart for the failed-payment recovery process
 ```
 
-**After configuration:**
-- Save the file
-- Click the **Refresh** button in the MCP settings panel
-- Restart Windsurf IDE for changes to take full effect
+Use `$dynamic-sequence-diagram` or its name in prose if your agent does not expose
+slash invocation. Invocation syntax and discovery must be checked in your agent.
+The login request should clarify TCP versus browser/app/provider sign-in when
+context leaves it ambiguous. Generating a page uses Python 3.10+; the resulting
+HTML requires only a browser. Existing output files are never silently replaced.
 
-</details>
+Each focused skill works independently. Shared resources have one canonical source
+under `skills/dynamic-umls/`; synchronized copies make every ZIP self-contained.
+Use `make examples` after changing canonical resources or example JSON, then
+`make check` to catch drift. See [DESIGN](DESIGN.md) for visual and browser checks.
 
-<details>
-<summary><strong>🤖 Claude Desktop</strong></summary>
+## Install locally
 
-Add the following configuration to your Claude Desktop configuration file:
+Requires Git and Python **3.10+**. Installation has no Python package dependencies
+and makes no network requests. Clone the repository into an unused directory:
 
-**macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`  
-**Windows:** `%APPDATA%\Claude\claude_desktop_config.json`  
-**Linux:** `~/.config/Claude/claude_desktop_config.json`
-
-```json
-{
-  "mcpServers": {
-    "context-templates": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://detailer-api.supabase.co/functions/v1/mcp",
-        "--header",
-        "Authorization:${AUTH_HEADER}",
-        "--allow-http"
-      ],
-      "env": {
-        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
-      }
-    }
-  }
-}
+```sh
+git clone https://github.com/Ginylil/context-templates.git
+cd context-templates
+make catalog
+make install INSTALL_ARGS=--dry-run
 ```
 
-**After configuration:**
-- Save the file
-- Completely quit Claude Desktop (not just close the window)
-- Restart Claude Desktop to load the new MCP server
-- You should see an MCP indicator in the bottom-right of the chat interface
+Choose the agents you use:
 
-</details>
-
-<details>
-<summary><strong>🔧 Other MCP-Compatible Tools</strong></summary>
-
-For any other tool that supports MCP, use this standard configuration format:
-
-```json
-{
-  "mcpServers": {
-    "context-templates": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://detailer-api.supabase.co/functions/v1/mcp",
-        "--header",
-        "Authorization:${AUTH_HEADER}",
-        "--allow-http"
-      ],
-      "env": {
-        "AUTH_HEADER": "Bearer dtl_public_eec1f1037008dc82ce9d314c3294fbcc0e3f5d5df315d8c6"
-      }
-    }
-  }
-}
+```sh
+make install-codex
+make install-cursor
+make install-claude
+make install          # all three
 ```
 
-Consult your tool's documentation for the specific configuration file location and format requirements.
+Select one skill with `make install-codex SKILL=context-templates`.
 
-</details>
+| Agent | User-level destination |
+| --- | --- |
+| Codex | `~/.agents/skills/<name>/` |
+| Cursor | `~/.cursor/skills/<name>/` |
+| Claude Code | `~/.claude/skills/<name>/` |
 
----
+The installer copies the complete skill folder, records ownership and content
+hashes, and leaves unrelated skills alone. Rerunning it is a no-op for unchanged
+managed copies. Updates refuse unmanaged name conflicts, links, and locally
+edited managed copies; there is no force-overwrite option or automatic removal.
+Keep local modifications, contribute them by PR, or choose a different name
+before resolving a conflict. Do not edit the ownership receipt to bypass it.
 
-**Important Notes:**
-- After adding the configuration, **restart your IDE completely** (quit and reopen) for the changes to take effect
-- For Cursor and Windsurf, you may need to **reload or refresh** the MCP servers panel after the first configuration
-- Ensure you have **Node.js** installed on your system (required for `npx` command)
-- If you encounter issues, check that the configuration file syntax is valid JSON
+Each agent may also discover skills through compatibility paths. If the same
+name already appears from another library, resolve that duplication deliberately;
+this installer does not modify that other library. Start a fresh session or
+restart the agent if a new skill is not visible. Verify discovery and invocation
+in the agent you use; a copied file alone does not prove either.
 
-## Template Types
+### Windows or machines without Make
 
-This repository is organized into three main categories of templates:
+The Python interface performs the same operations. On Windows use `py -3` (or
+an available Python 3.10+ executable); on macOS/Linux use `python3`:
 
--   **`rules`**: Define coding standards, best practices, and style guides for various languages and frameworks (e.g., React, Python, TypeScript).
--   **`shortcuts`**: Provide quick actions and generators for common development tasks, like creating feature plans or generating PR descriptions.
--   **`workflows`**: Contain multi-step processes and guides for more complex development scenarios.
-
-## Repository Structure
-
-The templates are organized into directories based on their type:
-
-```
-templates/
-├── rules/
-│   └── cursor/
-│       ├── react.yml
-│       └── python.yml
-├── shortcuts/
-│   ├── pr_description_generation.yml
-│   └── task_planning_and_feature_development.yml
-└── workflows/
-    └── example-workflow.yml
+```text
+py -3 scripts/skills.py list
+py -3 scripts/skills.py install --agent all --dry-run
+py -3 scripts/skills.py install --agent codex --skill context-templates
+py -3 scripts/skills.py install --agent cursor
+py -3 scripts/skills.py install --agent claude
 ```
 
-## Contributing
+### Receive updates on another computer
 
-We welcome contributions! If you have a template that could benefit other developers, please feel free to open a pull request. (Contribution guidelines coming soon).
+In a clean checkout tracking this repository's `main`, review upstream changes,
+then fast-forward and reinstall:
 
-## Credits
+```sh
+git fetch origin
+git log --oneline HEAD..origin/main
+git diff HEAD..origin/main -- skills scripts/skills.py
+git pull --ff-only
+make install
+```
 
-A portion of the rules available in `templates/rules/cursor` are adapted from the collection at [awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules/tree/main/rules-new) by [PatrickJS](https://github.com/PatrickJS). We are grateful for their contributions to the community.
+Inspect branch and worktree state first. Preserve edits or use a separate clean
+checkout if the current checkout is dirty or on a contribution branch. This is
+an explicit update workflow; automatic cross-computer synchronization is deferred.
+
+## Contribute through a PR
+
+Ask your agent:
+
+> Use the Context Templates skill to improve `<skill-name>` and open a pull
+> request against Ginylil/context-templates.
+
+Or:
+
+> Use the Context Templates skill to propose a new skill for `<purpose>`, validate
+> it locally, and open a pull request against Ginylil/context-templates.
+
+The agent works on a branch (or your fork), validates the change, and opens a PR
+for maintainer review. GitHub authentication is needed for submission; a local
+installation request alone does not create a PR. See [CONTRIBUTING](CONTRIBUTING.md)
+for the canonical folder format and validation requirements.
+
+## Maintainer checks and downloads
+
+```sh
+make check
+make build
+```
+
+Builds produce a ZIP for each complete skill plus a checksummed `catalog.json`
+in `dist/`. These files are reproducible local outputs and are also retained as
+CI artifacts. A GitHub Actions artifact download may require signing in; the raw
+bootstrap link above is public. There is no website build or automatic release
+publication. Only `skills/` is packaged; private experiments belong in a separate
+private repository and must never be copied here as part of an install or build.
+
+The previous YAML template collection and MCP/API publishing flow have been
+retired. Existing clones and third-party service data are unaffected by this
+repository change. Useful workflows will return as individually reviewed skills.
+
+See [DETAILS](DETAILS.md) for installer behavior and [AGENTS](AGENTS.md) for
+repository work rules. Runtime locations follow the official
+[Codex skill documentation](https://learn.chatgpt.com/docs/build-skills),
+[Cursor skill documentation](https://cursor.com/docs/skills), and
+[Claude Code skill documentation](https://code.claude.com/docs/en/skills).

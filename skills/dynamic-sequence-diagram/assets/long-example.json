@@ -1,0 +1,817 @@
+{
+  "type": "sequence",
+  "title": "A report, from request to delivery",
+  "lede": "Follow 32 messages across six participants, from queued work to a completed download.",
+  "kicker": "Dynamic UMLs / long sequence",
+  "width": 1400,
+  "height": 2380,
+  "nodes": [
+    {
+      "id": "browser",
+      "label": "Browser",
+      "kind": "participant",
+      "x": 100,
+      "y": 45,
+      "w": 160,
+      "role": "The person",
+      "detail": "Requests the report and downloads the resulting file."
+    },
+    {
+      "id": "app",
+      "label": "Application",
+      "kind": "participant",
+      "x": 340,
+      "y": 45,
+      "w": 180,
+      "role": "Request owner",
+      "detail": "Records report requests and exposes their status."
+    },
+    {
+      "id": "queue",
+      "label": "Job queue",
+      "kind": "participant",
+      "x": 580,
+      "y": 45,
+      "w": 180,
+      "role": "Work handoff",
+      "detail": "Hands accepted jobs to a worker."
+    },
+    {
+      "id": "worker",
+      "label": "Worker",
+      "kind": "participant",
+      "x": 820,
+      "y": 45,
+      "w": 180,
+      "role": "Report builder",
+      "detail": "Builds and verifies an illustrative report artifact."
+    },
+    {
+      "id": "store",
+      "label": "Object store",
+      "kind": "participant",
+      "x": 1060,
+      "y": 45,
+      "w": 180,
+      "role": "Artifact storage",
+      "detail": "Holds source objects and generated artifacts."
+    },
+    {
+      "id": "notifier",
+      "label": "Notifier",
+      "kind": "participant",
+      "x": 1300,
+      "y": 45,
+      "w": 180,
+      "role": "Completion notice",
+      "detail": "Delivers an illustrative completion notice."
+    }
+  ],
+  "edges": [
+    {
+      "id": "message-01",
+      "from": "browser",
+      "to": "app",
+      "kind": "call",
+      "label": "Request a report",
+      "detail": "The person submits report options to the application."
+    },
+    {
+      "id": "message-02",
+      "from": "app",
+      "to": "app",
+      "kind": "call",
+      "label": "Validate options",
+      "detail": "The application checks the requested options before creating work.",
+      "labelAt": {
+        "x": 475,
+        "y": 224
+      }
+    },
+    {
+      "id": "message-03",
+      "from": "app",
+      "to": "queue",
+      "kind": "call",
+      "label": "Enqueue report job",
+      "detail": "The application places the illustrative report job on the queue."
+    },
+    {
+      "id": "message-04",
+      "from": "queue",
+      "to": "app",
+      "kind": "return",
+      "label": "Job accepted",
+      "detail": "The queue returns the accepted job reference."
+    },
+    {
+      "id": "message-05",
+      "from": "app",
+      "to": "browser",
+      "kind": "return",
+      "label": "Return job reference",
+      "detail": "The application returns a reference that the browser can use to check status."
+    },
+    {
+      "id": "message-06",
+      "from": "worker",
+      "to": "queue",
+      "kind": "call",
+      "label": "Claim next job",
+      "detail": "The worker asks the queue for available work."
+    },
+    {
+      "id": "message-07",
+      "from": "queue",
+      "to": "worker",
+      "kind": "return",
+      "label": "Job parameters",
+      "detail": "The queue delivers the job parameters to the worker."
+    },
+    {
+      "id": "message-08",
+      "from": "worker",
+      "to": "app",
+      "kind": "call",
+      "label": "Mark running",
+      "detail": "The worker asks the application to record that report generation has started."
+    },
+    {
+      "id": "message-09",
+      "from": "app",
+      "to": "worker",
+      "kind": "return",
+      "label": "Running status saved",
+      "detail": "The application confirms the running status was recorded."
+    },
+    {
+      "id": "message-10",
+      "from": "worker",
+      "to": "store",
+      "kind": "call",
+      "label": "Read source objects",
+      "detail": "The worker requests the source objects needed for the report."
+    },
+    {
+      "id": "message-11",
+      "from": "store",
+      "to": "worker",
+      "kind": "return",
+      "label": "Source objects",
+      "detail": "The object store returns the illustrative input records."
+    },
+    {
+      "id": "message-12",
+      "from": "worker",
+      "to": "worker",
+      "kind": "call",
+      "label": "Normalize records",
+      "detail": "The worker normalizes the records into the chosen report structure.",
+      "labelAt": {
+        "x": 955,
+        "y": 904
+      }
+    },
+    {
+      "id": "message-13",
+      "from": "worker",
+      "to": "worker",
+      "kind": "call",
+      "label": "Build report rows",
+      "detail": "The worker builds the rows that will appear in the report.",
+      "labelAt": {
+        "x": 955,
+        "y": 972
+      }
+    },
+    {
+      "id": "message-14",
+      "from": "worker",
+      "to": "store",
+      "kind": "call",
+      "label": "Write draft artifact",
+      "detail": "The worker writes an intermediate artifact to storage."
+    },
+    {
+      "id": "message-15",
+      "from": "store",
+      "to": "worker",
+      "kind": "return",
+      "label": "Draft stored",
+      "detail": "The store confirms the draft artifact was saved."
+    },
+    {
+      "id": "message-16",
+      "from": "worker",
+      "to": "worker",
+      "kind": "call",
+      "label": "Verify artifact",
+      "detail": "The worker checks that the generated artifact matches the requested structure.",
+      "labelAt": {
+        "x": 955,
+        "y": 1176
+      }
+    },
+    {
+      "id": "message-17",
+      "from": "worker",
+      "to": "store",
+      "kind": "call",
+      "label": "Publish final artifact",
+      "detail": "The worker writes the verified final artifact."
+    },
+    {
+      "id": "message-18",
+      "from": "store",
+      "to": "worker",
+      "kind": "return",
+      "label": "Artifact reference",
+      "detail": "The store returns the final artifact reference."
+    },
+    {
+      "id": "message-19",
+      "from": "worker",
+      "to": "app",
+      "kind": "call",
+      "label": "Mark report ready",
+      "detail": "The worker provides the final artifact reference and asks the application to record readiness."
+    },
+    {
+      "id": "message-20",
+      "from": "worker",
+      "to": "queue",
+      "kind": "call",
+      "label": "Acknowledge job",
+      "detail": "The worker acknowledges the completed job to the queue."
+    },
+    {
+      "id": "message-21",
+      "from": "queue",
+      "to": "worker",
+      "kind": "return",
+      "label": "Acknowledged",
+      "detail": "The queue confirms that the acknowledgment was received."
+    },
+    {
+      "id": "message-22",
+      "from": "app",
+      "to": "notifier",
+      "kind": "call",
+      "label": "Request notification",
+      "detail": "The application asks the notifier to deliver a completion notice."
+    },
+    {
+      "id": "message-23",
+      "from": "notifier",
+      "to": "app",
+      "kind": "return",
+      "label": "Notice accepted",
+      "detail": "The notifier confirms acceptance of the notification request."
+    },
+    {
+      "id": "message-24",
+      "from": "notifier",
+      "to": "browser",
+      "kind": "signal",
+      "label": "Report ready notice",
+      "detail": "The notifier sends an illustrative asynchronous completion notice to the browser."
+    },
+    {
+      "id": "message-25",
+      "from": "browser",
+      "to": "app",
+      "kind": "call",
+      "label": "Check report status",
+      "detail": "The browser asks the application for the recorded report status."
+    },
+    {
+      "id": "message-26",
+      "from": "app",
+      "to": "browser",
+      "kind": "return",
+      "label": "Ready status",
+      "detail": "The application returns the ready status."
+    },
+    {
+      "id": "message-27",
+      "from": "browser",
+      "to": "app",
+      "kind": "call",
+      "label": "Request download",
+      "detail": "The browser asks for the location of the finished report."
+    },
+    {
+      "id": "message-28",
+      "from": "app",
+      "to": "store",
+      "kind": "call",
+      "label": "Locate final artifact",
+      "detail": "The application looks up the final artifact location."
+    },
+    {
+      "id": "message-29",
+      "from": "store",
+      "to": "app",
+      "kind": "return",
+      "label": "Download location",
+      "detail": "The store returns the illustrative download location."
+    },
+    {
+      "id": "message-30",
+      "from": "app",
+      "to": "browser",
+      "kind": "return",
+      "label": "Return location",
+      "detail": "The application returns the download location to the browser."
+    },
+    {
+      "id": "message-31",
+      "from": "browser",
+      "to": "store",
+      "kind": "call",
+      "label": "Download report",
+      "detail": "The browser requests the report from the object store."
+    },
+    {
+      "id": "message-32",
+      "from": "store",
+      "to": "browser",
+      "kind": "return",
+      "label": "Report file",
+      "detail": "The store returns the finished report file to the browser."
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "full-report",
+      "label": "Full report journey",
+      "steps": [
+        {
+          "title": "Request a report",
+          "body": "The person submits report options to the application.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "message-01"
+          ]
+        },
+        {
+          "title": "Validate options",
+          "body": "The application checks the requested options before creating work.",
+          "nodes": [
+            "app"
+          ],
+          "edges": [
+            "message-02"
+          ]
+        },
+        {
+          "title": "Enqueue report job",
+          "body": "The application places the illustrative report job on the queue.",
+          "nodes": [
+            "app",
+            "queue"
+          ],
+          "edges": [
+            "message-03"
+          ]
+        },
+        {
+          "title": "Job accepted",
+          "body": "The queue returns the accepted job reference.",
+          "nodes": [
+            "queue",
+            "app"
+          ],
+          "edges": [
+            "message-04"
+          ]
+        },
+        {
+          "title": "Return job reference",
+          "body": "The application returns a reference that the browser can use to check status.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "message-05"
+          ]
+        },
+        {
+          "title": "Claim next job",
+          "body": "The worker asks the queue for available work.",
+          "nodes": [
+            "worker",
+            "queue"
+          ],
+          "edges": [
+            "message-06"
+          ]
+        },
+        {
+          "title": "Job parameters",
+          "body": "The queue delivers the job parameters to the worker.",
+          "nodes": [
+            "queue",
+            "worker"
+          ],
+          "edges": [
+            "message-07"
+          ]
+        },
+        {
+          "title": "Mark running",
+          "body": "The worker asks the application to record that report generation has started.",
+          "nodes": [
+            "worker",
+            "app"
+          ],
+          "edges": [
+            "message-08"
+          ]
+        },
+        {
+          "title": "Running status saved",
+          "body": "The application confirms the running status was recorded.",
+          "nodes": [
+            "app",
+            "worker"
+          ],
+          "edges": [
+            "message-09"
+          ]
+        },
+        {
+          "title": "Read source objects",
+          "body": "The worker requests the source objects needed for the report.",
+          "nodes": [
+            "worker",
+            "store"
+          ],
+          "edges": [
+            "message-10"
+          ]
+        },
+        {
+          "title": "Source objects",
+          "body": "The object store returns the illustrative input records.",
+          "nodes": [
+            "store",
+            "worker"
+          ],
+          "edges": [
+            "message-11"
+          ]
+        },
+        {
+          "title": "Normalize records",
+          "body": "The worker normalizes the records into the chosen report structure.",
+          "nodes": [
+            "worker"
+          ],
+          "edges": [
+            "message-12"
+          ]
+        },
+        {
+          "title": "Build report rows",
+          "body": "The worker builds the rows that will appear in the report.",
+          "nodes": [
+            "worker"
+          ],
+          "edges": [
+            "message-13"
+          ]
+        },
+        {
+          "title": "Write draft artifact",
+          "body": "The worker writes an intermediate artifact to storage.",
+          "nodes": [
+            "worker",
+            "store"
+          ],
+          "edges": [
+            "message-14"
+          ]
+        },
+        {
+          "title": "Draft stored",
+          "body": "The store confirms the draft artifact was saved.",
+          "nodes": [
+            "store",
+            "worker"
+          ],
+          "edges": [
+            "message-15"
+          ]
+        },
+        {
+          "title": "Verify artifact",
+          "body": "The worker checks that the generated artifact matches the requested structure.",
+          "nodes": [
+            "worker"
+          ],
+          "edges": [
+            "message-16"
+          ]
+        },
+        {
+          "title": "Publish final artifact",
+          "body": "The worker writes the verified final artifact.",
+          "nodes": [
+            "worker",
+            "store"
+          ],
+          "edges": [
+            "message-17"
+          ]
+        },
+        {
+          "title": "Artifact reference",
+          "body": "The store returns the final artifact reference.",
+          "nodes": [
+            "store",
+            "worker"
+          ],
+          "edges": [
+            "message-18"
+          ]
+        },
+        {
+          "title": "Mark report ready",
+          "body": "The worker provides the final artifact reference and asks the application to record readiness.",
+          "nodes": [
+            "worker",
+            "app"
+          ],
+          "edges": [
+            "message-19"
+          ]
+        },
+        {
+          "title": "Acknowledge job",
+          "body": "The worker acknowledges the completed job to the queue.",
+          "nodes": [
+            "worker",
+            "queue"
+          ],
+          "edges": [
+            "message-20"
+          ]
+        },
+        {
+          "title": "Acknowledged",
+          "body": "The queue confirms that the acknowledgment was received.",
+          "nodes": [
+            "queue",
+            "worker"
+          ],
+          "edges": [
+            "message-21"
+          ]
+        },
+        {
+          "title": "Request notification",
+          "body": "The application asks the notifier to deliver a completion notice.",
+          "nodes": [
+            "app",
+            "notifier"
+          ],
+          "edges": [
+            "message-22"
+          ]
+        },
+        {
+          "title": "Notice accepted",
+          "body": "The notifier confirms acceptance of the notification request.",
+          "nodes": [
+            "notifier",
+            "app"
+          ],
+          "edges": [
+            "message-23"
+          ]
+        },
+        {
+          "title": "Report ready notice",
+          "body": "The notifier sends an illustrative asynchronous completion notice to the browser.",
+          "nodes": [
+            "notifier",
+            "browser"
+          ],
+          "edges": [
+            "message-24"
+          ]
+        },
+        {
+          "title": "Check report status",
+          "body": "The browser asks the application for the recorded report status.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "message-25"
+          ]
+        },
+        {
+          "title": "Ready status",
+          "body": "The application returns the ready status.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "message-26"
+          ]
+        },
+        {
+          "title": "Request download",
+          "body": "The browser asks for the location of the finished report.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "message-27"
+          ]
+        },
+        {
+          "title": "Locate final artifact",
+          "body": "The application looks up the final artifact location.",
+          "nodes": [
+            "app",
+            "store"
+          ],
+          "edges": [
+            "message-28"
+          ]
+        },
+        {
+          "title": "Download location",
+          "body": "The store returns the illustrative download location.",
+          "nodes": [
+            "store",
+            "app"
+          ],
+          "edges": [
+            "message-29"
+          ]
+        },
+        {
+          "title": "Return location",
+          "body": "The application returns the download location to the browser.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "message-30"
+          ]
+        },
+        {
+          "title": "Download report",
+          "body": "The browser requests the report from the object store.",
+          "nodes": [
+            "browser",
+            "store"
+          ],
+          "edges": [
+            "message-31"
+          ]
+        },
+        {
+          "title": "Report file",
+          "body": "The store returns the finished report file to the browser.",
+          "nodes": [
+            "store",
+            "browser"
+          ],
+          "edges": [
+            "message-32"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "delivery",
+      "label": "Inspect delivery",
+      "steps": [
+        {
+          "title": "Check report status",
+          "body": "The browser asks the application for the recorded report status.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "message-25"
+          ]
+        },
+        {
+          "title": "Ready status",
+          "body": "The application returns the ready status.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "message-26"
+          ]
+        },
+        {
+          "title": "Request download",
+          "body": "The browser asks for the location of the finished report.",
+          "nodes": [
+            "browser",
+            "app"
+          ],
+          "edges": [
+            "message-27"
+          ]
+        },
+        {
+          "title": "Locate final artifact",
+          "body": "The application looks up the final artifact location.",
+          "nodes": [
+            "app",
+            "store"
+          ],
+          "edges": [
+            "message-28"
+          ]
+        },
+        {
+          "title": "Download location",
+          "body": "The store returns the illustrative download location.",
+          "nodes": [
+            "store",
+            "app"
+          ],
+          "edges": [
+            "message-29"
+          ]
+        },
+        {
+          "title": "Return location",
+          "body": "The application returns the download location to the browser.",
+          "nodes": [
+            "app",
+            "browser"
+          ],
+          "edges": [
+            "message-30"
+          ]
+        },
+        {
+          "title": "Download report",
+          "body": "The browser requests the report from the object store.",
+          "nodes": [
+            "browser",
+            "store"
+          ],
+          "edges": [
+            "message-31"
+          ]
+        },
+        {
+          "title": "Report file",
+          "body": "The store returns the finished report file to the browser.",
+          "nodes": [
+            "store",
+            "browser"
+          ],
+          "edges": [
+            "message-32"
+          ]
+        }
+      ]
+    }
+  ],
+  "assumptions": [
+    "Illustrative successful report-generation model; no application implementation was supplied.",
+    "Messages are ordered for explanation. Notification transport, authentication, retries, failures and concurrent jobs are outside this example.",
+    "The report-ready notice is an asynchronous signal. Dashed open arrows represent returns; self-calls explain local work.",
+    "Focused sequence notation: no activation bars or combined fragments. The page describes a model and does not execute a job."
+  ],
+  "legend": [
+    {
+      "label": "Solid filled arrow: call"
+    },
+    {
+      "label": "Dashed open arrow: return",
+      "dashed": true
+    },
+    {
+      "label": "Solid open arrow: signal"
+    },
+    {
+      "label": "Loop: self-call"
+    }
+  ],
+  "sources": [],
+  "evidence": "Evidence: illustrative long-sequence example for layout and playback review; no application repository was supplied."
+}
