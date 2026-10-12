@@ -17,9 +17,33 @@ anything. It explains discovery, safe local installation, updates, and how to
 contribute improvements or new skills through a pull request. The catalog includes the bootstrap and the Dynamic UMLs family described below;
 additional skills are reviewed and added individually.
 
+## How skills and scripts work together
+
+Each skill is a complete folder: `SKILL.md` tells your agent when and how to use
+it, while optional `references/`, `assets/`, and `scripts/` provide supporting
+guidance, templates, and deterministic tools. For Dynamic UMLs, the agent
+investigates your question and prepares a diagram model; bundled Python scripts
+validate that model and render one interactive HTML file you can open locally.
+The page works offline, with no Python runtime needed to view it.
+
+The Makefile is a convenient interface to the Python installer. Choose your
+preferred agent with `make install-codex`, `make install-cursor`, or
+`make install-claude`; `make install` installs for all three. Add `SKILL=<name>`
+to install one skill. Installation copies the complete folder, including any
+scripts and resources, into that agent's local skills directory. It does not
+run bundled skill scripts; your agent uses them when carrying out the skill.
+Python 3.10+ is required for installation and UML generation. Make is optional:
+the equivalent Python commands are listed under [Install locally](#install-locally).
+
 ## Dynamic UMLs
 
-Create a standalone HTML page that explains a system through an interactive
+Use Dynamic UMLs to explain how a system works: messages over time, types and
+relationships, decision paths, state changes, parallel activities, or component
+boundaries. Ask for a diagram in plain language, for example
+`/dynamic-sequence-diagram for a browser, application, and identity-provider login`.
+Choose a focused skill below, or use `dynamic-umls` to select a suitable view.
+
+Each produces a standalone HTML page with an interactive
 walkthrough. Each skill investigates the supplied context, makes minimal explicit
 assumptions, and asks **at most five questions** for material unknowns. Pages include
 playback, step navigation, an element inspector, overview, meaningful alternate

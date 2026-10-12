@@ -102,7 +102,10 @@ module resolution with `DYNAMIC_UMLS_PLAYWRIGHT` and browser executable with
 The browser check loads all seven examples through `file://` offline, tests navigation,
 scenarios, inspector, keyboard focus, playback to end, restart, reduced motion,
 mobile page overflow and node text bounds, modal pause/resume and optional
-sidebar width, and captures desktop/mobile proof. Regression proof at 1440×760
+sidebar width, and captures desktop/mobile proof. Sequence density checks require
+readable active/neighboring endpoints, use of available space, source order and
+accurate omission groups; filler participant identities may vary with actual
+canvas width and scrollbar gutter. Regression proof at 1440×760
 checks actual active-message viewport bounds (including during playback),
 document movement, the absence of inner vertical canvas overflow for all six
 types, and sequence header/lifeline alignment during horizontal panning. A changed

@@ -55,7 +55,8 @@ GitHub CLI when available, forks for contributors without upstream write access,
 checks for duplicate PRs, and leaves merge decisions to maintainers. It carries
 no credentials and does not require another skill or connector.
 
-`make check` runs catalog validation and isolated installer/package tests.
+`make check` runs canonical diagram drift checks, catalog validation, and isolated
+installer/package/rendering tests.
 `make build` exercises packaging. The read-only GitHub Actions workflow runs
 these checks on Linux, macOS, and Windows. Local results, CI, file installation,
 agent discovery, invocation, PR submission, and maintainer acceptance are distinct

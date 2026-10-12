@@ -376,10 +376,22 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
       }
       await page.locator('#step-track button').nth(27).click();
       const shown=await page.locator('#participant-headings [data-node]:visible').evaluateAll(nodes=>nodes.map(n=>n.dataset.node));
-      const expected=viewport.width===1271?longModel.nodes.map(n=>n.id):viewport.width===800?['browser','app','store','notifier']:['app','store'];
-      assert.deepEqual(shown,expected,'Fill available width instead of always hiding inactive participants');
+      if(viewport.width===1271)assert.deepEqual(shown,longModel.nodes.map(n=>n.id),'Show all participants when they fit');
+      else if(viewport.width===800){
+        // Scrollbar gutters change the usable canvas width across browser/OS setups.
+        // Assert density and neighboring-call context, not the identity of a filler.
+        assert(shown.length>=4,'Fill available width instead of always hiding inactive participants');
+        assert(['browser','app','store'].every(id=>shown.includes(id)),'Retain current and neighboring message endpoints');
+      }else assert.deepEqual(shown,['app','store'],'Keep the active endpoints readable on a narrow phone');
+      assert.deepEqual(shown,longModel.nodes.filter(n=>shown.includes(n.id)).map(n=>n.id),'Preserve participant order');
       const omitted=await page.locator('[data-omitted]').evaluateAll(nodes=>nodes.map(n=>n.dataset.omitted));
-      assert.deepEqual(omitted,viewport.width===1271?[]:viewport.width===800?['queue worker']:['browser','queue worker','notifier']);
+      const omittedGroups=[];
+      for(const node of longModel.nodes){
+        if(shown.includes(node.id))omittedGroups.push(null);
+        else if(omittedGroups.at(-1))omittedGroups[omittedGroups.length-1]+=' '+node.id;
+        else omittedGroups.push(node.id);
+      }
+      assert.deepEqual(omitted,omittedGroups.filter(Boolean),'Each ellipsis must describe its contiguous omitted participants');
       if(omitted.length)assert.match(await page.locator('[data-omitted]').filter({hasText:'…'}).first().getAttribute('aria-label'),/omitted participants/);
       assert.deepEqual(await page.locator('[data-edge]:visible').evaluateAll(edges=>edges.map(e=>e.dataset.edge)),longModel.edges.filter(e=>shown.includes(e.from)&&shown.includes(e.to)).map(e=>e.id),'Only messages between shown participants remain visible');
       await page.waitForTimeout(250);
