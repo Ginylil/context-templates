@@ -24,6 +24,8 @@
   metadata checks. Local checks are not CI or proof of discovery in each agent.
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
+- Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
+  assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
   Shared renderer, flowchart/state verifiers, template, supplied logo, guide and example JSON are canonical under
   `skills/dynamic-umls/`. Regenerate focused-skill resources and HTML review
