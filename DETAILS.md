@@ -30,6 +30,10 @@ requested agents without guessing whether their apps are installed. `--skill`
 selects individual catalog entries; without it the current catalog is selected.
 `--home` supports isolated tests and `--dry-run` makes no filesystem changes.
 
+The bootstrap skill offers individual selections and an explicit "Install all
+skills" option. The latter selects the full catalog for the requested agent;
+installing for all three agents is a separate target choice.
+
 The installer preflights every requested skill and target before making changes.
 Each target directory holds `.context-templates-install.json`, identifying this
 repository and recording content hashes and executable flags for managed copies.

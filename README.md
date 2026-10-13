@@ -12,8 +12,9 @@ Please read this skill:
 https://raw.githubusercontent.com/Ginylil/context-templates/main/skills/context-templates/SKILL.md
 
 Review the available skills and recommend which ones to install locally for my work.
-Briefly explain each recommendation. Wait for me to choose, then preview the
-installation before installing the selected skills for this agent.
+Briefly explain each recommendation and offer an "Install all skills" option.
+Wait for me to choose, then preview the installation before installing the
+selected skills or the full catalog for this agent.
 ```
 
 You can also [download the skill](https://raw.githubusercontent.com/Ginylil/context-templates/main/skills/context-templates/SKILL.md)
