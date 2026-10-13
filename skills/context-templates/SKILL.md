@@ -31,8 +31,14 @@ GitHub account are needed only when creating a contribution PR.
 
 1. Read the checkout's current README, CONTRIBUTING, and AGENTS instructions.
    List installable skills with `make catalog` or
-   `python3 scripts/skills.py list --json`. Read the selected `SKILL.md` and
-   supporting files before executing their instructions or bundled scripts.
+   `python3 scripts/skills.py list --json`. Briefly explain the skills and
+   recommend those relevant to the user's work. Offer both individual selections
+   and an explicit "Install all skills" option for the requested agent. If the
+   user already chose individual skills or the full catalog, honor that choice
+   without asking them to choose again. "All skills" means the full catalog for
+   that agent; installing for all three agents is a separate target choice.
+   Read the selected `SKILL.md` and supporting files before executing their
+   instructions or bundled scripts.
 2. Use the supported installer, not a hand-written recursive copy or symlink:
 
    ```text
@@ -40,6 +46,8 @@ GitHub account are needed only when creating a contribution PR.
    make install-codex SKILL=<name>
    make install-cursor SKILL=<name>
    make install-claude SKILL=<name>
+   make install-codex INSTALL_ARGS=--dry-run
+   make install-codex
    make install
    ```
 
@@ -47,8 +55,9 @@ GitHub account are needed only when creating a contribution PR.
    the current public catalog; `make install` installs it for all three agents.
    Preview every requested target before an actual install. Without Make, use
    `python3 scripts/skills.py install --agent codex --skill <name> --dry-run`,
-   then the same command without `--dry-run`. Agents are `codex`, `cursor`,
-   `claude`, and `all`. On Windows, use the available `py -3` or `python`
+   then the same command without `--dry-run`. For the full catalog, omit
+   `--skill` from both commands; do not pass `--skill all`. Agents are `codex`,
+   `cursor`, `claude`, and `all`. On Windows, use the available `py -3` or `python`
    interpreter for the same script; native Make is not required.
 3. The installer copies complete skill folders into the documented user-level
    directories. It records hashes and ownership, leaves unrelated skills alone,
