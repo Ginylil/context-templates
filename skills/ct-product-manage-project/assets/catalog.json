@@ -88,5 +88,15 @@
     "skill": "ct-marketing-launch-product",
     "intent": "launch-product",
     "purpose": "Prepare or execute an authorized launch"
+  },
+  {
+    "skill": "ct-devops-release-apple-app",
+    "intent": "release-apple-app",
+    "purpose": "Verify Apple store and testing release milestones"
+  },
+  {
+    "skill": "ct-devops-release-android-app",
+    "intent": "release-android-app",
+    "purpose": "Verify Android store and testing release milestones"
   }
 ]

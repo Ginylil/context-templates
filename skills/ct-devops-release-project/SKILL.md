@@ -5,6 +5,11 @@ description: "Prepare or execute a scoped release with build proof, rollback inf
 
 # Release Project
 
+For Apple App Store/TestFlight or Google Play work, prefer the installed
+`ct-devops-release-apple-app` or `ct-devops-release-android-app` specialist when
+available. Those own store-specific testing, review and publication milestones;
+this skill remains the generic repository release lane.
+
 Read the repository's actual release procedure, branch protections, environment identity and artifact provenance. Identify the exact candidate revision, relevant dirty work, required checks and recovery route before any deployment. A successful build is a candidate, not a deployment.
 
 Run the narrow required checks and capture the repository-native build. Reuse a proven artifact when the release procedure supports it. Record target, version and artifact identity so the source tested can be connected to the source deployed. Fix only blockers within the authorized release scope.

@@ -347,10 +347,10 @@ class StandaloneLifecycleTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual(path.read_bytes(), expected)
 
-    def test_all_fifteen_domains_validate_from_each_isolated_agent_install(self):
+    def test_all_domains_validate_from_each_isolated_agent_install(self):
         names = [x["skill"] for x in json.loads((SKILLS / "ct-product-manage-project/assets/catalog.json").read_text(encoding="utf-8"))]
         domains = [name for name in names if (SKILLS / name / "assets/contract.json").is_file()]
-        self.assertEqual(len(domains), 15)
+        self.assertEqual(len(domains), 17)
         with tempfile.TemporaryDirectory() as directory:
             home = Path(directory) / "isolated home"
             for agent in installer.TARGETS:

@@ -58,8 +58,10 @@ Bundled resources are context for the task, not permission to broaden it.
    python scripts/dynamic_umls.py --check
    python scripts/ct_lifecycle.py --check
    python scripts/skills.py check
+   python scripts/secret_scan.py
    python -m unittest discover -s tests -v
    python scripts/skills.py build
+   python scripts/secret_scan.py --packages dist
    ```
 
 4. Check meaningful behavior with a realistic request in an isolated workspace.
@@ -85,7 +87,7 @@ Define a Project's focused checks run with
 `python -m unittest discover -s tests -p test_define_project.py -v` and are included
 in `make check`.
 
-The eighteen lifecycle entry points share portable support through synchronized
+The twenty lifecycle entry points share portable support through synchronized
 copies. Canonical sources are under Define a Project (definition validation),
 Manage a Project (domain validation and explicit command capture), and Plan
 Development (task graph and tracking validation). Run `make resources` after a
@@ -96,6 +98,14 @@ examples deliberately show blocked states when no real proof has been supplied.
 Tests must also exercise ready paths using disposable source trees and actual
 local command capture, while remote provider behavior uses mocked readbacks.
 Do not present either as live provider or human-acceptance proof.
+
+Store release checks share `scripts/store_release.py` from the Apple release
+skill, copied into Android and the manager by `make resources`. Keep its examples
+synthetic and test phase contradictions, candidate identity, scoped authorization,
+review exemptions, tester access and separate device proof. Keep signing keys,
+keystores, `.p8` files, service-account JSON and credential values outside packages.
+The secret scan reports locations/rules without matched values; do not weaken it
+with a blanket fixture allowlist. Use constructed inert strings for scanner tests.
 
 ## Dynamic UML contributions
 

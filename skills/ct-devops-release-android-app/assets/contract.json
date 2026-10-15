@@ -1,0 +1,254 @@
+{
+  "skill": "ct-devops-release-android-app",
+  "purpose": "Prove the exact requested android store milestone without conflating upload, testing, review and public availability.",
+  "requires_definition": false,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "app_id": {
+        "type": "string"
+      },
+      "application_id": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      },
+      "build_number": {
+        "type": "string"
+      },
+      "target_stage": {
+        "type": "string",
+        "enum": [
+          "prepare",
+          "upload",
+          "play-internal",
+          "play-closed",
+          "play-open",
+          "production"
+        ]
+      },
+      "track": {
+        "type": "string"
+      },
+      "artifact": {
+        "type": "object",
+        "fields": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "credential_refs": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "provider": {
+              "type": "string",
+              "enum": [
+                "env",
+                "keychain",
+                "secret-manager"
+              ]
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "authorization_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "authorized_stage": {
+        "type": "string",
+        "enum": [
+          "prepare",
+          "upload",
+          "play-internal",
+          "play-closed",
+          "play-open",
+          "production"
+        ],
+        "nullable": true
+      },
+      "require_device_proof": {
+        "type": "boolean"
+      },
+      "audience": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      },
+      "countries": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "rollout_percent": {
+        "type": "number"
+      },
+      "platform_variant": {
+        "type": "string",
+        "enum": [
+          "android"
+        ]
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string",
+        "nullable": true
+      },
+      "artifact_sha256": {
+        "type": "string",
+        "nullable": true
+      },
+      "build_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "checks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "not-run"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "store_readback": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "testing_readback": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "device_proof": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "acceptance_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "outcome": {
+        "type": "string",
+        "enum": [
+          "prepare",
+          "upload",
+          "play-internal",
+          "play-closed",
+          "play-open",
+          "production",
+          "blocked"
+        ]
+      },
+      "recovery": {
+        "type": "string"
+      },
+      "limitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "command",
+      "field": "build_check",
+      "exit": "zero"
+    },
+    {
+      "type": "required-values",
+      "items": "checks",
+      "field": "id",
+      "values": [
+        "tests",
+        "signing",
+        "compliance",
+        "recovery",
+        "tracking"
+      ]
+    },
+    {
+      "type": "all-status",
+      "items": "checks",
+      "field": "status",
+      "allowed": [
+        "passed"
+      ]
+    },
+    {
+      "type": "scenario-evidence",
+      "items": "checks",
+      "status_field": "status",
+      "evidence_field": "evidence_ids"
+    },
+    {
+      "type": "equals-input",
+      "field": "outcome",
+      "input_field": "target_stage"
+    },
+    {
+      "type": "store-release",
+      "platform": "android"
+    }
+  ]
+}

@@ -13,8 +13,8 @@ MANAGER = ROOT / "skills/ct-product-manage-project"
 def outputs():
     catalog = json.loads((MANAGER / "assets/catalog.json").read_text(encoding="utf-8"))
     names = [item["skill"] for item in catalog]
-    if len(names) != 18 or len(set(names)) != 18:
-        raise ValueError("Expected exactly 18 unique lifecycle skill identities")
+    if len(names) != 20 or len(set(names)) != 20:
+        raise ValueError("Expected exactly 20 unique lifecycle skill identities")
     define = ROOT / "skills/ct-product-define-project"
     planner = ROOT / "skills/ct-rnd-plan-development"
     result = {}
@@ -29,6 +29,9 @@ def outputs():
             result[folder / "scripts/workflow.py"] = (MANAGER / "scripts/workflow.py").read_bytes()
     result[MANAGER / "scripts/plan_contract.py"] = (planner / "scripts/plan.py").read_bytes()
     result[MANAGER / "references/planning-contract.md"] = (planner / "references/contract.md").read_bytes()
+    store = ROOT / "skills/ct-devops-release-apple-app/scripts/store_release.py"
+    for name in ("ct-devops-release-android-app", MANAGER.name):
+        result[ROOT / "skills" / name / "scripts/store_release.py"] = store.read_bytes()
     return result
 
 

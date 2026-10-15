@@ -118,6 +118,13 @@ def schema(value, spec, where, context):
         require(value in context[spec["ref"]], f"{where}: unknown {spec['ref']} reference {value}")
 
 
+def store_module():
+    spec = importlib.util.spec_from_file_location("ct_store_release", Path(__file__).with_name("store_release.py"))
+    result = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(result)
+    return result
+
+
 def validate_input(policy, value, base=Path.cwd(), *, historical=False):
     fields(policy, "skill purpose requires_definition inputs result rules", "policy")
     fields(value, "schema_version project_id request repository ledger definition constraints sources inputs", "input")
@@ -168,6 +175,9 @@ def validate_input(policy, value, base=Path.cwd(), *, historical=False):
         require(source["id"] not in context["source"], "sources: duplicate identifier")
         context["source"][source["id"]] = reference({k: source[k] for k in ("path", "sha256")}, base)
     schema(value["inputs"], policy["inputs"], "inputs", context)
+    for rule in policy["rules"]:
+        if rule.get("type") == "store-release":
+            store_module().check_input(rule, value, context, globals())
     return context
 
 
@@ -333,6 +343,8 @@ def rule_valid(rule, result, value, context):
                 if evidence["kind"] == "command":
                     require(evidence["data"]["exit_code"] == 0 and not evidence["data"]["timed_out"],
                             "scenario-evidence: passed scenario cites a failing or timed-out check")
+    elif kind == "store-release":
+        store_module().check_output(rule, result, value, context, globals())
     else:
         raise ValueError(f"rule: unknown bundled rule {kind}")
 

@@ -23,7 +23,7 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 contribute improvements or new skills through a pull request. The catalog includes
-the bootstrap, eighteen project lifecycle skills, and the Dynamic UMLs family below;
+the bootstrap, twenty project lifecycle skills, and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
@@ -48,7 +48,7 @@ the equivalent Python commands are listed under [Install locally](#install-local
 
 Start with `ct-product-manage-project` to find the next useful step, or invoke a
 focused skill directly. Existing scope, source evidence and GitHub tracking are
-reused; the guide does not force every project through all eighteen skills.
+reused; the guide does not force every project through all twenty skills.
 
 ```text
 Use ct-product-manage-project to help me define and build a small web app.
@@ -72,6 +72,8 @@ Inspect what already exists and take the next useful step toward my goal.
 | [`ct-qa-test-user-flows`](skills/ct-qa-test-user-flows/SKILL.md) | Execute flows and report actual results |
 | [`ct-security-review-project`](skills/ct-security-review-project/SKILL.md) | Assess demonstrated security risks and uncertainty |
 | [`ct-devops-release-project`](skills/ct-devops-release-project/SKILL.md) | Verify the requested release milestone |
+| [`ct-devops-release-apple-app`](skills/ct-devops-release-apple-app/SKILL.md) | Release through TestFlight, App Review and the App Store |
+| [`ct-devops-release-android-app`](skills/ct-devops-release-android-app/SKILL.md) | Release through Play internal, closed, open and production tracks |
 | [`ct-devops-maintain-project`](skills/ct-devops-maintain-project/SKILL.md) | Review health, spend, changes and recovery |
 | [`ct-marketing-research-market`](skills/ct-marketing-research-market/SKILL.md) | Research audiences, competitors and positioning |
 | [`ct-marketing-launch-product`](skills/ct-marketing-launch-product/SKILL.md) | Prepare or execute an authorized launch |
@@ -88,6 +90,12 @@ plans require GitHub Issues and Projects with authoritative readback before
 execution. Local-only preparation is supported and remains explicitly blocked at
 that tracking gate. Completed assessments can expose failed tests or risks;
 they do not imply acceptance or permission to deploy/publish.
+
+The Apple and Android release skills also work directly for an existing app.
+They keep upload, processing, tester access, device proof, review and public
+release separate, bind the exact app/build/export and audience, and accept only
+logical credential-store references. Actual signing keys, tokens, service-account
+files, tester details and runtime evidence stay outside this public catalog.
 
 These packages have local contract, negative-control, standalone-installation
 and disposable-workspace tests. Mocked remote readbacks and source fixtures do

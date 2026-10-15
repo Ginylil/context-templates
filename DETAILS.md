@@ -105,7 +105,7 @@ package-level checks, not proof of discovery in a live agent runtime.
 
 ## Lifecycle routing and domain checks
 
-The manager's `assets/catalog.json` defines eighteen lifecycle identities. The
+The manager's `assets/catalog.json` defines twenty lifecycle identities. The
 guide routes from the current definition, task graph, repository, verified
 tracking and specialist reports; explicit specialist requests can enter directly.
 It does not run every skill or execute selected work by returning a route.
@@ -126,7 +126,7 @@ adapter supports GitHub.com Projects v2. Live verification requires GitHub CLI,
 authentication and access; unavailable readback blocks admission. The tool never
 creates or changes remote tasks itself.
 
-Fifteen specialists carry a domain policy in `assets/contract.json`, intake and
+Seventeen specialists carry a domain policy in `assets/contract.json`, intake and
 output examples, and standalone copies of the shared validator. This is a small
 explicit policy vocabulary, not an implementation of general JSON Schema. Rules
 check domain relationships such as architecture endpoints, selected acceptance
@@ -147,10 +147,10 @@ checks cannot authenticate a manual approval or make arbitrary captured data tru
 
 Canonical shared support lives in Define a Project (`scripts/project.py` and
 its contract), Manage a Project (`scripts/workflow.py`), and Plan Development
-(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 51
+(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 59
 standalone resources; `make resources` refreshes them, and check/build reject
 drift. Generated copies are packaged resources, not private runtime dependencies.
-All eighteen skills can be installed separately. The guide explicitly reports a
+All twenty skills can be installed separately. The guide explicitly reports a
 required specialist that is unavailable.
 
 Local tests cover each domain's blocked and ready artifacts, negative cases,
@@ -160,6 +160,30 @@ installation targets. Independent dry runs exercise local planning, a real
 temporary bug fix, failed QA and a blocked release. Provider APIs are mocked in
 tests; actual agent discovery, provider integrations, deployed application behavior
 and human acceptance are separate evidence levels.
+
+## Store release specialists and public-content checks
+
+The Apple and Android release skills share an offline store contract helper.
+Apple owns `scripts/store_release.py`; resource synchronization copies it into
+Android and the project guide. The guide can route each platform directly and
+validates its store receipts with the same rules. Known-app releases do not need
+a new product definition, but supplied interview/definition history is checked.
+
+Store contracts bind the provider app and bundle/package IDs, version/build,
+source revision, exported artifact digest, target stage/track, audience, countries
+and rollout. Separate structured provider readbacks distinguish processing,
+testing access, review submission and public release. A provider-confirmed review
+exemption is distinct from pending/rejected review. Device proof is a separate
+candidate-bound artifact. Production requires matching testing evidence, structured
+human acceptance and action-scoped authorization. These cooperative records do
+not authenticate approvals, prove signing validity or contact a provider.
+
+`make check` runs `scripts/secret_scan.py` over tracked and nonignored untracked
+public files. `make build` and CI also scan current catalog ZIP contents, using
+redacted credential signatures and credential-file checks. `--history` additionally
+checks all reachable Git blobs. This is a heuristic guard, not a guarantee that
+all secrets are detectable. It never validates tokens or prints matched values.
+New public examples use synthetic names; runtime evidence remains private.
 
 ## Dynamic UMLs
 

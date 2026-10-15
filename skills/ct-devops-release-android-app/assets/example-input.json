@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "project_id": "example-notes",
+  "request": "Prepare an android release candidate; no provider mutations are authorized.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep credentials and tester information outside the public catalog.",
+    "Use GitHub Issues and Projects for executable work."
+  ],
+  "sources": [],
+  "inputs": {
+    "candidate_revision": "unresolved",
+    "app_id": "com.example.notes",
+    "application_id": "com.example.notes",
+    "version": "1.0.0",
+    "build_number": "1",
+    "target_stage": "prepare",
+    "track": "none",
+    "artifact": null,
+    "credential_refs": [
+      {
+        "provider": "secret-manager",
+        "name": "example-release-identity"
+      }
+    ],
+    "authorization_source": null,
+    "authorized_stage": null,
+    "require_device_proof": false,
+    "audience": [
+      "Release operator"
+    ],
+    "countries": [],
+    "rollout_percent": 0,
+    "platform_variant": "android"
+  }
+}
