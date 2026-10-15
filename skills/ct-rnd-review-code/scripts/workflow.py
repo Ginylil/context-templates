@@ -118,6 +118,13 @@ def schema(value, spec, where, context):
         require(value in context[spec["ref"]], f"{where}: unknown {spec['ref']} reference {value}")
 
 
+def store_module():
+    spec = importlib.util.spec_from_file_location("ct_store_release", Path(__file__).with_name("store_release.py"))
+    result = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(result)
+    return result
+
+
 def validate_input(policy, value, base=Path.cwd(), *, historical=False):
     fields(policy, "skill purpose requires_definition inputs result rules", "policy")
     fields(value, "schema_version project_id request repository ledger definition constraints sources inputs", "input")
@@ -135,6 +142,8 @@ def validate_input(policy, value, base=Path.cwd(), *, historical=False):
         if not repo.is_absolute():
             repo = Path(base) / repo
         require(repo.is_dir(), "repository: directory unavailable")
+        if any(r.get("type") == "store-release" for r in policy["rules"]):
+            store_module().configuration_module().check_private_paths(repo, globals())
         require(re.fullmatch(r"[0-9a-f]{40,64}", value["repository"]["revision"]) is not None,
                 "repository: invalid revision")
         fingerprint = value["repository"]["working_tree_sha256"]
@@ -168,6 +177,9 @@ def validate_input(policy, value, base=Path.cwd(), *, historical=False):
         require(source["id"] not in context["source"], "sources: duplicate identifier")
         context["source"][source["id"]] = reference({k: source[k] for k in ("path", "sha256")}, base)
     schema(value["inputs"], policy["inputs"], "inputs", context)
+    for rule in policy["rules"]:
+        if rule.get("type") == "store-release":
+            store_module().check_input(rule, value, context, globals())
     return context
 
 
@@ -333,6 +345,8 @@ def rule_valid(rule, result, value, context):
                 if evidence["kind"] == "command":
                     require(evidence["data"]["exit_code"] == 0 and not evidence["data"]["timed_out"],
                             "scenario-evidence: passed scenario cites a failing or timed-out check")
+    elif kind == "store-release":
+        store_module().check_output(rule, result, value, context, globals())
     else:
         raise ValueError(f"rule: unknown bundled rule {kind}")
 
@@ -360,6 +374,9 @@ def validate_output(policy, value, output, base=Path.cwd(), *, historical=False)
         text(blocker["next_action"], "blocker.next_action")
     require((output["status"] == "blocked") == bool(output["blockers"]), "output: blockers and status disagree")
     schema(output["result"], policy["result"], "result", context)
+    for rule in policy["rules"]:
+        if rule.get("type") == "store-release":
+            store_module().check_report(rule, output["result"], value, context, globals())
     if output["status"] == "ready":
         if policy["requires_definition"]:
             require(context["definition"] is not None and context["definition"]["status"] == "ready-for-planning",
@@ -427,8 +444,9 @@ def main():
     sub.add_argument("--output", required=True, type=Path)
     sub.add_argument("--timeout", type=int, default=30)
     sub.add_argument("argv", nargs=argparse.REMAINDER)
-    sub = commands.add_parser("validate-input")
-    sub.add_argument("input", type=Path)
+    for name in ("validate-input", "hash-input"):
+        sub = commands.add_parser(name)
+        sub.add_argument("input", type=Path)
     for name in ("validate-output", "render"):
         sub = commands.add_parser(name)
         sub.add_argument("input", type=Path)
@@ -437,6 +455,10 @@ def main():
             sub.add_argument("--output", dest="rendered", required=True, type=Path)
     args = parser.parse_args()
     try:
+        if args.command in ("inspect-repository", "record"):
+            policy_path = Path(__file__).resolve().parents[1] / "assets/contract.json"
+            if policy_path.is_file() and any(r.get("type") == "store-release" for r in load(policy_path)["rules"]):
+                store_module().configuration_module().check_private_paths(args.path if args.command == "inspect-repository" else args.cwd, globals())
         if args.command == "inspect-repository":
             head = revision(args.path)
             require(head is not None, "inspect-repository: Git checkout required")
@@ -449,7 +471,7 @@ def main():
             policy = load(Path(__file__).resolve().parents[1] / "assets/contract.json")
             value = load(args.input)
             base = args.input.resolve().parent
-            if args.command == "validate-input":
+            if args.command in ("validate-input", "hash-input"):
                 validate_input(policy, value, base)
             else:
                 output = load(args.output)
@@ -457,7 +479,7 @@ def main():
                 if args.command == "render":
                     with args.rendered.open("x", encoding="utf-8", newline="\n") as stream:
                         stream.write(render(policy, value, output, base))
-            result = {"status": "valid"}
+            result = {"input_sha256": digest(value)} if args.command == "hash-input" else {"status": "valid"}
         print(encoded(result), end="")
         return 0
     except (ValueError, OSError, KeyError, TypeError, RecursionError, subprocess.SubprocessError) as error:

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import hashlib
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -13,8 +14,8 @@ MANAGER = ROOT / "skills/ct-product-manage-project"
 def outputs():
     catalog = json.loads((MANAGER / "assets/catalog.json").read_text(encoding="utf-8"))
     names = [item["skill"] for item in catalog]
-    if len(names) != 18 or len(set(names)) != 18:
-        raise ValueError("Expected exactly 18 unique lifecycle skill identities")
+    if len(names) != 20 or len(set(names)) != 20:
+        raise ValueError("Expected exactly 20 unique lifecycle skill identities")
     define = ROOT / "skills/ct-product-define-project"
     planner = ROOT / "skills/ct-rnd-plan-development"
     result = {}
@@ -29,6 +30,16 @@ def outputs():
             result[folder / "scripts/workflow.py"] = (MANAGER / "scripts/workflow.py").read_bytes()
     result[MANAGER / "scripts/plan_contract.py"] = (planner / "scripts/plan.py").read_bytes()
     result[MANAGER / "references/planning-contract.md"] = (planner / "references/contract.md").read_bytes()
+    store = ROOT / "skills/ct-devops-release-apple-app/scripts/store_release.py"
+    for name in ("ct-devops-release-android-app", MANAGER.name):
+        result[ROOT / "skills" / name / "scripts/store_release.py"] = store.read_bytes()
+        result[ROOT / "skills" / name / "scripts/configuration.py"] = store.with_name("configuration.py").read_bytes()
+    for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app"):
+        folder = ROOT / "skills" / name / "assets"
+        intake = json.loads((folder / "example-input.json").read_text(encoding="utf-8"))
+        report = json.loads((folder / "example-output.json").read_text(encoding="utf-8"))
+        report["input_sha256"] = hashlib.sha256(json.dumps(intake, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+        result[folder / "example-output.json"] = (json.dumps(report, indent=2) + "\n").encode("utf-8")
     return result
 
 

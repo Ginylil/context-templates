@@ -93,7 +93,8 @@ def validate_state(value, base, skills_root):
             if not repo_path.is_absolute():
                 repo_path = input_path.parent / repo_path
             require(repo_path.resolve() == context["repository"].resolve(), "manager: receipt is for another repository")
-        if entry["skill"] in ("ct-rnd-review-code", "ct-qa-test-user-flows", "ct-security-review-project", "ct-devops-release-project"):
+        if entry["skill"] in ("ct-rnd-review-code", "ct-qa-test-user-flows", "ct-security-review-project", "ct-devops-release-project",
+                              "ct-devops-release-apple-app", "ct-devops-release-android-app"):
             require(context["repository"] is not None and intake["repository"] is not None,
                     "manager: release-gate report requires current repository identity")
             candidate = intake["inputs"].get("candidate_revision")

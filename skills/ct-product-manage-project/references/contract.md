@@ -61,7 +61,7 @@ observed source state. Successful check evidence must match the final fingerprin
 
 ## Specialist receipts
 
-For the fifteen domain specialists, `scripts/workflow.py` validates both the
+For the seventeen domain specialists, `scripts/workflow.py` validates both the
 referenced intake and output with that producer's bundled `assets/contract.json`.
 Therefore the producer must be installed to validate its receipt. Each complete
 producer package carries its own identical standalone support scripts. A report
@@ -86,6 +86,12 @@ product, security or test failures. In particular the guide requires QA
 `verdict: passed` before treating QA as a passing release gate. Human review
 still owns consequential findings and acceptance. See each producer's contract
 for its exact result fields and what its evidence can establish.
+
+The platform release intents `release-apple-app` and `release-android-app` select
+the corresponding installed specialist directly. Their bundled store helper
+validates exact app/build/export identity and provider-state relationships when
+receipts return. This routing recommendation is not a release authorization or
+confirmation of store availability.
 
 ## Shared interview
 

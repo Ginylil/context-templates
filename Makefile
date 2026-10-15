@@ -36,6 +36,7 @@ check:
 	$(PYTHON) scripts/dynamic_umls.py --check
 	$(PYTHON) scripts/ct_lifecycle.py --check
 	$(PYTHON) scripts/skills.py check
+	$(PYTHON) scripts/secret_scan.py
 	$(MAKE) test
 
 test:
@@ -45,3 +46,4 @@ build:
 	$(PYTHON) scripts/dynamic_umls.py --check
 	$(PYTHON) scripts/ct_lifecycle.py --check
 	$(PYTHON) scripts/skills.py build
+	$(PYTHON) scripts/secret_scan.py --packages dist

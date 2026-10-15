@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "project_id": "example-notes",
+  "request": "Discover configuration for a synthetic apple web-app wrapper; no provider mutations are authorized.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep credentials and tester information outside the public catalog.",
+    "Use GitHub Issues and Projects for executable work."
+  ],
+  "sources": [],
+  "inputs": {
+    "candidate_revision": "unresolved",
+    "app_id": null,
+    "application_id": null,
+    "version": null,
+    "build_number": null,
+    "target_stage": "discover",
+    "track": "none",
+    "artifact": null,
+    "credential_refs": [
+      {
+        "provider": "keychain",
+        "name": "example-release-identity"
+      }
+    ],
+    "authorization_source": null,
+    "authorized_stage": null,
+    "require_device_proof": false,
+    "audience": [
+      "Release operator"
+    ],
+    "countries": [],
+    "rollout_percent": 0,
+    "platform_variant": "ios",
+    "setup_mode": "wrap-web",
+    "requested_capabilities": [
+      "authentication",
+      "deep-links"
+    ],
+    "build_exposure_prefixes": [],
+    "discovery": null
+  }
+}

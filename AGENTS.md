@@ -35,8 +35,13 @@
 - Lifecycle support has canonical sources: Define a Project owns
   `scripts/project.py` and its definition contract; Manage a Project owns
   `scripts/workflow.py`; Plan Development owns `scripts/plan.py` and its contract.
-  Run `make resources` after changing them. Never hand-edit generated copies;
+  Apple App Release owns `scripts/store_release.py`, copied into Android and
+  Manage a Project. Run `make resources` after changing these canonical sources.
+  Never hand-edit generated copies;
   `make check` and `make build` reject drift. Every package works independently.
+- Public-content checks use `scripts/secret_scan.py`; check/build and CI reject
+  detected credentials and signing files. Keep examples synthetic, runtime evidence
+  private, and scan findings redacted. Never treat a heuristic pass as a guarantee.
 - Keep lifecycle assessments distinct from acceptance: `ready` may mean a
   completed assessment with findings. QA verdicts, candidate identity, human
   staging acceptance, GitHub readbacks and release milestones remain explicit.
@@ -47,3 +52,7 @@
   `skills/ct-dynamic-uml/`. Regenerate focused-skill resources and HTML review
   examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
+
+- Store release helpers are canonical in the Apple release skill. Use `make resources`
+  to refresh Android/manager copies and synthetic example input hashes; never copy
+  private runtime discovery, app/configuration data or credentials into public fixtures.

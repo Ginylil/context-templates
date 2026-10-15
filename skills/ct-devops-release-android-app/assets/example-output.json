@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "project_id": "example-notes",
+  "skill": "ct-devops-release-android-app",
+  "input_sha256": "fd3b4efbfad1c8a1c460a255dbf45e99260ef7af5d872ddb186a157253192c7e",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no build, provider action or account lookup was performed.",
+  "constraints": [
+    "Keep credentials and tester information outside the public catalog.",
+    "Use GitHub Issues and Projects for executable work."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "No source checkout or generated configuration discovery was supplied.",
+      "next_action": "Inspect the actual Git checkout with configuration.py, then list each missing setting with its location, setup action and verification."
+    }
+  ],
+  "result": {
+    "candidate_revision": null,
+    "artifact_sha256": null,
+    "build_check": null,
+    "checks": [],
+    "store_readback": null,
+    "testing_readback": null,
+    "device_proof": null,
+    "acceptance_source": null,
+    "outcome": "blocked",
+    "recovery": "No provider mutation attempted.",
+    "limitations": [
+      "Synthetic shape example; no signing, store or device proof."
+    ],
+    "configuration": [],
+    "setup_plan": [],
+    "environment_loader": "unknown",
+    "wrapper": {
+      "mode": "unknown",
+      "source_kind": "unknown",
+      "delivery": "undecided",
+      "config_files": [],
+      "web_output_dir": null,
+      "runtime_url": null,
+      "backend_plan": "Discover the actual web runtime and backend boundaries.",
+      "native_targets": [],
+      "sync_check": null,
+      "smoke_check": null,
+      "limitations": [
+        "No repository was supplied or inspected."
+      ]
+    }
+  }
+}
