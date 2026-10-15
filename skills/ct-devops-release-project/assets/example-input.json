@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Prepare a release candidate for the notes app. Deployment and publication are outside this request.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "candidate_revision": "candidate-unresolved",
+    "target_stage": "candidate",
+    "supports_staging": true,
+    "release_procedure": "Discover the repository-owned release procedure.",
+    "rollback_procedure": "Discover the repository-owned rollback procedure before any deployment.",
+    "authorized_actions": [
+      "Inspect repository and run non-destructive local checks."
+    ]
+  }
+}

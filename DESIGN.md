@@ -82,7 +82,7 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
 
 ## Canonical sources and generated copies
 
-`skills/dynamic-umls/` owns `assets/template.html`, `assets/ginylil.png`,
+`skills/ct-dynamic-uml/` owns `assets/template.html`, `assets/ginylil.png`,
 `scripts/render.py`, `scripts/validate_flowchart.py`, `scripts/validate_state.py`,
 `references/authoring.md`, `assets/examples/<type>.json` and the additional
 `assets/examples/sequence-long.json`. The six focused skills

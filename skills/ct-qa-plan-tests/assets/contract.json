@@ -1,0 +1,140 @@
+{
+  "skill": "ct-qa-plan-tests",
+  "purpose": "A risk-informed test plan covering each agreed project outcome.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "target_scope": {
+        "type": "string"
+      },
+      "known_risks": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      },
+      "available_surfaces": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "scenarios": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            },
+            "risk": {
+              "type": "string"
+            },
+            "preconditions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 0
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "expected": {
+              "type": "string"
+            },
+            "surface": {
+              "type": "string"
+            },
+            "test_data": {
+              "type": "string"
+            },
+            "cleanup": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "execution_order": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "scenario_id": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "scenario_id"
+      },
+      "excluded_checks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "check": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "impact": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "test_plan_artifact": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "coverage",
+      "items": "scenarios",
+      "field": "requirement_ids"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "scenarios",
+        "test_plan_artifact"
+      ]
+    },
+    {
+      "type": "cover-target",
+      "items": "execution_order",
+      "field": "scenario_id",
+      "target": "scenarios",
+      "target_field": "id",
+      "target_result": true
+    }
+  ]
+}

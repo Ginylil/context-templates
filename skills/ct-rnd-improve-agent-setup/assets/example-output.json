@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-rnd-improve-agent-setup",
+  "input_sha256": "88a70f7c7854a479b706001378e51b97723f50e7c0b5bff483277ef2510c4119",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "candidate_revision": "uncommitted-candidate",
+    "failure_mechanism": "The observed failure has not been inspected.",
+    "observed_source": null,
+    "changes": [],
+    "before_check": null,
+    "after_check": null,
+    "instruction_artifact": null,
+    "limits": [
+      "No source evidence or runnable check has been supplied."
+    ]
+  }
+}

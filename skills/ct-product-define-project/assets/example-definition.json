@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "input_sha256": "77fe5ec1f9ffeace90aa764658709982b04da21f5dec510c8dc80e69f5dcaa2e",
+  "ledger_sha256": "5d034509ba37b4eb472e319254daf80c6a4c5e59563428e2fc398955cdbedf4e",
+  "status": "ready-for-planning",
+  "title": "Private client follow-up notes",
+  "users": [
+    "Freelancers managing their own client follow-ups"
+  ],
+  "problem": "Follow-up notes are scattered, making the next client action difficult to find.",
+  "desired_outcome": "A freelancer can record a client follow-up and find their next due action in one place.",
+  "in_scope": [
+    "Owner-authenticated access to private notes",
+    "Manual creation and editing of client notes with a follow-up date",
+    "A list of upcoming follow-ups ordered by date"
+  ],
+  "out_of_scope": [
+    "Shared workspaces",
+    "Email imports",
+    "Automated outbound messages"
+  ],
+  "success_criteria": [
+    {
+      "id": "record-follow-up",
+      "criterion": "An authenticated user can save a note with a client and follow-up date, then find it after reloading.",
+      "verification": "Exercise create, reload, and read in a browser acceptance test."
+    },
+    {
+      "id": "isolate-notes",
+      "criterion": "Another user cannot list or retrieve the owner’s notes.",
+      "verification": "Use two test users and verify list isolation and denied direct-ID access."
+    },
+    {
+      "id": "find-next-action",
+      "criterion": "The upcoming list places an earlier follow-up before a later one.",
+      "verification": "Create two dated notes and assert their displayed order."
+    }
+  ],
+  "constraints": [
+    "Notes must require authenticated access.",
+    "The first version must work in a browser."
+  ],
+  "decisions": [
+    {
+      "id": "audience",
+      "answer": "Freelancers managing their own client follow-ups.",
+      "source": "Synthetic example user request"
+    },
+    {
+      "id": "sharing",
+      "answer": "Personal use only; no shared workspaces in the first version.",
+      "source": "Synthetic user reply to Q1"
+    },
+    {
+      "id": "capture",
+      "answer": "Manual entry is enough initially.",
+      "source": "Synthetic user reply to Q2"
+    }
+  ],
+  "assumptions": [
+    {
+      "decision_id": null,
+      "statement": "Freelancers will find a manual follow-up list useful; this is not yet customer-validated.",
+      "impact": "Validate usefulness with target users before committing to a broader roadmap."
+    }
+  ],
+  "blockers": [],
+  "tracking": {
+    "system": "github",
+    "repository": null,
+    "project": null
+  },
+  "next_action": "Select and verify the GitHub repository and Project, then plan small development slices and publish their Issues and Project items."
+}

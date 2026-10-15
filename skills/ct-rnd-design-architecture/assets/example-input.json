@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "A reviewable technical design traceable to project outcomes.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "sources": [],
+  "inputs": {
+    "context": "Design authenticated follow-up notes.",
+    "existing_system": "No implementation exists.",
+    "options": [
+      {
+        "id": "single-service",
+        "description": "One web service and a managed database.",
+        "tradeoffs": "Simple ownership; one deployment boundary."
+      }
+    ]
+  }
+}

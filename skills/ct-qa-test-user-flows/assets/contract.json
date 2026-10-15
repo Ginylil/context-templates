@@ -1,0 +1,206 @@
+{
+  "skill": "ct-qa-test-user-flows",
+  "purpose": "Exercise complete user journeys against agreed acceptance criteria and report evidence at its actual environment and revision.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "environment": {
+        "type": "string",
+        "enum": [
+          "local",
+          "ci",
+          "staging",
+          "production"
+        ]
+      },
+      "base_url": {
+        "type": "string",
+        "nullable": true
+      },
+      "candidate_revision": {
+        "type": "string"
+      },
+      "journeys": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "actor": {
+              "type": "string"
+            },
+            "goal": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "allowed_side_effects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string",
+        "nullable": true
+      },
+      "environment": {
+        "type": "string",
+        "enum": [
+          "local",
+          "ci",
+          "staging",
+          "production"
+        ]
+      },
+      "scenarios": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "journey_id": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            },
+            "steps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "expected": {
+              "type": "string"
+            },
+            "actual": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "blocked"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "verdict": {
+        "type": "string",
+        "enum": [
+          "passed",
+          "failed",
+          "incomplete"
+        ]
+      },
+      "limitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "follow_up": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "scenarios"
+      ]
+    },
+    {
+      "type": "coverage",
+      "items": "scenarios",
+      "field": "requirement_ids"
+    },
+    {
+      "type": "aggregate-status",
+      "items": "scenarios",
+      "field": "status",
+      "target": "verdict",
+      "priority": [
+        {
+          "status": "failed",
+          "value": "failed"
+        },
+        {
+          "status": "blocked",
+          "value": "incomplete"
+        }
+      ],
+      "default": "passed"
+    },
+    {
+      "type": "equals-input",
+      "field": "environment",
+      "input_field": "environment"
+    },
+    {
+      "type": "cover-target",
+      "items": "scenarios",
+      "field": "journey_id",
+      "target": "journeys",
+      "target_field": "id"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision",
+      "if_present": true
+    },
+    {
+      "type": "scenario-evidence",
+      "items": "scenarios",
+      "status_field": "status",
+      "evidence_field": "evidence_ids"
+    }
+  ]
+}

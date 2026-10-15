@@ -1,0 +1,118 @@
+{
+  "skill": "ct-rnd-fix-bug",
+  "purpose": "A focused repair with comparable before and after regression evidence.",
+  "requires_definition": false,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "reported_behavior": {
+        "type": "string"
+      },
+      "expected_behavior": {
+        "type": "string"
+      },
+      "reproduction_argv": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "root_cause": {
+        "type": "string"
+      },
+      "changes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "path": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "before_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "after_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "related_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "remaining_limits": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "changes"
+      ]
+    },
+    {
+      "type": "command",
+      "field": "before_check",
+      "exit": "nonzero"
+    },
+    {
+      "type": "command",
+      "field": "after_check",
+      "exit": "zero"
+    },
+    {
+      "type": "same-command",
+      "fields": [
+        "before_check",
+        "after_check"
+      ]
+    },
+    {
+      "type": "command",
+      "field": "related_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command-matches-input",
+      "field": "before_check",
+      "input_field": "reproduction_argv"
+    }
+  ]
+}

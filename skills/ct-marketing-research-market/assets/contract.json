@@ -1,0 +1,207 @@
+{
+  "skill": "ct-marketing-research-market",
+  "purpose": "Research audiences, alternatives, positioning, and distribution with dated source-bound claims and explicit uncertainty.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "research_question": {
+        "type": "string"
+      },
+      "geography": {
+        "type": "string"
+      },
+      "audiences": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "known_alternatives": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "cutoff_date": {
+        "type": "string"
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "claims": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "claim": {
+              "type": "string"
+            },
+            "source_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "source"
+              },
+              "min_items": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            },
+            "source_date": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ]
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "alternatives": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "customer_job": {
+              "type": "string"
+            },
+            "differentiators": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "source_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "source"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "positioning_options": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "audience": {
+              "type": "string"
+            },
+            "problem": {
+              "type": "string"
+            },
+            "promise": {
+              "type": "string"
+            },
+            "supporting_claims": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "validation_needed": {
+              "type": "string"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "channels": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "channel": {
+              "type": "string"
+            },
+            "audience_fit": {
+              "type": "string"
+            },
+            "supporting_claims": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "bounded_test": {
+              "type": "string"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "unknowns": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "nonempty",
+      "fields": [
+        "claims"
+      ]
+    },
+    {
+      "type": "references",
+      "items": "positioning_options",
+      "fields": [
+        "supporting_claims"
+      ],
+      "target": "claims",
+      "target_field": "id"
+    },
+    {
+      "type": "references",
+      "items": "channels",
+      "fields": [
+        "supporting_claims"
+      ],
+      "target": "claims",
+      "target_field": "id"
+    }
+  ]
+}

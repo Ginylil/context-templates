@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-qa-plan-tests",
+  "input_sha256": "6d2b057eb5b0ee1f3a607c36ef4bcb2875374328aa728ffbd48ba5a51fdca1b7",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "scenarios": [],
+    "execution_order": [],
+    "excluded_checks": [],
+    "test_plan_artifact": null
+  }
+}

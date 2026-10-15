@@ -6,6 +6,9 @@
 - Canonical skills live in `skills/<name>/SKILL.md`. Keep shared instructions
   portable and put substantial supporting content in references, assets, or
   scripts. Agent-specific UI metadata belongs in `agents/`.
+- New skill names use `ct-<department>-<expertise>` with a concrete action and
+  subject. Dynamic UML skills use `ct-dynamic-uml` and `ct-dynamic-uml-<type>`;
+  preserve the existing bootstrap name.
 - Only reviewed public content belongs here. Personal preferences and private
   experiments belong in a separate private repository. Do not migrate from
   another skill library in bulk or retire an original before verifying its replacement.
@@ -25,10 +28,22 @@
   metadata checks. Local checks are not CI or proof of discovery in each agent.
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
+- Define a Project's contract and examples live in its complete skill folder.
+  Keep its 10-question/2-batch budget in one scope ledger, with negative tests
+  and isolated CLI checks under `tests/test_define_project.py`. Do not copy
+  private project definitions or interview histories into the public package.
+- Lifecycle support has canonical sources: Define a Project owns
+  `scripts/project.py` and its definition contract; Manage a Project owns
+  `scripts/workflow.py`; Plan Development owns `scripts/plan.py` and its contract.
+  Run `make resources` after changing them. Never hand-edit generated copies;
+  `make check` and `make build` reject drift. Every package works independently.
+- Keep lifecycle assessments distinct from acceptance: `ready` may mean a
+  completed assessment with findings. QA verdicts, candidate identity, human
+  staging acceptance, GitHub readbacks and release milestones remain explicit.
 - Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
   Shared renderer, flowchart/state verifiers, template, supplied logo, guide and example JSON are canonical under
-  `skills/dynamic-umls/`. Regenerate focused-skill resources and HTML review
+  `skills/ct-dynamic-uml/`. Regenerate focused-skill resources and HTML review
   examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.

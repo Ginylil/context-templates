@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Assess the authenticated note creation and retrieval journey in staging without sending messages or using production data.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "environment": "staging",
+    "base_url": null,
+    "candidate_revision": "candidate-unresolved",
+    "journeys": [],
+    "allowed_side_effects": [
+      "Use synthetic notes in an isolated test account."
+    ]
+  }
+}

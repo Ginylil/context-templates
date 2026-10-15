@@ -1,4 +1,0 @@
-interface:
-  display_name: "Dynamic Flowchart"
-  short_description: "Walk through decisions, outcomes and repair loops"
-  default_prompt: "Use $dynamic-flowchart to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-rnd-review-code",
+  "input_sha256": "84353528aba02a269a326daee4a79c7be031512fe9c832653441275a6712e78a",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "candidate_revision": "uncommitted-candidate",
+    "reviewed_source": null,
+    "reviewed_files": [],
+    "assessments": [],
+    "findings": [],
+    "limitations": [
+      "No candidate diff has been supplied."
+    ],
+    "review_artifact": null
+  }
+}

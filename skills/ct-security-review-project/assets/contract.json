@@ -1,0 +1,178 @@
+{
+  "skill": "ct-security-review-project",
+  "purpose": "Produce a bounded security assessment with demonstrated findings, explicit trust boundaries, uncertainty, and practical remediation.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "review_scope": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "trust_boundaries": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "excluded_areas": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "allowed_checks": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "assessed_areas": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "area": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "examined",
+                "limited",
+                "unavailable"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "severity": {
+              "type": "string",
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low",
+                "informational"
+              ]
+            },
+            "confidence": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            },
+            "impact": {
+              "type": "string"
+            },
+            "recommendation": {
+              "type": "string"
+            },
+            "verification": {
+              "type": "string"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "threats": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "entry_point": {
+              "type": "string"
+            },
+            "asset": {
+              "type": "string"
+            },
+            "abuse_case": {
+              "type": "string"
+            },
+            "control": {
+              "type": "string"
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "unassessed_areas": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "priority_actions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "nonempty",
+      "fields": [
+        "assessed_areas"
+      ]
+    }
+  ]
+}

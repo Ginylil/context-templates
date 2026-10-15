@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-marketing-research-market",
+  "input_sha256": "9540d38310774ceb896eb41053db47cf07042a754497c726a7220a187a247ce1",
+  "status": "blocked",
+  "summary": "Assessment is blocked by missing project definition and source evidence.",
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "No validated project definition and shared scope ledger were supplied.",
+      "next_action": "Complete ct-product-define-project for this scope and supply the resulting definition and ledger references."
+    }
+  ],
+  "result": {
+    "claims": [],
+    "alternatives": [],
+    "positioning_options": [],
+    "channels": [],
+    "unknowns": [
+      "Current primary market sources and customer evidence have not been collected."
+    ]
+  }
+}

@@ -1,0 +1,208 @@
+{
+  "skill": "ct-devops-release-project",
+  "purpose": "Prepare or execute an explicitly scoped release while distinguishing build proof, candidate deployment, staging acceptance, and production readback.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "target_stage": {
+        "type": "string",
+        "enum": [
+          "candidate",
+          "staging",
+          "production"
+        ]
+      },
+      "supports_staging": {
+        "type": "boolean"
+      },
+      "release_procedure": {
+        "type": "string"
+      },
+      "rollback_procedure": {
+        "type": "string"
+      },
+      "authorized_actions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string",
+        "nullable": true
+      },
+      "build_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "checks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "not-run"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "staging_acceptance": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "authorization_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "production_readback": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "outcome": {
+        "type": "string",
+        "enum": [
+          "candidate-prepared",
+          "staging-deployed",
+          "production-verified",
+          "blocked"
+        ]
+      },
+      "recovery": {
+        "type": "string"
+      },
+      "limitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "staging_readback": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "command",
+      "field": "build_check",
+      "exit": "zero"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "checks"
+      ]
+    },
+    {
+      "type": "all-status",
+      "items": "checks",
+      "field": "status",
+      "allowed": [
+        "passed"
+      ]
+    },
+    {
+      "type": "required-when",
+      "input_field": "target_stage",
+      "equals": "production",
+      "fields": [
+        "authorization_source",
+        "production_readback"
+      ]
+    },
+    {
+      "type": "required-when",
+      "when": [
+        {
+          "input_field": "target_stage",
+          "equals": "production"
+        },
+        {
+          "input_field": "supports_staging",
+          "equals": true
+        }
+      ],
+      "fields": [
+        "staging_acceptance"
+      ]
+    },
+    {
+      "type": "map-input",
+      "input_field": "target_stage",
+      "field": "outcome",
+      "values": {
+        "candidate": "candidate-prepared",
+        "staging": "staging-deployed",
+        "production": "production-verified"
+      }
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "required-when",
+      "input_field": "target_stage",
+      "equals": "staging",
+      "fields": [
+        "staging_readback"
+      ]
+    },
+    {
+      "type": "required-when",
+      "when": [
+        {
+          "input_field": "target_stage",
+          "equals": "production"
+        },
+        {
+          "input_field": "supports_staging",
+          "equals": true
+        }
+      ],
+      "fields": [
+        "staging_readback"
+      ]
+    }
+  ]
+}

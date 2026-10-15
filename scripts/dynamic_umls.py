@@ -11,11 +11,11 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-CANONICAL = ROOT / 'skills/dynamic-umls'
+CANONICAL = ROOT / 'skills/ct-dynamic-uml'
 NAMES = {
-    'sequence': 'dynamic-sequence-diagram', 'class': 'dynamic-class-diagram',
-    'flowchart': 'dynamic-flowchart', 'state': 'dynamic-state-diagram',
-    'activity': 'dynamic-activity-diagram', 'component': 'dynamic-component-diagram',
+    'sequence': 'ct-dynamic-uml-sequence', 'class': 'ct-dynamic-uml-class',
+    'flowchart': 'ct-dynamic-uml-flowchart', 'state': 'ct-dynamic-uml-state',
+    'activity': 'ct-dynamic-uml-activity', 'component': 'ct-dynamic-uml-component',
 }
 
 
@@ -33,7 +33,7 @@ def outputs():
         result[ROOT / f'examples/dynamic-umls/{kind}.html'] = renderer.render(
             json.loads(model.read_text(encoding='utf-8')), expected=kind).encode('utf-8')
     long_model = CANONICAL / 'assets/examples/sequence-long.json'
-    result[ROOT / 'skills/dynamic-sequence-diagram/assets/long-example.json'] = long_model.read_bytes()
+    result[ROOT / 'skills/ct-dynamic-uml-sequence/assets/long-example.json'] = long_model.read_bytes()
     result[ROOT / 'examples/dynamic-umls/sequence-long.html'] = renderer.render(
         json.loads(long_model.read_text(encoding='utf-8')), expected='sequence').encode('utf-8')
     cards = []

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-rnd-design-architecture",
+  "input_sha256": "f0c73ffa3a664e91fee632dbd383cc68056ca205d38c772bf74ee2a3f2136a4e",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "components": [],
+    "interfaces": [],
+    "requirement_map": [],
+    "decisions": [],
+    "risks": [],
+    "design_artifact": null
+  }
+}

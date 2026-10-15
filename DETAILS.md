@@ -70,9 +70,100 @@ these checks on Linux, macOS, and Windows. Local results, CI, file installation,
 agent discovery, invocation, PR submission, and maintainer acceptance are distinct
 proof stages. There is no staging environment for this repository.
 
+## Project definition
+
+`skills/ct-product-define-project/` is a standalone portable skill. Its
+`scripts/project.py` uses only Python 3.10+ standard-library modules to validate
+intake JSON, maintain a project-scoped event ledger, check a definition against
+the current input/history digests, and render a Markdown brief. No commands
+execute project code, access a service, or install dependencies.
+
+Question usage is derived from recorded `ask` events, including unanswered
+questions: no more than ten questions in two batches. Decision dependencies must
+be resolved before their question's batch. Pending batches prevent further
+batches. Submitted answers retain source text and qualifications; recommendations
+do not resolve questions. New facts and adaptive branches use distinct event
+types. Same-event retries are no-ops. Starting again with the same input preserves
+the ledger. A changed input, stale revision, duplicate ID, or existing lock stops
+the update; validated updates use an atomic replacement. The ledger is a
+cooperative consistency guard, not protection against deliberate history edits.
+
+Output validation preserves input constraints and tracking declarations, binds
+all settled decisions, and requires each unresolved decision to be carried as an
+assumption or actionable blocker. Unanswered questions and blocking decisions
+require blockers; these forbid `ready-for-planning`. GitHub repository/Project
+references may be unknown at definition time, but executable task publication
+must subsequently verify and use both. No remote state is claimed by this skill.
+New readable outputs refuse overwrite. See the bundled
+[contract](skills/ct-product-define-project/references/contract.md) for exact
+formats, commands, and the boundary between structural checks and agent judgment.
+
+Focused tests cover the limits, negative controls, adaptive and resumed sessions,
+stale artifacts/writes, retry behavior, output preservation, and CLI execution
+from isolated copies for all three installer targets and a built ZIP. These are
+package-level checks, not proof of discovery in a live agent runtime.
+
+## Lifecycle routing and domain checks
+
+The manager's `assets/catalog.json` defines eighteen lifecycle identities. The
+guide routes from the current definition, task graph, repository, verified
+tracking and specialist reports; explicit specialist requests can enter directly.
+It does not run every skill or execute selected work by returning a route.
+`local_only` prevents remote tracking reads and holds execution before GitHub
+admission. A stored tracking receipt cannot substitute for live readback.
+
+Plan Development validates complete requirement coverage, unique task/criterion
+IDs and an acyclic task graph. It prepares deterministic issue bodies with stable
+plan/task markers and source digests. Its verifier uses read-only GitHub CLI
+REST/GraphQL operations to check issue identity/content, duplicates, Project
+membership and Status. New tasks must be open and in Backlog; the guide's ongoing
+mode allows progression but requires matching closed issues, configured completion
+statuses and scoped task proof before treating a task as complete. Task proof
+preserves every planned acceptance criterion and its verification instruction.
+Completed task evidence may retain an ancestor revision as later work advances;
+review, QA, security and release gates require the current candidate. The current
+adapter supports GitHub.com Projects v2. Live verification requires GitHub CLI,
+authentication and access; unavailable readback blocks admission. The tool never
+creates or changes remote tasks itself.
+
+Fifteen specialists carry a domain policy in `assets/contract.json`, intake and
+output examples, and standalone copies of the shared validator. This is a small
+explicit policy vocabulary, not an implementation of general JSON Schema. Rules
+check domain relationships such as architecture endpoints, selected acceptance
+coverage, before/after command identity, viewport coverage, QA environment and
+journey identity, release phase evidence, launch authorization/readback and
+product/market source links. Checked file references and canonical input digests
+reject missing, stale, wrong-project or dropped-constraint outputs.
+
+Repository bindings include HEAD and a structured working-tree fingerprint;
+recorded successful commands must match both. Untracked files are fingerprinted
+with separate filename/content-digest records so different file boundaries cannot
+alias. Passing checks, earlier failing reproductions and incomplete observations
+remain distinct. `workflow.py record` runs only argv explicitly supplied by its
+caller, without a shell, with a bounded timeout and output reserved before
+execution. Existing output prevents execution; no command is retried. Store proof
+outside the measured tree or in an ignored directory. These local cooperative
+checks cannot authenticate a manual approval or make arbitrary captured data true.
+
+Canonical shared support lives in Define a Project (`scripts/project.py` and
+its contract), Manage a Project (`scripts/workflow.py`), and Plan Development
+(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 51
+standalone resources; `make resources` refreshes them, and check/build reject
+drift. Generated copies are packaged resources, not private runtime dependencies.
+All eighteen skills can be installed separately. The guide explicitly reports a
+required specialist that is unavailable.
+
+Local tests cover each domain's blocked and ready artifacts, negative cases,
+resumption, source drift, constraint retention, actual command capture in
+disposable Git workspaces, routing and standalone CLI execution for all three
+installation targets. Independent dry runs exercise local planning, a real
+temporary bug fix, failed QA and a blocked release. Provider APIs are mocked in
+tests; actual agent discovery, provider integrations, deployed application behavior
+and human acceptance are separate evidence levels.
+
 ## Dynamic UMLs
 
-The router skill owns the shared HTML renderer, standard-library generator,
+The `ct-dynamic-uml` router skill owns the shared HTML renderer, standard-library generator,
 authoring guide, supplied Ginylil PNG, flowchart verifier, six diagram-type examples
 and an additional long sequence model (32 messages, six participants). `scripts/dynamic_umls.py` deterministically
 copies these resources into the focused skill folders and generates standalone

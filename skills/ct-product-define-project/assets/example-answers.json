@@ -1,0 +1,8 @@
+{
+  "id": "answers-one",
+  "type": "answer",
+  "answers": [
+    {"question_id": "Q1", "answer": "Personal use only; no shared workspaces in the first version.", "source": "Synthetic user reply to Q1"},
+    {"question_id": "Q2", "answer": "Manual entry is enough initially.", "source": "Synthetic user reply to Q2"}
+  ]
+}

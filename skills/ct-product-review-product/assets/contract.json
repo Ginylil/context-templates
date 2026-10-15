@@ -1,0 +1,167 @@
+{
+  "skill": "ct-product-review-product",
+  "purpose": "Assess customer value and product outcomes using consented evidence, separating observed behavior, interpretation, and testable recommendations.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "review_question": {
+        "type": "string"
+      },
+      "audience": {
+        "type": "string"
+      },
+      "metrics_available": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "excluded_areas": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "observations": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "claim": {
+              "type": "string"
+            },
+            "source_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "source"
+              },
+              "min_items": 1
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            },
+            "confidence": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ]
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "opportunities": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "problem": {
+              "type": "string"
+            },
+            "audience": {
+              "type": "string"
+            },
+            "supporting_observations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "proposed_change": {
+              "type": "string"
+            },
+            "success_measure": {
+              "type": "string"
+            },
+            "counter_metric": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ]
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "experiments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "hypothesis": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "decision_rule": {
+              "type": "string"
+            },
+            "required_permission": {
+              "type": "string"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "unanswered_questions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "nonempty",
+      "fields": [
+        "observations"
+      ]
+    },
+    {
+      "type": "references",
+      "items": "opportunities",
+      "fields": [
+        "supporting_observations"
+      ],
+      "target": "observations",
+      "target_field": "id"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Review the web app authentication, tenant isolation, and handling of private client notes using read-only repository evidence.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "review_scope": [
+      "Authentication",
+      "Tenant isolation",
+      "Private note storage"
+    ],
+    "trust_boundaries": [
+      "Browser to API",
+      "API to persistent storage"
+    ],
+    "excluded_areas": [
+      "Active penetration testing"
+    ],
+    "allowed_checks": [
+      "Read repository code and existing security reports."
+    ]
+  }
+}

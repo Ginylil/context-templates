@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Assess whether freelancers can quickly understand and complete their first useful note-taking session.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "review_question": "Where does first-session activation fail?",
+    "audience": "Freelancers managing their own client follow-ups.",
+    "metrics_available": [],
+    "excluded_areas": [
+      "Contacting users without explicit authorization."
+    ]
+  }
+}

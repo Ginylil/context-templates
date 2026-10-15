@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-rnd-set-up-project",
+  "input_sha256": "e5d010b997f7e3610cc7de5e8685b02c2c72c22cad480f4a1acba769e32f2b60",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "target_path": "./follow-up-notes",
+    "created_paths": [],
+    "setup_check": null,
+    "test_check": null,
+    "build_check": null,
+    "ci_artifact": null,
+    "instruction_artifact": null
+  }
+}

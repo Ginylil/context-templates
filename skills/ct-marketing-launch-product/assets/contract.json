@@ -1,0 +1,219 @@
+{
+  "skill": "ct-marketing-launch-product",
+  "purpose": "Prepare a measurable product launch and, when explicitly authorized, publish bounded assets with duplicate prevention and live readback.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "mode": {
+        "type": "string",
+        "enum": [
+          "prepare",
+          "publish"
+        ]
+      },
+      "product_revision": {
+        "type": "string"
+      },
+      "audience": {
+        "type": "string"
+      },
+      "channels": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "claim_sources": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "ref": "source"
+        }
+      },
+      "authorized_actions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "product_revision": {
+        "type": "string",
+        "nullable": true
+      },
+      "assets": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "channel": {
+              "type": "string"
+            },
+            "audience": {
+              "type": "string"
+            },
+            "message": {
+              "type": "string"
+            },
+            "call_to_action": {
+              "type": "string"
+            },
+            "claim_sources": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "source"
+              },
+              "min_items": 1
+            },
+            "artifact": {
+              "type": "string",
+              "ref": "evidence"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "measurement": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "event": {
+              "type": "string"
+            },
+            "baseline": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            },
+            "window": {
+              "type": "string"
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "authorization_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "live_readback": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "publications": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "channel": {
+              "type": "string"
+            },
+            "asset_id": {
+              "type": "string"
+            },
+            "idempotency_key": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "evidence": {
+              "type": "string",
+              "ref": "evidence"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "outcome": {
+        "type": "string",
+        "enum": [
+          "drafts-prepared",
+          "publication-verified",
+          "blocked"
+        ]
+      },
+      "limitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "product_revision",
+      "input_field": "product_revision"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "assets",
+        "measurement"
+      ]
+    },
+    {
+      "type": "required-when",
+      "input_field": "mode",
+      "equals": "publish",
+      "fields": [
+        "authorization_source",
+        "live_readback",
+        "publications"
+      ]
+    },
+    {
+      "type": "map-input",
+      "input_field": "mode",
+      "field": "outcome",
+      "values": {
+        "prepare": "drafts-prepared",
+        "publish": "publication-verified"
+      }
+    },
+    {
+      "type": "references",
+      "items": "publications",
+      "fields": [
+        "asset_id"
+      ],
+      "target": "assets",
+      "target_field": "id"
+    },
+    {
+      "type": "required-when",
+      "input_field": "mode",
+      "equals": "prepare",
+      "empty_fields": [
+        "publications"
+      ]
+    }
+  ]
+}

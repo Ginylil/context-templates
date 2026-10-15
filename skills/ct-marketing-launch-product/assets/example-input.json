@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Prepare launch drafts for a private freelancer notes app without posting, scheduling, or purchasing promotion.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "mode": "prepare",
+    "product_revision": "candidate-unresolved",
+    "audience": "Freelancers managing client follow-ups.",
+    "channels": [
+      "Owned product website"
+    ],
+    "claim_sources": [],
+    "authorized_actions": [
+      "Draft local launch materials."
+    ]
+  }
+}

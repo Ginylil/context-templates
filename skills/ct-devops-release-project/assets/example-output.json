@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-devops-release-project",
+  "input_sha256": "0c34588c00af4bff7398e3487aebe1d7bb0b31bcedfd806d4ba91799c665ec73",
+  "status": "blocked",
+  "summary": "Assessment is blocked by missing project definition and source evidence.",
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "No validated project definition and shared scope ledger were supplied.",
+      "next_action": "Complete ct-product-define-project for this scope and supply the resulting definition and ledger references."
+    }
+  ],
+  "result": {
+    "candidate_revision": null,
+    "build_check": null,
+    "checks": [],
+    "staging_acceptance": null,
+    "authorization_source": null,
+    "production_readback": null,
+    "outcome": "blocked",
+    "recovery": "No deployment has been attempted.",
+    "limitations": [
+      "Candidate revision, repository commands, and acceptance definition are unavailable."
+    ],
+    "staging_readback": null
+  }
+}

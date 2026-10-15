@@ -1,4 +1,0 @@
-interface:
-  display_name: "Dynamic UMLs"
-  short_description: "Choose and create interactive diagram walkthroughs"
-  default_prompt: "Use $dynamic-umls to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

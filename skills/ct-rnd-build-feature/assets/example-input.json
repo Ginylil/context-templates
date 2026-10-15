@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "A complete engineering candidate traceable to agreed outcomes.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "sources": [],
+  "inputs": {
+    "task_id": null,
+    "candidate_revision": "uncommitted-candidate",
+    "requirement_ids": [],
+    "acceptance": []
+  }
+}

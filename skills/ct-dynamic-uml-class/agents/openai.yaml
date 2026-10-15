@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dynamic Class Diagram"
+  short_description: "Explore types, ownership and cardinality interactively"
+  default_prompt: "Use $ct-dynamic-uml-class to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

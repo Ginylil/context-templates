@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-security-review-project",
+  "input_sha256": "834447f16e020f2f2a44ee9d0c3c3bdbe1aa8c70d0513821a3cacceb78b517ec",
+  "status": "blocked",
+  "summary": "Assessment is blocked by missing project definition and source evidence.",
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "No validated project definition and shared scope ledger were supplied.",
+      "next_action": "Complete ct-product-define-project for this scope and supply the resulting definition and ledger references."
+    }
+  ],
+  "result": {
+    "assessed_areas": [],
+    "findings": [],
+    "threats": [],
+    "unassessed_areas": [
+      "Authentication, authorization, and storage controls require repository evidence."
+    ],
+    "priority_actions": [
+      "Supply the repository revision and approved scope."
+    ]
+  }
+}

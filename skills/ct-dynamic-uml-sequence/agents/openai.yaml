@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dynamic Sequence Diagram"
+  short_description: "Explain messages with an interactive sequence walkthrough"
+  default_prompt: "Use $ct-dynamic-uml-sequence to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

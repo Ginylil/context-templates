@@ -1,0 +1,199 @@
+{
+  "skill": "ct-devops-maintain-project",
+  "purpose": "Assess a running service through bounded health, cost, change, security, failure, and recovery evidence without implying continuous monitoring.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "service_inventory": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "review_window": {
+        "type": "string"
+      },
+      "providers": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "allowed_actions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "coverage": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "area": {
+              "type": "string",
+              "enum": [
+                "spend",
+                "changes",
+                "security",
+                "health",
+                "failures",
+                "incidents",
+                "recovery"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "examined",
+                "limited",
+                "unavailable"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            },
+            "observed_at": {
+              "type": "string"
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "severity": {
+              "type": "string",
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low",
+                "informational"
+              ]
+            },
+            "confidence": {
+              "type": "string",
+              "enum": [
+                "high",
+                "medium",
+                "low"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            },
+            "impact": {
+              "type": "string"
+            },
+            "recommendation": {
+              "type": "string"
+            },
+            "verification": {
+              "type": "string"
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "monitoring_gaps": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "maintenance_actions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "target": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "impact": {
+              "type": "string"
+            },
+            "recovery": {
+              "type": "string"
+            },
+            "authorization": {
+              "type": "string",
+              "enum": [
+                "not-needed",
+                "required",
+                "already-authorized"
+              ]
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "next_review": {
+        "type": "string",
+        "nullable": true
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "nonempty",
+      "fields": [
+        "coverage"
+      ]
+    },
+    {
+      "type": "required-values",
+      "items": "coverage",
+      "field": "area",
+      "values": [
+        "spend",
+        "changes",
+        "security",
+        "health",
+        "failures",
+        "incidents",
+        "recovery"
+      ]
+    }
+  ]
+}

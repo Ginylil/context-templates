@@ -1,0 +1,191 @@
+{
+  "skill": "ct-rnd-design-architecture",
+  "purpose": "A reviewable technical design traceable to project outcomes.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "context": {
+        "type": "string"
+      },
+      "existing_system": {
+        "type": "string"
+      },
+      "options": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "tradeoffs": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 1,
+        "unique_by": "id"
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "components": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "responsibility": {
+              "type": "string"
+            },
+            "owned_data": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 0
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "interfaces": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "from": {
+              "type": "string"
+            },
+            "to": {
+              "type": "string"
+            },
+            "contract": {
+              "type": "string"
+            },
+            "failure_behavior": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "requirement_map": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            },
+            "design": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "decisions": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "choice": {
+              "type": "string"
+            },
+            "alternatives": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "rationale": {
+              "type": "string"
+            },
+            "source_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "source"
+              },
+              "min_items": 0
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "risks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "risk": {
+              "type": "string"
+            },
+            "mitigation": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "design_artifact": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "nonempty",
+      "fields": [
+        "components",
+        "decisions",
+        "design_artifact"
+      ]
+    },
+    {
+      "type": "coverage",
+      "items": "requirement_map",
+      "field": "requirement_ids"
+    },
+    {
+      "type": "references",
+      "items": "interfaces",
+      "fields": [
+        "from",
+        "to"
+      ],
+      "target": "components",
+      "target_field": "id"
+    }
+  ]
+}

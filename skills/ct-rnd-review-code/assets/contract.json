@@ -1,0 +1,165 @@
+{
+  "skill": "ct-rnd-review-code",
+  "purpose": "An evidence-bound review tied to the inspected candidate revision.",
+  "requires_definition": false,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "change_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "intent": {
+        "type": "string"
+      },
+      "review_scope": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "reviewed_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "reviewed_files": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "path": {
+              "type": "string"
+            },
+            "source_id": {
+              "type": "string",
+              "ref": "source"
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "assessments": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "area": {
+              "type": "string"
+            },
+            "conclusion": {
+              "type": "string"
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "findings": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "severity": {
+              "type": "string",
+              "enum": [
+                "critical",
+                "high",
+                "medium",
+                "low"
+              ]
+            },
+            "path": {
+              "type": "string"
+            },
+            "line": {
+              "type": "integer"
+            },
+            "problem": {
+              "type": "string"
+            },
+            "trigger": {
+              "type": "string"
+            },
+            "impact": {
+              "type": "string"
+            },
+            "recommended_fix": {
+              "type": "string"
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "limitations": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      },
+      "review_artifact": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "equals-input",
+      "field": "reviewed_source",
+      "input_field": "change_source"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "reviewed_source",
+        "reviewed_files",
+        "assessments",
+        "review_artifact"
+      ]
+    }
+  ]
+}

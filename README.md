@@ -22,7 +22,8 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
-contribute improvements or new skills through a pull request. The catalog includes the bootstrap and the Dynamic UMLs family described below;
+contribute improvements or new skills through a pull request. The catalog includes
+the bootstrap, eighteen project lifecycle skills, and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
@@ -43,13 +44,91 @@ run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
 
+## Project lifecycle skills
+
+Start with `ct-product-manage-project` to find the next useful step, or invoke a
+focused skill directly. Existing scope, source evidence and GitHub tracking are
+reused; the guide does not force every project through all eighteen skills.
+
+```text
+Use ct-product-manage-project to help me define and build a small web app.
+Inspect what already exists and take the next useful step toward my goal.
+```
+
+| Skill | Job |
+| --- | --- |
+| [`ct-product-manage-project`](skills/ct-product-manage-project/SKILL.md) | Guide the next project step using checked handoffs |
+| [`ct-product-define-project`](skills/ct-product-define-project/SKILL.md) | Define users, scope, constraints and success |
+| [`ct-product-review-product`](skills/ct-product-review-product/SKILL.md) | Assess customer value and product outcomes |
+| [`ct-rnd-design-architecture`](skills/ct-rnd-design-architecture/SKILL.md) | Design components, interfaces and tradeoffs |
+| [`ct-rnd-plan-development`](skills/ct-rnd-plan-development/SKILL.md) | Plan complete GitHub-tracked development slices |
+| [`ct-rnd-set-up-project`](skills/ct-rnd-set-up-project/SKILL.md) | Establish a runnable, checked repository |
+| [`ct-rnd-build-feature`](skills/ct-rnd-build-feature/SKILL.md) | Implement one complete admitted feature |
+| [`ct-rnd-fix-bug`](skills/ct-rnd-fix-bug/SKILL.md) | Reproduce, diagnose and repair a defect |
+| [`ct-rnd-review-code`](skills/ct-rnd-review-code/SKILL.md) | Review behavior and repository standards |
+| [`ct-rnd-improve-agent-setup`](skills/ct-rnd-improve-agent-setup/SKILL.md) | Improve agents from observed workflow problems |
+| [`ct-design-build-interface`](skills/ct-design-build-interface/SKILL.md) | Design and verify a usable interface |
+| [`ct-qa-plan-tests`](skills/ct-qa-plan-tests/SKILL.md) | Define behavioral coverage and verification |
+| [`ct-qa-test-user-flows`](skills/ct-qa-test-user-flows/SKILL.md) | Execute flows and report actual results |
+| [`ct-security-review-project`](skills/ct-security-review-project/SKILL.md) | Assess demonstrated security risks and uncertainty |
+| [`ct-devops-release-project`](skills/ct-devops-release-project/SKILL.md) | Verify the requested release milestone |
+| [`ct-devops-maintain-project`](skills/ct-devops-maintain-project/SKILL.md) | Review health, spend, changes and recovery |
+| [`ct-marketing-research-market`](skills/ct-marketing-research-market/SKILL.md) | Research audiences, competitors and positioning |
+| [`ct-marketing-launch-product`](skills/ct-marketing-launch-product/SKILL.md) | Prepare or execute an authorized launch |
+
+Each complete folder works independently. The guide checks which specialists
+are installed. The agent prepares JSON, while bundled Python tools validate
+structure, scope/source bindings, proof references and domain-specific rules.
+Explicit command capture records actual argv, output, exit status and source
+fingerprints without shell execution or inferred retries. Capturing a command
+does not authorize it; use only actions already in scope.
+
+All specialists share the same **ten-question/two-batch** scope ledger. Development
+plans require GitHub Issues and Projects with authoritative readback before
+execution. Local-only preparation is supported and remains explicitly blocked at
+that tracking gate. Completed assessments can expose failed tests or risks;
+they do not imply acceptance or permission to deploy/publish.
+
+These packages have local contract, negative-control, standalone-installation
+and disposable-workspace tests. Mocked remote readbacks and source fixtures do
+not establish live provider behavior, actual agent discovery or human staging
+acceptance. There is no staging environment for this catalog itself.
+
+### Define a project
+
+Use [`ct-product-define-project`](skills/ct-product-define-project/SKILL.md) to
+turn an idea into a clear definition of its users, problem, first scope,
+constraints, and observable success before development planning:
+
+```text
+Use ct-product-define-project to define a small browser app for tracking client
+follow-ups. Investigate what you can, then ask only the decisions you need from me.
+```
+
+The agent prepares the structured artifacts. A bundled Python tool validates
+inputs, keeps one resumable interview ledger, and validates the output before
+rendering a readable Markdown brief. The interview allows **at most ten questions
+across two batches**, shared across agents working on the same scope. Questions
+in a batch must have their prerequisites settled; recommendations never become
+answers automatically. Clear requests can finish without questions. Missing
+critical answers produce an explicit blocked definition.
+
+Install the complete folder with
+`make install-codex SKILL=ct-product-define-project`, selecting the target agent
+you use. The skill runs independently with Python 3.10+ and no package or service
+dependencies. See its [contract and commands](skills/ct-product-define-project/references/contract.md)
+and [synthetic output example](skills/ct-product-define-project/assets/example-definition.json).
+GitHub Issues and Projects are required for subsequent executable task planning;
+this definition skill neither publishes tasks nor verifies remote tracking objects.
+Validated JSON proves contract consistency, not customer demand or user acceptance.
+
 ## Dynamic UMLs
 
 Use Dynamic UMLs to explain how a system works: messages over time, types and
 relationships, decision paths, state changes, parallel activities, or component
 boundaries. Ask for a diagram in plain language, for example
-`/dynamic-sequence-diagram for a browser, application, and identity-provider login`.
-Choose a focused skill below, or use `dynamic-umls` to select a suitable view.
+`/ct-dynamic-uml-sequence for a browser, application, and identity-provider login`.
+Choose a focused skill below, or use `ct-dynamic-uml` to select a suitable view.
 
 Each produces a standalone HTML page with an interactive
 walkthrough. Each skill investigates the supplied context, makes minimal explicit
@@ -77,13 +156,19 @@ Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | View example in browser |
 | --- | --- |
-| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html) |
-| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence-long.html) |
-| [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](https://ginylil.github.io/context-templates/examples/dynamic-umls/class.html) |
-| [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](https://ginylil.github.io/context-templates/examples/dynamic-umls/flowchart.html) |
-| [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](https://ginylil.github.io/context-templates/examples/dynamic-umls/state.html) |
-| [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](https://ginylil.github.io/context-templates/examples/dynamic-umls/activity.html) |
-| [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](https://ginylil.github.io/context-templates/examples/dynamic-umls/component.html) |
+| [`ct-dynamic-uml`](skills/ct-dynamic-uml/SKILL.md) — choose a view | [Example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html) |
+| [`ct-dynamic-uml-sequence`](skills/ct-dynamic-uml-sequence/SKILL.md) | [Three-party sign-in](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence-long.html) |
+| [`ct-dynamic-uml-class`](skills/ct-dynamic-uml-class/SKILL.md) | [Orders and payments](https://ginylil.github.io/context-templates/examples/dynamic-umls/class.html) |
+| [`ct-dynamic-uml-flowchart`](skills/ct-dynamic-uml-flowchart/SKILL.md) | [Review readiness](https://ginylil.github.io/context-templates/examples/dynamic-umls/flowchart.html) |
+| [`ct-dynamic-uml-state`](skills/ct-dynamic-uml-state/SKILL.md) | [Order lifecycle](https://ginylil.github.io/context-templates/examples/dynamic-umls/state.html) |
+| [`ct-dynamic-uml-activity`](skills/ct-dynamic-uml-activity/SKILL.md) | [Parallel preparation](https://ginylil.github.io/context-templates/examples/dynamic-umls/activity.html) |
+| [`ct-dynamic-uml-component`](skills/ct-dynamic-uml-component/SKILL.md) | [One catalog, three agents](https://ginylil.github.io/context-templates/examples/dynamic-umls/component.html) |
+
+The UML skills now use the `ct-dynamic-uml` prefix. Install them by their new
+names. Existing installations with `dynamic-*` names remain untouched; the
+installer does not rename, replace or remove those folders. Both versions can
+therefore appear until you explicitly remove the old copies. Hosted example
+URLs remain under `examples/dynamic-umls/`.
 
 [Open the interactive example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html)
 to try all six views and the long sequence in your browser. The repository's
@@ -94,25 +179,25 @@ the source. These are a focused UML subset; flowcharts are general process notat
 Install the complete folder for the skill you choose, including its resources:
 
 ```sh
-make install-codex SKILL=dynamic-sequence-diagram
+make install-codex SKILL=ct-dynamic-uml-sequence
 ```
 
 Then ask your agent:
 
 ```text
-/dynamic-sequence-diagram for 3 way handshake login
-/dynamic-class-diagram for this project's billing model
-/dynamic-flowchart for the failed-payment recovery process
+/ct-dynamic-uml-sequence for 3 way handshake login
+/ct-dynamic-uml-class for this project's billing model
+/ct-dynamic-uml-flowchart for the failed-payment recovery process
 ```
 
-Use `$dynamic-sequence-diagram` or its name in prose if your agent does not expose
+Use `$ct-dynamic-uml-sequence` or its name in prose if your agent does not expose
 slash invocation. Invocation syntax and discovery must be checked in your agent.
 The login request should clarify TCP versus browser/app/provider sign-in when
 context leaves it ambiguous. Generating a page uses Python 3.10+; the resulting
 HTML requires only a browser. Existing output files are never silently replaced.
 
 Each focused skill works independently. Shared resources have one canonical source
-under `skills/dynamic-umls/`; synchronized copies make every ZIP self-contained.
+under `skills/ct-dynamic-uml/`; synchronized copies make every ZIP self-contained.
 Use `make examples` after changing canonical resources or example JSON, then
 `make check` to catch drift. See [DESIGN](DESIGN.md) for visual and browser checks.
 

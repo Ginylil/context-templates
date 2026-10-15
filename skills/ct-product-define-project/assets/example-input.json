@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "idea": "A small web app that helps freelancers record client follow-ups and find what to do next.",
+  "sources": [
+    {
+      "id": "user-request",
+      "reference": "Synthetic example user request",
+      "summary": "Freelancers need an authenticated browser-based place for client follow-ups."
+    }
+  ],
+  "constraints": [
+    "Notes must require authenticated access.",
+    "The first version must work in a browser."
+  ],
+  "decisions": [
+    {
+      "id": "audience",
+      "topic": "Initial audience",
+      "depends_on": [],
+      "blocking": true,
+      "resolution": {
+        "answer": "Freelancers managing their own client follow-ups.",
+        "source": "Synthetic example user request"
+      }
+    },
+    {
+      "id": "sharing",
+      "topic": "Collaboration scope",
+      "depends_on": [
+        "audience"
+      ],
+      "blocking": true,
+      "resolution": null
+    },
+    {
+      "id": "capture",
+      "topic": "How notes enter the app",
+      "depends_on": [
+        "audience"
+      ],
+      "blocking": true,
+      "resolution": null
+    }
+  ],
+  "tracking": {
+    "system": "github",
+    "repository": null,
+    "project": null
+  }
+}
