@@ -72,8 +72,8 @@ Inspect what already exists and take the next useful step toward my goal.
 | [`ct-qa-test-user-flows`](skills/ct-qa-test-user-flows/SKILL.md) | Execute flows and report actual results |
 | [`ct-security-review-project`](skills/ct-security-review-project/SKILL.md) | Assess demonstrated security risks and uncertainty |
 | [`ct-devops-release-project`](skills/ct-devops-release-project/SKILL.md) | Verify the requested release milestone |
-| [`ct-devops-release-apple-app`](skills/ct-devops-release-apple-app/SKILL.md) | Release through TestFlight, App Review and the App Store |
-| [`ct-devops-release-android-app`](skills/ct-devops-release-android-app/SKILL.md) | Release through Play internal, closed, open and production tracks |
+| [`ct-devops-release-apple-app`](skills/ct-devops-release-apple-app/SKILL.md) | Discover setup, wrap web apps and release through TestFlight and the App Store |
+| [`ct-devops-release-android-app`](skills/ct-devops-release-android-app/SKILL.md) | Discover setup, wrap web apps and release through Play testing and production |
 | [`ct-devops-maintain-project`](skills/ct-devops-maintain-project/SKILL.md) | Review health, spend, changes and recovery |
 | [`ct-marketing-research-market`](skills/ct-marketing-research-market/SKILL.md) | Research audiences, competitors and positioning |
 | [`ct-marketing-launch-product`](skills/ct-marketing-launch-product/SKILL.md) | Prepare or execute an authorized launch |
@@ -94,8 +94,11 @@ they do not imply acceptance or permission to deploy/publish.
 The Apple and Android release skills also work directly for an existing app.
 They keep upload, processing, tester access, device proof, review and public
 release separate, bind the exact app/build/export and audience, and accept only
-logical credential-store references. Actual signing keys, tokens, service-account
-files, tester details and runtime evidence stay outside this public catalog.
+logical credential-store references. Both store skills include configuration
+discovery, exact setup locations and a checked web-to-native wrapping workflow.
+Their example input hashes are generated from the included synthetic JSON.
+Actual signing keys, tokens, service-account files, tester details and runtime
+evidence stay outside this public catalog.
 
 These packages have local contract, negative-control, standalone-installation
 and disposable-workspace tests. Mocked remote readbacks and source fixtures do

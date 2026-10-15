@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_id": "example-notes",
-  "request": "Prepare an android release candidate; no provider mutations are authorized.",
+  "request": "Discover configuration for a synthetic android web-app wrapper; no provider mutations are authorized.",
   "repository": null,
   "ledger": null,
   "definition": null,
@@ -12,11 +12,11 @@
   "sources": [],
   "inputs": {
     "candidate_revision": "unresolved",
-    "app_id": "com.example.notes",
-    "application_id": "com.example.notes",
-    "version": "1.0.0",
-    "build_number": "1",
-    "target_stage": "prepare",
+    "app_id": null,
+    "application_id": null,
+    "version": null,
+    "build_number": null,
+    "target_stage": "discover",
     "track": "none",
     "artifact": null,
     "credential_refs": [
@@ -33,6 +33,13 @@
     ],
     "countries": [],
     "rollout_percent": 0,
-    "platform_variant": "android"
+    "platform_variant": "android",
+    "setup_mode": "wrap-web",
+    "requested_capabilities": [
+      "authentication",
+      "deep-links"
+    ],
+    "build_exposure_prefixes": [],
+    "discovery": null
   }
 }

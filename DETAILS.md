@@ -147,7 +147,7 @@ checks cannot authenticate a manual approval or make arbitrary captured data tru
 
 Canonical shared support lives in Define a Project (`scripts/project.py` and
 its contract), Manage a Project (`scripts/workflow.py`), and Plan Development
-(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 59
+(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 63
 standalone resources; `make resources` refreshes them, and check/build reject
 drift. Generated copies are packaged resources, not private runtime dependencies.
 All twenty skills can be installed separately. The guide explicitly reports a
@@ -164,10 +164,27 @@ and human acceptance are separate evidence levels.
 ## Store release specialists and public-content checks
 
 The Apple and Android release skills share an offline store contract helper.
-Apple owns `scripts/store_release.py`; resource synchronization copies it into
-Android and the project guide. The guide can route each platform directly and
+Apple owns `scripts/store_release.py` and `scripts/configuration.py`; resource
+synchronization copies them into Android and the project guide. The guide can route each platform directly and
 validates its store receipts with the same rules. Known-app releases do not need
 a new product definition, but supplied interview/definition history is checked.
+
+Before release, `discover` produces a checked configuration inventory and
+location/action/owner/verification setup plan; `configure` covers scoped local
+setup and web wrapping. Discovery reads project/dependency hints and environment
+names/locations without parsing `.env` values or signing files. Recognizable
+private files must be ignored and untracked before source hashing. Literal source
+references are checked for inventory coverage; arbitrary loaders, effective native
+settings and capabilities still require agent inspection. Native target/config,
+web output, SSR backend plan, secret exposure and wrapper sync/smoke proof are
+gated separately from provider milestones. See each skill's setup and contract
+guides for framework-specific configuration locations.
+
+Both store examples are synthetic blocked discovery intakes. `make resources`
+generates their `input_sha256` from their included sorted-key compact UTF-8 JSON;
+check/build reject stale values. The `hash-input` CLI computes the same digest
+for private runtime intake. File references hash actual bytes and the package
+builder generates ZIP checksums; these hashes are content identifiers.
 
 Store contracts bind the provider app and bundle/package IDs, version/build,
 source revision, exported artifact digest, target stage/track, audience, countries

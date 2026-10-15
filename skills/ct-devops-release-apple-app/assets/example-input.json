@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "project_id": "example-notes",
-  "request": "Prepare an apple release candidate; no provider mutations are authorized.",
+  "request": "Discover configuration for a synthetic apple web-app wrapper; no provider mutations are authorized.",
   "repository": null,
   "ledger": null,
   "definition": null,
@@ -12,11 +12,11 @@
   "sources": [],
   "inputs": {
     "candidate_revision": "unresolved",
-    "app_id": "1234567890",
-    "application_id": "com.example.notes",
-    "version": "1.0.0",
-    "build_number": "1",
-    "target_stage": "prepare",
+    "app_id": null,
+    "application_id": null,
+    "version": null,
+    "build_number": null,
+    "target_stage": "discover",
     "track": "none",
     "artifact": null,
     "credential_refs": [
@@ -33,6 +33,13 @@
     ],
     "countries": [],
     "rollout_percent": 0,
-    "platform_variant": "ios"
+    "platform_variant": "ios",
+    "setup_mode": "wrap-web",
+    "requested_capabilities": [
+      "authentication",
+      "deep-links"
+    ],
+    "build_exposure_prefixes": [],
+    "discovery": null
   }
 }

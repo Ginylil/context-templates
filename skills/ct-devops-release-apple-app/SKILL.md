@@ -1,14 +1,22 @@
 ---
 name: ct-devops-release-apple-app
-description: "Prepare or execute Apple app releases through signed uploads, TestFlight internal and external testing, App Review, and App Store publication with exact candidate evidence and scoped authorization."
+description: "Discover configuration, set up or wrap an existing web app, and release Apple apps through signed uploads, TestFlight internal and external testing, App Review, and App Store publication with exact candidate evidence and scoped authorization."
 ---
 
 # Release an Apple app
 
-Advance the actual Apple release lane to one requested milestone: `prepare`, `upload`,
+Advance the actual Apple lane through `discover` or `configure`, then `prepare`, `upload`,
 `testflight-internal`, `testflight-external`, `submit-review`, or `production`.
 Existing apps do not need a new product definition to release a known candidate.
 Read repository instructions and [platform guide](references/platform.md) before execution.
+
+For missing setup or a web app that needs a native shell, use the
+[configuration and wrapping guide](references/setup.md). Discover the actual
+stack and loader first; preserve existing native/framework choices. Return
+exact missing settings with location, action, owner, safe storage, verification
+and status. Configure only the selected authorized route; `discover` is read-only.
+Neither discovered settings nor a successful configuration check authorizes an
+upload or proves native behavior, Apple access, or store acceptance.
 
 ## Establish the candidate and authority
 

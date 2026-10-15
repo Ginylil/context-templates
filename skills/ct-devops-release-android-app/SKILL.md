@@ -1,13 +1,21 @@
 ---
 name: ct-devops-release-android-app
-description: "Prepare or execute Android app releases through signed bundles, Play internal, closed and open testing, and production rollout with exact candidate evidence and scoped authorization."
+description: "Discover configuration, set up or wrap an existing web app, and release Android apps through signed bundles, Play internal, closed and open testing, and production rollout with exact candidate evidence and scoped authorization."
 ---
 
 # Release an Android app
 
-Advance the actual Play lane to `prepare`, `upload`, `play-internal`, `play-closed`,
+Advance the actual Play lane through `discover` or `configure`, then `prepare`, `upload`, `play-internal`, `play-closed`,
 `play-open`, or `production`. Existing apps do not need a new product definition.
 Read repository instructions and [the platform guide](references/platform.md).
+
+For missing setup or a web app that needs a native shell, use the
+[configuration and wrapping guide](references/setup.md). Discover the actual
+stack and loader first; preserve existing native/framework choices. Return
+exact missing settings with location, action, owner, safe storage, verification
+and status. Configure only the selected authorized route; `discover` is read-only.
+Neither discovered settings nor a successful configuration check authorizes an
+upload or proves native behavior, Play access, or store acceptance.
 
 ## Establish the candidate and authority
 

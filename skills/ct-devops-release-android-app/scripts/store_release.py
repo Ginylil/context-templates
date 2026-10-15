@@ -1,8 +1,16 @@
 """Shared, offline store handoff checks; no credentials or provider clients."""
 from __future__ import annotations
 import datetime as dt
+import importlib.util
+from pathlib import Path
 import re
 from urllib.parse import urlparse, parse_qs
+
+
+def configuration_module():
+    spec = importlib.util.spec_from_file_location('ct_store_configuration', Path(__file__).with_name('configuration.py'))
+    result = importlib.util.module_from_spec(spec); spec.loader.exec_module(result)
+    return result
 
 
 def check_input(rule, value, context, api):
@@ -10,14 +18,14 @@ def check_input(rule, value, context, api):
     data = value['inputs']
     platform = rule['platform']
     pattern = r'[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+' if platform == 'apple' else r'[A-Za-z][A-Za-z0-9_]*(?:\.[A-Za-z][A-Za-z0-9_]*)+'
-    require(re.fullmatch(pattern, data['application_id']),
+    require(data['application_id'] is None or re.fullmatch(pattern, data['application_id']),
             'store: application_id must be a bundle/package identifier')
     if platform == 'apple':
-        require(re.fullmatch(r'[0-9]+', data['app_id']), 'store: expected App Store Connect numeric app ID')
-        require(re.fullmatch(r'[0-9]+(?:\.[0-9]+){0,2}', data['build_number']), 'store: invalid Apple build number')
+        require(data['app_id'] is None or re.fullmatch(r'[0-9]+', data['app_id']), 'store: expected App Store Connect numeric app ID')
+        require(data['build_number'] is None or re.fullmatch(r'[0-9]+(?:\.[0-9]+){0,2}', data['build_number']), 'store: invalid Apple build number')
     else:
-        require(data['app_id'] == data['application_id'], 'store: Android app ID must equal package identifier')
-        require(data['build_number'].isdigit() and 0 < int(data['build_number']) <= 2100000000,
+        require(data['app_id'] is None or data['application_id'] is None or data['app_id'] == data['application_id'], 'store: Android app ID must equal package identifier')
+        require(data['build_number'] is None or (data['build_number'].isdigit() and 0 < int(data['build_number']) <= 2100000000),
                 'store: invalid Android version code')
     require(0 <= data['rollout_percent'] <= 100, 'store: invalid rollout percentage')
     require(all(re.fullmatch(r'[A-Z]{2}', c) for c in data['countries']), 'store: expected ISO country codes')
@@ -34,14 +42,19 @@ def check_input(rule, value, context, api):
         require(path.suffix.lower() in allowed,
                 'store: expected exported Apple artifact or Android App Bundle; no credentials')
     stage, track = data['target_stage'], data['track']
-    fixed = ({'prepare': 'none', 'upload': 'none', 'testflight-internal': 'testflight-internal',
+    fixed = ({'discover': 'none', 'configure': 'none', 'prepare': 'none', 'upload': 'none', 'testflight-internal': 'testflight-internal',
               'testflight-external': 'testflight-external', 'submit-review': 'app-store', 'production': 'app-store'}
-             if platform == 'apple' else {'prepare': 'none', 'upload': 'none', 'play-internal': 'internal',
+             if platform == 'apple' else {'discover': 'none', 'configure': 'none', 'prepare': 'none', 'upload': 'none', 'play-internal': 'internal',
                                          'play-open': 'beta', 'production': 'production'})
     if stage in fixed:
         require(track == fixed[stage], 'store: stage and track disagree')
     else:
         require(track not in ('none', 'internal', 'beta', 'production'), 'store: expected actual closed-track ID')
+    for name in data['requested_capabilities']:
+        require(re.fullmatch(r'[a-z][a-z0-9-]*', name), 'setup: use stable capability names')
+    for prefix in data['build_exposure_prefixes']:
+        require(re.fullmatch(r'[A-Z][A-Z0-9_]*_', prefix), 'setup: invalid client-exposure prefix')
+    configuration_module().check_input(rule, value, context, api)
 
 
 def readback(key, result, value, context, rule, api, *, testing=False):
@@ -150,9 +163,26 @@ def decision(source_id, kind, rule, value, context, api):
         require(record['accepted'] is True, 'store: candidate was not accepted')
 
 
+def check_report(rule, result, value, context, api):
+    configuration_module().check_report(rule, result, value, context, api)
+
+
 def check_output(rule, result, value, context, api):
     require = api['require']
     data = value['inputs']
+    configuration_module().check_ready(rule, result, value, context, api)
+    if data['target_stage'] == 'discover':
+        return
+    for check in ({'type': 'command', 'field': 'build_check', 'exit': 'zero'},
+                  {'type': 'required-values', 'items': 'checks', 'field': 'id', 'values': ['tests', 'signing', 'compliance', 'recovery', 'tracking']},
+                  {'type': 'all-status', 'items': 'checks', 'field': 'status', 'allowed': ['passed']},
+                  {'type': 'scenario-evidence', 'items': 'checks', 'status_field': 'status', 'evidence_field': 'evidence_ids'}):
+        api['rule_valid'](check, result, value, context)
+    if data['target_stage'] == 'configure':
+        require(result['store_readback'] is None and result['testing_readback'] is None and result['artifact_sha256'] is None and result['device_proof'] is None and result['acceptance_source'] is None,
+                'setup: configure must not claim a store/export milestone')
+        return
+    require(all(data[k] is not None for k in ('app_id', 'application_id', 'version', 'build_number')), 'store: candidate identifiers missing')
     require(data['artifact'] is not None, 'store: release artifact is missing')
     require(result['artifact_sha256'] == data['artifact']['sha256'], 'store: output artifact digest mismatch')
     stage = data['target_stage']

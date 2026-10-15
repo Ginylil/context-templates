@@ -52,3 +52,7 @@
   `skills/ct-dynamic-uml/`. Regenerate focused-skill resources and HTML review
   examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
+
+- Store release helpers are canonical in the Apple release skill. Use `make resources`
+  to refresh Android/manager copies and synthetic example input hashes; never copy
+  private runtime discovery, app/configuration data or credentials into public fixtures.

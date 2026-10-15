@@ -9,20 +9,26 @@
         "type": "string"
       },
       "app_id": {
-        "type": "string"
+        "type": "string",
+        "nullable": true
       },
       "application_id": {
-        "type": "string"
+        "type": "string",
+        "nullable": true
       },
       "version": {
-        "type": "string"
+        "type": "string",
+        "nullable": true
       },
       "build_number": {
-        "type": "string"
+        "type": "string",
+        "nullable": true
       },
       "target_stage": {
         "type": "string",
         "enum": [
+          "discover",
+          "configure",
           "prepare",
           "upload",
           "testflight-internal",
@@ -73,6 +79,8 @@
       "authorized_stage": {
         "type": "string",
         "enum": [
+          "discover",
+          "configure",
           "prepare",
           "upload",
           "testflight-internal",
@@ -110,6 +118,37 @@
           "visionos",
           "watchos"
         ]
+      },
+      "setup_mode": {
+        "type": "string",
+        "enum": [
+          "existing-native",
+          "wrap-web"
+        ]
+      },
+      "requested_capabilities": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "build_exposure_prefixes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "discovery": {
+        "type": "object",
+        "fields": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "nullable": true
       }
     }
   },
@@ -183,6 +222,8 @@
       "outcome": {
         "type": "string",
         "enum": [
+          "discover",
+          "configure",
           "prepare",
           "upload",
           "testflight-internal",
@@ -201,6 +242,206 @@
           "type": "string"
         },
         "min_items": 1
+      },
+      "configuration": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "area": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "purpose": {
+              "type": "string"
+            },
+            "required": {
+              "type": "boolean"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "configured",
+                "missing",
+                "invalid",
+                "not-applicable",
+                "unverified"
+              ]
+            },
+            "location": {
+              "type": "string"
+            },
+            "setup_action": {
+              "type": "string"
+            },
+            "verification": {
+              "type": "string"
+            },
+            "storage": {
+              "type": "string",
+              "enum": [
+                "public-config",
+                "local-env",
+                "ci-secret",
+                "keychain",
+                "secret-manager",
+                "console"
+              ]
+            },
+            "sensitive": {
+              "type": "boolean"
+            },
+            "bundled": {
+              "type": "boolean"
+            },
+            "user_action": {
+              "type": "boolean"
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              }
+            }
+          }
+        },
+        "unique_by": "id"
+      },
+      "setup_plan": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "configuration_id": {
+              "type": "string"
+            },
+            "action": {
+              "type": "string"
+            },
+            "where": {
+              "type": "string"
+            },
+            "verification": {
+              "type": "string"
+            },
+            "owner": {
+              "type": "string",
+              "enum": [
+                "agent",
+                "user"
+              ]
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "pending",
+                "done",
+                "blocked"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              }
+            }
+          }
+        },
+        "unique_by": "configuration_id"
+      },
+      "environment_loader": {
+        "type": "string"
+      },
+      "wrapper": {
+        "type": "object",
+        "fields": {
+          "mode": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "unsupported",
+              "existing-native",
+              "capacitor",
+              "expo",
+              "react-native",
+              "custom"
+            ]
+          },
+          "source_kind": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "native",
+              "static",
+              "ssr",
+              "remote"
+            ]
+          },
+          "delivery": {
+            "type": "string",
+            "enum": [
+              "undecided",
+              "native",
+              "bundled",
+              "hosted"
+            ]
+          },
+          "config_files": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "web_output_dir": {
+            "type": "string",
+            "nullable": true
+          },
+          "runtime_url": {
+            "type": "string",
+            "nullable": true
+          },
+          "backend_plan": {
+            "type": "string"
+          },
+          "native_targets": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "ios",
+                "macos",
+                "tvos",
+                "visionos",
+                "watchos",
+                "android"
+              ]
+            }
+          },
+          "sync_check": {
+            "type": "string",
+            "ref": "evidence",
+            "nullable": true
+          },
+          "smoke_check": {
+            "type": "string",
+            "ref": "evidence",
+            "nullable": true
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          }
+        }
       }
     }
   },
@@ -213,37 +454,6 @@
     {
       "type": "repository-revision",
       "field": "candidate_revision"
-    },
-    {
-      "type": "command",
-      "field": "build_check",
-      "exit": "zero"
-    },
-    {
-      "type": "required-values",
-      "items": "checks",
-      "field": "id",
-      "values": [
-        "tests",
-        "signing",
-        "compliance",
-        "recovery",
-        "tracking"
-      ]
-    },
-    {
-      "type": "all-status",
-      "items": "checks",
-      "field": "status",
-      "allowed": [
-        "passed"
-      ]
-    },
-    {
-      "type": "scenario-evidence",
-      "items": "checks",
-      "status_field": "status",
-      "evidence_field": "evidence_ids"
     },
     {
       "type": "equals-input",

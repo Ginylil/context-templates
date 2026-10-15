@@ -34,6 +34,13 @@ class StoreReleaseTests(unittest.TestCase):
         self.f = fixture_module.EngineeringLifecycleTests(); self.f.setUp()
         self.addCleanup(self.f.doCleanups)
         self.base = self.f.base
+        for relative in ('ios/Fixture.xcodeproj/project.pbxproj', 'android/app/build.gradle', 'android/app/src/main/AndroidManifest.xml'):
+            path = self.f.repository / relative; path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text('Synthetic native configuration fixture; not a compiled platform project.\n')
+        final = self.base / 'configured-source.json'
+        workflow.record([sys.executable, 'check.py'], self.f.repository, final)
+        self.f.evidence = [e for e in self.f.evidence if e['kind'] != 'command' or e['id'] == 'before']
+        self.f.evidence += [{'id': name, 'kind': 'command', 'reference': {'path': final.name, 'sha256': workflow.file_digest(final)}} for name in ('after', 'check')]
 
     def case(self, platform='apple', stage='prepare', device=False):
         policy, intake, output = [asset(platform, x) for x in ('contract.json', 'example-input.json', 'example-output.json')]
@@ -41,12 +48,13 @@ class StoreReleaseTests(unittest.TestCase):
                                 'working_tree_sha256': workflow.tree_digest(self.f.repository)}
         intake['sources'] = [{'id': 'permission', **self.f.source_ref}, {'id': 'acceptance', **self.f.source_ref}]
         artifact = self.f.write('candidate.ipa' if platform == 'apple' else 'candidate.aab', 'Synthetic artifact fixture; not an application binary.')
-        tracks = {'prepare': 'none', 'upload': 'none', 'testflight-internal': 'testflight-internal',
+        tracks = {'discover': 'none', 'configure': 'none', 'prepare': 'none', 'upload': 'none', 'testflight-internal': 'testflight-internal',
                   'testflight-external': 'testflight-external', 'submit-review': 'app-store',
                   'play-internal': 'internal', 'play-closed': 'alpha', 'play-open': 'beta',
                   'production': 'app-store' if platform == 'apple' else 'production'}
         data = intake['inputs']
-        data.update(candidate_revision=self.f.revision, artifact=artifact, target_stage=stage, track=tracks[stage],
+        data.update(app_id='1234567890' if platform == 'apple' else 'com.example.notes', application_id='com.example.notes', version='1.0.0', build_number='1',
+                    setup_mode='existing-native', requested_capabilities=[], candidate_revision=self.f.revision, artifact=artifact, target_stage=stage, track=tracks[stage],
                     authorization_source=None if stage == 'prepare' else 'permission',
                     authorized_stage=None if stage == 'prepare' else stage, require_device_proof=device,
                     countries=['US'] if stage == 'production' else [], rollout_percent=100 if stage != 'prepare' else 0)
@@ -58,13 +66,31 @@ class StoreReleaseTests(unittest.TestCase):
         acceptance = dict(common, kind='ct-store-acceptance.v1', accepted=True)
         intake['sources'] = [{'id': 'permission', **self.f.write('authorization.json', permission)},
                              {'id': 'acceptance', **self.f.write('acceptance.json', acceptance)}]
+        cfg = workflow.store_module().configuration_module()
+        snapshot = cfg.discover(self.f.repository, platform, vars(workflow))
+        data['discovery'] = self.f.write('discovery.json', snapshot)
         output.update(status='ready', blockers=[], summary='Synthetic contract fixture; no store contacted.', evidence=copy.deepcopy(self.f.evidence))
         result = output['result']
         result.update(candidate_revision=self.f.revision, artifact_sha256=artifact['sha256'], build_check='after', outcome=stage,
                       checks=[{'id': name, 'name': 'Synthetic ' + name, 'status': 'passed', 'evidence_ids': ['after']}
                               for name in ('tests', 'signing', 'compliance', 'recovery', 'tracking')])
+        cfg_files = ['ios/Fixture.xcodeproj/project.pbxproj'] if platform == 'apple' else ['android/app/build.gradle', 'android/app/src/main/AndroidManifest.xml']
+        result.update(environment_loader='Native fixture defaults; no dotenv loader.',
+            configuration=[{'id': area, 'area': area, 'name': 'FIXTURE_' + area.upper().replace('-', '_'),
+                'purpose': 'Synthetic ' + area + ' configuration.', 'required': True, 'status': 'configured',
+                'location': cfg_files[0], 'setup_action': 'No action; synthetic configured fixture.',
+                'verification': 'Inspect synthetic fixture proof.', 'storage': 'public-config', 'sensitive': False,
+                'bundled': False, 'user_action': False, 'evidence_ids': ['after']} for area in cfg.AREAS],
+            setup_plan=[], wrapper={'mode': 'existing-native', 'source_kind': 'native', 'delivery': 'native',
+                'config_files': cfg_files, 'web_output_dir': None, 'runtime_url': None, 'backend_plan': 'not-applicable',
+                'native_targets': [data['platform_variant']], 'sync_check': None, 'smoke_check': 'after',
+                'limitations': ['Synthetic source fixture; not a signed app or device.']})
+        if stage in ('discover', 'configure'):
+            data['artifact'] = None; result['artifact_sha256'] = None
+        if stage == 'discover':
+            result['build_check'] = None; result['checks'] = []
         values = [policy, intake, output]
-        if stage != 'prepare': self.receipt(values, platform, stage, 'store_readback')
+        if stage not in ('prepare', 'discover', 'configure'): self.receipt(values, platform, stage, 'store_readback')
         if stage == 'production':
             self.receipt(values, platform, 'testflight-internal' if platform == 'apple' else 'play-internal', 'testing_readback')
             result['acceptance_source'] = 'acceptance'

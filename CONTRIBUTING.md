@@ -99,9 +99,13 @@ Tests must also exercise ready paths using disposable source trees and actual
 local command capture, while remote provider behavior uses mocked readbacks.
 Do not present either as live provider or human-acceptance proof.
 
-Store release checks share `scripts/store_release.py` from the Apple release
-skill, copied into Android and the manager by `make resources`. Keep its examples
-synthetic and test phase contradictions, candidate identity, scoped authorization,
+Store release checks share `scripts/store_release.py` and `scripts/configuration.py`
+from the Apple release skill, copied into Android and the manager by `make resources`.
+The same generator derives both store example input hashes from their synthetic
+input JSON; never copy an application digest or hand-edit those generated fields.
+Test discovery/configuration and web-wrapper failure paths with disposable files
+and real command evidence, keeping actual native/store proof limitations explicit.
+Keep examples synthetic and test phase contradictions, candidate identity, scoped authorization,
 review exemptions, tester access and separate device proof. Keep signing keys,
 keystores, `.p8` files, service-account JSON and credential values outside packages.
 The secret scan reports locations/rules without matched values; do not weaken it

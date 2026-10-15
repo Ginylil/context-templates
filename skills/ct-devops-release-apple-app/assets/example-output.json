@@ -2,7 +2,7 @@
   "schema_version": 1,
   "project_id": "example-notes",
   "skill": "ct-devops-release-apple-app",
-  "input_sha256": "1b2a868a3f87054135b2266d6055b48ee18735d84ec9d2e6a1db3fb29ce0d88a",
+  "input_sha256": "f1fa0ccedfcbf8c0cb310412c9f9220b240c06ea963cb2456581539a3a057d01",
   "status": "blocked",
   "summary": "Synthetic blocked example; no build, provider action or account lookup was performed.",
   "constraints": [
@@ -12,8 +12,8 @@
   "evidence": [],
   "blockers": [
     {
-      "reason": "Source checkout, release artifact and readiness proof are unavailable.",
-      "next_action": "Inspect the actual repository and record its candidate, artifact and readiness checks."
+      "reason": "No source checkout or generated configuration discovery was supplied.",
+      "next_action": "Inspect the actual Git checkout with configuration.py, then list each missing setting with its location, setup action and verification."
     }
   ],
   "result": {
@@ -29,6 +29,24 @@
     "recovery": "No provider mutation attempted.",
     "limitations": [
       "Synthetic shape example; no signing, store or device proof."
-    ]
+    ],
+    "configuration": [],
+    "setup_plan": [],
+    "environment_loader": "unknown",
+    "wrapper": {
+      "mode": "unknown",
+      "source_kind": "unknown",
+      "delivery": "undecided",
+      "config_files": [],
+      "web_output_dir": null,
+      "runtime_url": null,
+      "backend_plan": "Discover the actual web runtime and backend boundaries.",
+      "native_targets": [],
+      "sync_check": null,
+      "smoke_check": null,
+      "limitations": [
+        "No repository was supplied or inspected."
+      ]
+    }
   }
 }

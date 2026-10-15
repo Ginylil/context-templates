@@ -19,8 +19,8 @@ ledger/definition pairs are validated; all questions reuse the scope's 10/2 budg
 The bundled [definition contract](definition-contract.md) documents ledger commands.
 
 `inputs` binds candidate revision, `platform_variant` (Apple OS or Android),
-provider `app_id`, bundle/package `application_id`,
-marketing `version`, `build_number`, requested `target_stage`, actual `track`,
+nullable provider `app_id`, bundle/package `application_id`,
+nullable marketing `version` and `build_number`, requested `target_stage`, actual `track`,
 nullable exported `artifact`, logical `credential_refs`, `authorization_source`,
 `authorized_stage`, `require_device_proof`, `audience`, `countries`, and `rollout_percent`.
 Apple app IDs are App Store Connect numeric IDs; Android app IDs equal the package
@@ -30,12 +30,21 @@ Credential references contain only `provider` (`env`, `keychain`, `secret-manage
 and a logical `name`; inline values and extra fields are rejected. These fields
 name prerequisite stores, not a credential lookup or an authorization grant.
 Keep tester identities and signing/account details out of public examples.
+For new setup, IDs/version/build may be null until discovered; actual release
+phases require all four. `setup_mode` is `existing-native` or `wrap-web`;
+`requested_capabilities` contains applicable kebab-case areas such as
+`authentication` or `deep-links`. `build_exposure_prefixes` records any custom
+uppercase client-inlining prefixes, in addition to the standard checked ones.
+Nullable `discovery` references the generated snapshot by path and actual file
+SHA-256. Follow [the setup guide](setup.md) for the selected platform/framework.
 
 Run using an absolute skill path (use `py -3` instead of `python3` on Windows):
 
 ```text
+python3 <skill>/scripts/configuration.py --repository <repository> --platform android --output /private/discovery.json
 python3 <skill>/scripts/workflow.py inspect-repository <repository>
 python3 <skill>/scripts/workflow.py validate-input /private/input.json
+python3 <skill>/scripts/workflow.py hash-input /private/input.json
 python3 <skill>/scripts/workflow.py record --cwd <repository> --output /private/build-proof.json --timeout 60 -- <explicit-build-command>
 python3 <skill>/scripts/workflow.py validate-output /private/input.json /private/output.json
 python3 <skill>/scripts/workflow.py render /private/input.json /private/output.json --output /private/report.md
@@ -47,19 +56,87 @@ Keep proof outside the measured checkout or in an already ignored private direct
 For longer builds use the repository's established evidence capture; do not claim
 a 60-second timeout is a build failure diagnosis. New output paths refuse overwrite.
 
+## Configuration discovery and setup report
+
+`configuration.py` reads Git-listed project structure, recognized dependency names
+and literal environment references from source. It reports names and locations,
+never environment values or private-key contents. Keep `.env` files and signing
+files ignored and untracked: recognizable private filenames in Git's public set
+block discovery and store source binding before content hashing. Public
+`.env.example`/`.env.template` files must contain placeholders only and remain
+part of the ordinary source fingerprint. Run this preflight before capturing
+source identity. Private discovery output includes absolute local paths; never
+commit it to the public catalog. No project script, install, build, dashboard
+request or secret lookup runs during discovery.
+
+The snapshot includes repository identity, configuration paths, detected framework
+hints, literal environment names/source paths, environment file paths/ignore state,
+skipped sources and limitations. Validation regenerates it and rejects drift.
+This is a bounded heuristic, not a parser for arbitrary loaders, CI variables or
+platform settings: the agent must review those manually and include every
+applicable setting/capability in the inventory.
+
+`result.configuration` is an inventory with unique `id`, `area`, `name`, `purpose`,
+`required`, `status`, exact `location`, `setup_action`, `verification`, `storage`,
+`sensitive`, `bundled`, `user_action`, and `evidence_ids`. Status is `configured`,
+`missing`, `invalid`, `not-applicable` or `unverified`. The required baseline areas
+are app-identity, toolchain, runtime, native-project, build-export, signing,
+upload-auth, store-record, store-metadata, privacy-permissions, testing, recovery,
+and tracking, plus requested capabilities. Multiple settings may share an area.
+Discovered literal environment names must each have a runtime row. Mark an
+inapplicable item explicitly with its reason; do not use that to skip core setup.
+
+`result.setup_plan` provides one actionable entry per unresolved required item:
+`configuration_id`, `action`, `where`, `verification`, `owner` (`agent` or `user`),
+`status` (`pending`, `done`, `blocked`), `evidence_ids`. Configured rows and done
+steps need evidence. Report exact files, loader, target or dashboard section,
+never merely "configure .env". `environment_loader` describes the real loading
+mechanism, precedence and environment. Configured local secrets require an
+existing ignored file and a named loader; secrets must never use client-exposed
+prefixes or be bundled. CI injection does not make a shipped value private.
+
+`result.wrapper` records `mode` (unknown/unsupported/existing-native/capacitor/
+expo/react-native/custom), `source_kind` (unknown/native/static/ssr/remote),
+`delivery` (undecided/native/bundled/hosted), actual `config_files`, nullable
+`web_output_dir` and `runtime_url`, `backend_plan`, `native_targets`, nullable
+command-evidence IDs `sync_check` and `smoke_check`, and nonempty `limitations`.
+A web wrap needs a supported route, selected native target, existing config files,
+passing sync/smoke command evidence and either built web output containing
+`index.html` or a supported production HTTPS hosted route. Capacitor hosted
+`server.url` is rejected as a production route. SSR needs an explicit backend
+plan. Capacitor targets are limited to iOS/Android; other platforms need their
+own selected route. Existing native routes also require passing native smoke
+command evidence. These structural checks supplement agent inspection of effective native
+settings and actual runtime behavior; they cannot establish those facts alone.
+
+A ready `discover` means the inventory and actionable setup plan are complete;
+missing settings can remain. It requires current discovery and cannot claim an
+export or provider milestone. A ready `configure` additionally requires resolved
+required settings, applicable core native configuration, matching native target,
+build proof, native smoke command evidence and the five check areas; it still cannot claim store/testing
+readback or an exported artifact. Later phases reuse those configuration gates
+and add their candidate/export/provider checks. Keep `track` as `none` for
+`discover` and `configure`.
+
 ## Output and milestone checks
 
 The envelope is `schema_version`, `project_id`, `skill`, `input_sha256`, `status`,
 `summary`, `constraints`, `evidence`, `blockers`, `result`. The canonical input
-SHA-256 is UTF-8 sorted-key compact JSON, preserving Unicode. `ready` has no
+SHA-256 is UTF-8 sorted-key compact JSON, preserving Unicode. Compute it with
+`hash-input`; never paste a digest from another project. Both public example
+`input_sha256` values are generated from their included synthetic intake JSON by
+`make resources`; check/build reject stale generated values. File/artifact
+references instead hash actual bytes; package ZIP digests come from `make build`.
+A digest identifies content and is not a credential. Example files contain no
+real candidate, private app identity or provider receipt. `ready` has no
 blockers; `blocked` has actionable `{reason, next_action}` entries and never means
 release completion. Preserve intake/definition constraints. Evidence entries are
 `{id, kind, reference}`, where kind is command, artifact or observation. Use `record`
 for command proofs; see the bundled workflow's help and the platform guide.
 
-Result binds the candidate and actual artifact digest. It includes a passing
+For `configure` and release phases, result includes a passing
 `build_check`, five checked areas (`tests`, `signing`, `compliance`, `recovery`,
-`tracking`) with evidence, nullable `store_readback`, `testing_readback`,
+`tracking`) with evidence. Release phases also bind the actual candidate/export. Result has nullable `store_readback`, `testing_readback`,
 `device_proof` and `acceptance_source`, exact requested `outcome`, recovery and
 limitations. A ready outcome equals the requested phase. Record unresolved
 required checks or permissions as blocked rather than relabeling them passed.
