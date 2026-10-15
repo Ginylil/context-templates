@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "input": {
+    "schema_version": 1,
+    "project_id": "follow-up-notes",
+    "idea": "A small web app that helps freelancers record client follow-ups and find what to do next.",
+    "sources": [
+      {
+        "id": "user-request",
+        "reference": "Synthetic example user request",
+        "summary": "Freelancers need an authenticated browser-based place for client follow-ups."
+      }
+    ],
+    "constraints": [
+      "Notes must require authenticated access.",
+      "The first version must work in a browser."
+    ],
+    "decisions": [
+      {
+        "id": "audience",
+        "topic": "Initial audience",
+        "depends_on": [],
+        "blocking": true,
+        "resolution": {
+          "answer": "Freelancers managing their own client follow-ups.",
+          "source": "Synthetic example user request"
+        }
+      },
+      {
+        "id": "sharing",
+        "topic": "Collaboration scope",
+        "depends_on": [
+          "audience"
+        ],
+        "blocking": true,
+        "resolution": null
+      },
+      {
+        "id": "capture",
+        "topic": "How notes enter the app",
+        "depends_on": [
+          "audience"
+        ],
+        "blocking": true,
+        "resolution": null
+      }
+    ],
+    "tracking": {
+      "system": "github",
+      "repository": null,
+      "project": null
+    }
+  },
+  "events": [
+    {
+      "id": "batch-one",
+      "type": "ask",
+      "questions": [
+        {
+          "id": "Q1",
+          "decision_id": "sharing",
+          "prompt": "Does the first version need collaboration?",
+          "options": [
+            "Personal use only",
+            "Shared workspaces"
+          ],
+          "recommended_option": 0
+        },
+        {
+          "id": "Q2",
+          "decision_id": "capture",
+          "prompt": "How should users add follow-up notes in the first version?",
+          "options": [
+            "Type them manually",
+            "Import them from email"
+          ],
+          "recommended_option": 0
+        }
+      ]
+    },
+    {
+      "id": "answers-one",
+      "type": "answer",
+      "answers": [
+        {
+          "question_id": "Q1",
+          "answer": "Personal use only; no shared workspaces in the first version.",
+          "source": "Synthetic user reply to Q1"
+        },
+        {
+          "question_id": "Q2",
+          "answer": "Manual entry is enough initially.",
+          "source": "Synthetic user reply to Q2"
+        }
+      ]
+    }
+  ]
+}

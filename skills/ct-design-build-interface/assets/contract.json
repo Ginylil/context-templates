@@ -1,0 +1,191 @@
+{
+  "skill": "ct-design-build-interface",
+  "purpose": "A rendered, interactive engineering candidate with requirement and viewport coverage.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "user_flow": {
+        "type": "string"
+      },
+      "requirement_ids": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "ref": "requirement"
+        },
+        "min_items": 0
+      },
+      "viewports": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          }
+        },
+        "min_items": 1,
+        "unique_by": "id"
+      },
+      "design_constraints": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "viewports": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "design_rationale": {
+        "type": "string"
+      },
+      "surfaces": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            },
+            "viewport_id": {
+              "type": "string"
+            },
+            "before": {
+              "type": "string",
+              "ref": "evidence",
+              "nullable": true
+            },
+            "after": {
+              "type": "string",
+              "ref": "evidence"
+            },
+            "interaction_check": {
+              "type": "string",
+              "ref": "evidence"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "not-run"
+              ]
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "build_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "staging_handoff": {
+        "type": "string"
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "equals-input",
+      "field": "viewports",
+      "input_field": "viewports"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "design_rationale",
+        "surfaces"
+      ]
+    },
+    {
+      "type": "coverage",
+      "items": "surfaces",
+      "field": "requirement_ids",
+      "input_field": "requirement_ids"
+    },
+    {
+      "type": "all-status",
+      "items": "surfaces",
+      "field": "status",
+      "allowed": [
+        "passed"
+      ]
+    },
+    {
+      "type": "cover-target",
+      "items": "surfaces",
+      "field": "viewport_id",
+      "target": "viewports",
+      "target_field": "id"
+    },
+    {
+      "type": "references",
+      "items": "surfaces",
+      "fields": [
+        "viewport_id"
+      ],
+      "target": "viewports",
+      "target_field": "id"
+    },
+    {
+      "type": "command",
+      "field": "build_check",
+      "exit": "zero"
+    }
+  ]
+}

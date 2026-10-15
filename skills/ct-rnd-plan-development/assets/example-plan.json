@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "plan_id": "first-release",
+  "definition_sha256": "25ad0cecdd55feacb928d830c3e1a73c3ad0c380e2996e98f1aada4e92fb36b0",
+  "ledger_sha256": "5d034509ba37b4eb472e319254daf80c6a4c5e59563428e2fc398955cdbedf4e",
+  "tracking": {
+    "system": "github",
+    "repository": "example/follow-up-notes",
+    "project": "https://github.com/orgs/example/projects/1"
+  },
+  "tasks": [
+    {
+      "id": "save-private-note",
+      "title": "Save and reload an owner-private note",
+      "outcome": "Save and reload an owner-private note",
+      "depends_on": [],
+      "status": "backlog",
+      "acceptance": [
+        {
+          "id": "prove-record-follow-up",
+          "requirement_ids": [
+            "record-follow-up"
+          ],
+          "criterion": "An authenticated user can save a note with a client and follow-up date, then find it after reloading.",
+          "verification": "Exercise create, reload, and read in a browser acceptance test."
+        },
+        {
+          "id": "prove-isolate-notes",
+          "requirement_ids": [
+            "isolate-notes"
+          ],
+          "criterion": "Another user cannot list or retrieve the owner\u2019s notes.",
+          "verification": "Use two test users and verify list isolation and denied direct-ID access."
+        }
+      ]
+    },
+    {
+      "id": "list-follow-ups",
+      "title": "Find upcoming follow-ups in date order",
+      "outcome": "Find upcoming follow-ups in date order",
+      "depends_on": [
+        "save-private-note"
+      ],
+      "status": "backlog",
+      "acceptance": [
+        {
+          "id": "prove-find-next-action",
+          "requirement_ids": [
+            "find-next-action"
+          ],
+          "criterion": "The upcoming list places an earlier follow-up before a later one.",
+          "verification": "Create two dated notes and assert their displayed order."
+        }
+      ]
+    }
+  ]
+}

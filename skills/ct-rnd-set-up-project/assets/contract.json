@@ -1,0 +1,149 @@
+{
+  "skill": "ct-rnd-set-up-project",
+  "purpose": "A reproducible project foundation with captured setup, test, and build evidence.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "target_path": {
+        "type": "string"
+      },
+      "stack": {
+        "type": "string"
+      },
+      "commands": {
+        "type": "object",
+        "fields": {
+          "setup": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          },
+          "develop": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          },
+          "test": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          },
+          "build": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          }
+        }
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "target_path": {
+        "type": "string"
+      },
+      "created_paths": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      },
+      "setup_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "test_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "build_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "ci_artifact": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "instruction_artifact": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "target_path",
+      "input_field": "target_path"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "created_paths",
+        "ci_artifact",
+        "instruction_artifact"
+      ]
+    },
+    {
+      "type": "command",
+      "field": "setup_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command",
+      "field": "test_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command",
+      "field": "build_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command-matches-input",
+      "field": "setup_check",
+      "input_field": "commands.setup"
+    },
+    {
+      "type": "command-matches-input",
+      "field": "test_check",
+      "input_field": "commands.test"
+    },
+    {
+      "type": "command-matches-input",
+      "field": "build_check",
+      "input_field": "commands.build"
+    },
+    {
+      "type": "command-cwd-input",
+      "field": "setup_check",
+      "input_field": "target_path"
+    },
+    {
+      "type": "command-cwd-input",
+      "field": "test_check",
+      "input_field": "target_path"
+    },
+    {
+      "type": "command-cwd-input",
+      "field": "build_check",
+      "input_field": "target_path"
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "skill": "ct-rnd-improve-agent-setup",
+  "purpose": "A small agent-workflow repair with demonstrated benefit.",
+  "requires_definition": false,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "observed_failure": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "proposed_change": {
+        "type": "string"
+      },
+      "verification_argv": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "failure_mechanism": {
+        "type": "string"
+      },
+      "observed_source": {
+        "type": "string",
+        "ref": "source",
+        "nullable": true
+      },
+      "changes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "path": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "before_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "after_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "instruction_artifact": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "limits": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "equals-input",
+      "field": "observed_source",
+      "input_field": "observed_failure"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "observed_source",
+        "changes",
+        "instruction_artifact"
+      ]
+    },
+    {
+      "type": "command",
+      "field": "before_check",
+      "exit": "nonzero"
+    },
+    {
+      "type": "command",
+      "field": "after_check",
+      "exit": "zero"
+    },
+    {
+      "type": "same-command",
+      "fields": [
+        "before_check",
+        "after_check"
+      ]
+    },
+    {
+      "type": "command-matches-input",
+      "field": "before_check",
+      "input_field": "verification_argv"
+    }
+  ]
+}

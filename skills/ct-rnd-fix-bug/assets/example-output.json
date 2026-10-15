@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-rnd-fix-bug",
+  "input_sha256": "2cecf38ec6b6d690d8a9ad707d610b7077a206c197c417051a13b4de055896aa",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "candidate_revision": "uncommitted-candidate",
+    "root_cause": "Reproduction has not yet been established.",
+    "changes": [],
+    "before_check": null,
+    "after_check": null,
+    "related_check": null,
+    "remaining_limits": [
+      "No affected repository or reproduction evidence has been supplied."
+    ]
+  }
+}

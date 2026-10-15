@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Prepare a read-only operational review of the notes service, including monitoring gaps and recovery readiness.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "service_inventory": [
+      "Notes web app and API"
+    ],
+    "review_window": "The most recent completed seven-day window, with exact dates to be established from source timestamps.",
+    "providers": [],
+    "allowed_actions": [
+      "Read available operational evidence."
+    ]
+  }
+}

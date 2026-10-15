@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-design-build-interface",
+  "input_sha256": "74b5a341b384f43604830be4a48e496884504f79bcea71be0bd302ccbc00ce53",
+  "status": "blocked",
+  "summary": "Synthetic blocked example; no project work has been executed.",
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "The project definition or actual repository evidence needed for this task has not been supplied.",
+      "next_action": "Supply the relevant project artifacts, retain the existing interview ledger, and collect task-specific proof."
+    }
+  ],
+  "result": {
+    "candidate_revision": "uncommitted-candidate",
+    "viewports": [
+      {
+        "id": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "id": "desktop",
+        "width": 1440,
+        "height": 900
+      }
+    ],
+    "design_rationale": "A visual direction requires the supplied project context.",
+    "surfaces": [],
+    "build_check": null,
+    "staging_handoff": "No implementation or deployed staging version exists."
+  }
+}

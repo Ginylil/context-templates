@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "Research how freelancers currently track client follow-ups and which audience might value a private notes app.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "sources": [],
+  "inputs": {
+    "research_question": "Which existing follow-up workflow leaves an evidenced unmet need?",
+    "geography": "English-speaking markets",
+    "audiences": [
+      "Independent freelancers"
+    ],
+    "known_alternatives": [
+      "Spreadsheets and general note applications"
+    ],
+    "cutoff_date": "2026-10-15"
+  }
+}

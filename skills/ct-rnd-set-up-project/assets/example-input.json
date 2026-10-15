@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "A reproducible project foundation with captured setup, test, and build evidence.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "sources": [],
+  "inputs": {
+    "target_path": "./follow-up-notes",
+    "stack": "A browser web app; stack selection awaits the definition.",
+    "commands": {
+      "setup": [
+        "python",
+        "-m",
+        "venv",
+        ".venv"
+      ],
+      "develop": [
+        "python",
+        "-m",
+        "http.server"
+      ],
+      "test": [
+        "python",
+        "-m",
+        "unittest"
+      ],
+      "build": [
+        "python",
+        "build.py"
+      ]
+    }
+  }
+}

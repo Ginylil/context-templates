@@ -1,0 +1,188 @@
+{
+  "skill": "ct-rnd-build-feature",
+  "purpose": "A complete engineering candidate traceable to agreed outcomes.",
+  "requires_definition": true,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "task_id": {
+        "type": "string",
+        "nullable": true
+      },
+      "candidate_revision": {
+        "type": "string"
+      },
+      "requirement_ids": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "ref": "requirement"
+        },
+        "min_items": 0
+      },
+      "acceptance": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            },
+            "scenario": {
+              "type": "string"
+            },
+            "verification": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "task_id": {
+        "type": "string",
+        "nullable": true
+      },
+      "candidate_revision": {
+        "type": "string"
+      },
+      "changes": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "path": {
+              "type": "string"
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        },
+        "min_items": 0
+      },
+      "scenarios": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "requirement_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "requirement"
+              },
+              "min_items": 1
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "not-run"
+              ]
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "test_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "build_check": {
+        "type": "string",
+        "ref": "evidence",
+        "nullable": true
+      },
+      "staging_handoff": {
+        "type": "string"
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "task_id",
+      "input_field": "task_id"
+    },
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "nonempty",
+      "fields": [
+        "changes"
+      ]
+    },
+    {
+      "type": "coverage",
+      "items": "scenarios",
+      "field": "requirement_ids",
+      "input_field": "requirement_ids"
+    },
+    {
+      "type": "cover-target",
+      "items": "scenarios",
+      "field": "id",
+      "target": "acceptance",
+      "target_field": "id"
+    },
+    {
+      "type": "all-status",
+      "items": "scenarios",
+      "field": "status",
+      "allowed": [
+        "passed"
+      ]
+    },
+    {
+      "type": "command",
+      "field": "test_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command",
+      "field": "build_check",
+      "exit": "zero"
+    },
+    {
+      "type": "scenario-evidence",
+      "items": "scenarios",
+      "status_field": "status",
+      "evidence_field": "evidence_ids"
+    }
+  ]
+}

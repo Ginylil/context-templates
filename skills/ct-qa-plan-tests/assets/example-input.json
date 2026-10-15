@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "request": "A risk-informed test plan covering each agreed project outcome.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Keep note contents private."
+  ],
+  "sources": [],
+  "inputs": {
+    "target_scope": "First authenticated note workflow.",
+    "known_risks": [
+      "Unauthenticated access must not expose notes."
+    ],
+    "available_surfaces": [
+      "Unit tests",
+      "Browser tests",
+      "Staging user acceptance"
+    ]
+  }
+}

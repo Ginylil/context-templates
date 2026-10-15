@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "skill": "ct-product-review-product",
+  "input_sha256": "466d7a287af927ddcf7752cf16798cd2fd71fe4d8eaaec3c00a9c15f3736b656",
+  "status": "blocked",
+  "summary": "Assessment is blocked by missing project definition and source evidence.",
+  "constraints": [
+    "Keep client notes private.",
+    "Use GitHub Issues and Projects for executable task tracking."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "No validated project definition and shared scope ledger were supplied.",
+      "next_action": "Complete ct-product-define-project for this scope and supply the resulting definition and ledger references."
+    }
+  ],
+  "result": {
+    "observations": [],
+    "opportunities": [],
+    "experiments": [],
+    "unanswered_questions": [
+      "No usage evidence, customer feedback, or inspectable product was supplied."
+    ]
+  }
+}

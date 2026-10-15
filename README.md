@@ -23,7 +23,7 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 contribute improvements or new skills through a pull request. The catalog includes
-the bootstrap, Define a Project, and the Dynamic UMLs family described below;
+the bootstrap, eighteen project lifecycle skills, and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
@@ -44,7 +44,57 @@ run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
 
-## Define a project
+## Project lifecycle skills
+
+Start with `ct-product-manage-project` to find the next useful step, or invoke a
+focused skill directly. Existing scope, source evidence and GitHub tracking are
+reused; the guide does not force every project through all eighteen skills.
+
+```text
+Use ct-product-manage-project to help me define and build a small web app.
+Inspect what already exists and take the next useful step toward my goal.
+```
+
+| Skill | Job |
+| --- | --- |
+| [`ct-product-manage-project`](skills/ct-product-manage-project/SKILL.md) | Guide the next project step using checked handoffs |
+| [`ct-product-define-project`](skills/ct-product-define-project/SKILL.md) | Define users, scope, constraints and success |
+| [`ct-product-review-product`](skills/ct-product-review-product/SKILL.md) | Assess customer value and product outcomes |
+| [`ct-rnd-design-architecture`](skills/ct-rnd-design-architecture/SKILL.md) | Design components, interfaces and tradeoffs |
+| [`ct-rnd-plan-development`](skills/ct-rnd-plan-development/SKILL.md) | Plan complete GitHub-tracked development slices |
+| [`ct-rnd-set-up-project`](skills/ct-rnd-set-up-project/SKILL.md) | Establish a runnable, checked repository |
+| [`ct-rnd-build-feature`](skills/ct-rnd-build-feature/SKILL.md) | Implement one complete admitted feature |
+| [`ct-rnd-fix-bug`](skills/ct-rnd-fix-bug/SKILL.md) | Reproduce, diagnose and repair a defect |
+| [`ct-rnd-review-code`](skills/ct-rnd-review-code/SKILL.md) | Review behavior and repository standards |
+| [`ct-rnd-improve-agent-setup`](skills/ct-rnd-improve-agent-setup/SKILL.md) | Improve agents from observed workflow problems |
+| [`ct-design-build-interface`](skills/ct-design-build-interface/SKILL.md) | Design and verify a usable interface |
+| [`ct-qa-plan-tests`](skills/ct-qa-plan-tests/SKILL.md) | Define behavioral coverage and verification |
+| [`ct-qa-test-user-flows`](skills/ct-qa-test-user-flows/SKILL.md) | Execute flows and report actual results |
+| [`ct-security-review-project`](skills/ct-security-review-project/SKILL.md) | Assess demonstrated security risks and uncertainty |
+| [`ct-devops-release-project`](skills/ct-devops-release-project/SKILL.md) | Verify the requested release milestone |
+| [`ct-devops-maintain-project`](skills/ct-devops-maintain-project/SKILL.md) | Review health, spend, changes and recovery |
+| [`ct-marketing-research-market`](skills/ct-marketing-research-market/SKILL.md) | Research audiences, competitors and positioning |
+| [`ct-marketing-launch-product`](skills/ct-marketing-launch-product/SKILL.md) | Prepare or execute an authorized launch |
+
+Each complete folder works independently. The guide checks which specialists
+are installed. The agent prepares JSON, while bundled Python tools validate
+structure, scope/source bindings, proof references and domain-specific rules.
+Explicit command capture records actual argv, output, exit status and source
+fingerprints without shell execution or inferred retries. Capturing a command
+does not authorize it; use only actions already in scope.
+
+All specialists share the same **ten-question/two-batch** scope ledger. Development
+plans require GitHub Issues and Projects with authoritative readback before
+execution. Local-only preparation is supported and remains explicitly blocked at
+that tracking gate. Completed assessments can expose failed tests or risks;
+they do not imply acceptance or permission to deploy/publish.
+
+These packages have local contract, negative-control, standalone-installation
+and disposable-workspace tests. Mocked remote readbacks and source fixtures do
+not establish live provider behavior, actual agent discovery or human staging
+acceptance. There is no staging environment for this catalog itself.
+
+### Define a project
 
 Use [`ct-product-define-project`](skills/ct-product-define-project/SKILL.md) to
 turn an idea into a clear definition of its users, problem, first scope,

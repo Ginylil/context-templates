@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "project_id": "follow-up-notes",
+  "objective": "Define, build and release a useful browser app.",
+  "intent": "continue",
+  "local_only": true,
+  "ledger": null,
+  "definition": null,
+  "plan": null,
+  "tracking": null,
+  "repository": null,
+  "receipts": [],
+  "task_receipts": [],
+  "target_stage": "staging",
+  "done_statuses": [
+    "Done"
+  ]
+}

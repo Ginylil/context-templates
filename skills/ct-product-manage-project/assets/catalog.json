@@ -1,0 +1,92 @@
+[
+  {
+    "skill": "ct-product-manage-project",
+    "intent": "manage-project",
+    "purpose": "Coordinate the next useful project step"
+  },
+  {
+    "skill": "ct-product-define-project",
+    "intent": "define-project",
+    "purpose": "Define users, scope, constraints and success"
+  },
+  {
+    "skill": "ct-product-review-product",
+    "intent": "review-product",
+    "purpose": "Assess customer value and product outcomes"
+  },
+  {
+    "skill": "ct-rnd-design-architecture",
+    "intent": "design-architecture",
+    "purpose": "Design components, interfaces and tradeoffs"
+  },
+  {
+    "skill": "ct-rnd-plan-development",
+    "intent": "plan-development",
+    "purpose": "Plan complete GitHub-tracked development slices"
+  },
+  {
+    "skill": "ct-rnd-set-up-project",
+    "intent": "set-up-project",
+    "purpose": "Establish a runnable and checked repository"
+  },
+  {
+    "skill": "ct-rnd-build-feature",
+    "intent": "build-feature",
+    "purpose": "Implement a complete admitted feature"
+  },
+  {
+    "skill": "ct-rnd-fix-bug",
+    "intent": "fix-bug",
+    "purpose": "Reproduce and repair a defect"
+  },
+  {
+    "skill": "ct-rnd-review-code",
+    "intent": "review-code",
+    "purpose": "Review requirements and repository standards"
+  },
+  {
+    "skill": "ct-rnd-improve-agent-setup",
+    "intent": "improve-agent-setup",
+    "purpose": "Improve agents from observed workflow problems"
+  },
+  {
+    "skill": "ct-design-build-interface",
+    "intent": "build-interface",
+    "purpose": "Create and verify an interface"
+  },
+  {
+    "skill": "ct-qa-plan-tests",
+    "intent": "plan-tests",
+    "purpose": "Define behavioral test coverage"
+  },
+  {
+    "skill": "ct-qa-test-user-flows",
+    "intent": "test-user-flows",
+    "purpose": "Execute and assess real user flows"
+  },
+  {
+    "skill": "ct-security-review-project",
+    "intent": "review-security",
+    "purpose": "Assess security risks and evidence"
+  },
+  {
+    "skill": "ct-devops-release-project",
+    "intent": "release-project",
+    "purpose": "Verify a scoped release milestone"
+  },
+  {
+    "skill": "ct-devops-maintain-project",
+    "intent": "maintain-project",
+    "purpose": "Assess operations and recovery readiness"
+  },
+  {
+    "skill": "ct-marketing-research-market",
+    "intent": "research-market",
+    "purpose": "Research audience, competition and positioning"
+  },
+  {
+    "skill": "ct-marketing-launch-product",
+    "intent": "launch-product",
+    "purpose": "Prepare or execute an authorized launch"
+  }
+]

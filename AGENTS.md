@@ -31,6 +31,14 @@
   Keep its 10-question/2-batch budget in one scope ledger, with negative tests
   and isolated CLI checks under `tests/test_define_project.py`. Do not copy
   private project definitions or interview histories into the public package.
+- Lifecycle support has canonical sources: Define a Project owns
+  `scripts/project.py` and its definition contract; Manage a Project owns
+  `scripts/workflow.py`; Plan Development owns `scripts/plan.py` and its contract.
+  Run `make resources` after changing them. Never hand-edit generated copies;
+  `make check` and `make build` reject drift. Every package works independently.
+- Keep lifecycle assessments distinct from acceptance: `ready` may mean a
+  completed assessment with findings. QA verdicts, candidate identity, human
+  staging acceptance, GitHub readbacks and release milestones remain explicit.
 - Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
