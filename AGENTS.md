@@ -7,7 +7,8 @@
   portable and put substantial supporting content in references, assets, or
   scripts. Agent-specific UI metadata belongs in `agents/`.
 - New skill names use `ct-<department>-<expertise>` with a concrete action and
-  subject. Preserve existing bootstrap and Dynamic UML names.
+  subject. Dynamic UML skills use `ct-dynamic-uml` and `ct-dynamic-uml-<type>`;
+  preserve the existing bootstrap name.
 - Only reviewed public content belongs here. Personal preferences and private
   experiments belong in a separate private repository. Do not migrate from
   another skill library in bulk or retire an original before verifying its replacement.
@@ -43,6 +44,6 @@
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
   Shared renderer, flowchart/state verifiers, template, supplied logo, guide and example JSON are canonical under
-  `skills/dynamic-umls/`. Regenerate focused-skill resources and HTML review
+  `skills/ct-dynamic-uml/`. Regenerate focused-skill resources and HTML review
   examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.

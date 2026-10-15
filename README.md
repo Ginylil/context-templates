@@ -127,8 +127,8 @@ Validated JSON proves contract consistency, not customer demand or user acceptan
 Use Dynamic UMLs to explain how a system works: messages over time, types and
 relationships, decision paths, state changes, parallel activities, or component
 boundaries. Ask for a diagram in plain language, for example
-`/dynamic-sequence-diagram for a browser, application, and identity-provider login`.
-Choose a focused skill below, or use `dynamic-umls` to select a suitable view.
+`/ct-dynamic-uml-sequence for a browser, application, and identity-provider login`.
+Choose a focused skill below, or use `ct-dynamic-uml` to select a suitable view.
 
 Each produces a standalone HTML page with an interactive
 walkthrough. Each skill investigates the supplied context, makes minimal explicit
@@ -156,13 +156,19 @@ Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | View example in browser |
 | --- | --- |
-| [`dynamic-umls`](skills/dynamic-umls/SKILL.md) — choose a view | [Example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html) |
-| [`dynamic-sequence-diagram`](skills/dynamic-sequence-diagram/SKILL.md) | [Three-party sign-in](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence-long.html) |
-| [`dynamic-class-diagram`](skills/dynamic-class-diagram/SKILL.md) | [Orders and payments](https://ginylil.github.io/context-templates/examples/dynamic-umls/class.html) |
-| [`dynamic-flowchart`](skills/dynamic-flowchart/SKILL.md) | [Review readiness](https://ginylil.github.io/context-templates/examples/dynamic-umls/flowchart.html) |
-| [`dynamic-state-diagram`](skills/dynamic-state-diagram/SKILL.md) | [Order lifecycle](https://ginylil.github.io/context-templates/examples/dynamic-umls/state.html) |
-| [`dynamic-activity-diagram`](skills/dynamic-activity-diagram/SKILL.md) | [Parallel preparation](https://ginylil.github.io/context-templates/examples/dynamic-umls/activity.html) |
-| [`dynamic-component-diagram`](skills/dynamic-component-diagram/SKILL.md) | [One catalog, three agents](https://ginylil.github.io/context-templates/examples/dynamic-umls/component.html) |
+| [`ct-dynamic-uml`](skills/ct-dynamic-uml/SKILL.md) — choose a view | [Example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html) |
+| [`ct-dynamic-uml-sequence`](skills/ct-dynamic-uml-sequence/SKILL.md) | [Three-party sign-in](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence.html) · [Long sequence: 32 messages, six participants](https://ginylil.github.io/context-templates/examples/dynamic-umls/sequence-long.html) |
+| [`ct-dynamic-uml-class`](skills/ct-dynamic-uml-class/SKILL.md) | [Orders and payments](https://ginylil.github.io/context-templates/examples/dynamic-umls/class.html) |
+| [`ct-dynamic-uml-flowchart`](skills/ct-dynamic-uml-flowchart/SKILL.md) | [Review readiness](https://ginylil.github.io/context-templates/examples/dynamic-umls/flowchart.html) |
+| [`ct-dynamic-uml-state`](skills/ct-dynamic-uml-state/SKILL.md) | [Order lifecycle](https://ginylil.github.io/context-templates/examples/dynamic-umls/state.html) |
+| [`ct-dynamic-uml-activity`](skills/ct-dynamic-uml-activity/SKILL.md) | [Parallel preparation](https://ginylil.github.io/context-templates/examples/dynamic-umls/activity.html) |
+| [`ct-dynamic-uml-component`](skills/ct-dynamic-uml-component/SKILL.md) | [One catalog, three agents](https://ginylil.github.io/context-templates/examples/dynamic-umls/component.html) |
+
+The UML skills now use the `ct-dynamic-uml` prefix. Install them by their new
+names. Existing installations with `dynamic-*` names remain untouched; the
+installer does not rename, replace or remove those folders. Both versions can
+therefore appear until you explicitly remove the old copies. Hosted example
+URLs remain under `examples/dynamic-umls/`.
 
 [Open the interactive example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html)
 to try all six views and the long sequence in your browser. The repository's
@@ -173,25 +179,25 @@ the source. These are a focused UML subset; flowcharts are general process notat
 Install the complete folder for the skill you choose, including its resources:
 
 ```sh
-make install-codex SKILL=dynamic-sequence-diagram
+make install-codex SKILL=ct-dynamic-uml-sequence
 ```
 
 Then ask your agent:
 
 ```text
-/dynamic-sequence-diagram for 3 way handshake login
-/dynamic-class-diagram for this project's billing model
-/dynamic-flowchart for the failed-payment recovery process
+/ct-dynamic-uml-sequence for 3 way handshake login
+/ct-dynamic-uml-class for this project's billing model
+/ct-dynamic-uml-flowchart for the failed-payment recovery process
 ```
 
-Use `$dynamic-sequence-diagram` or its name in prose if your agent does not expose
+Use `$ct-dynamic-uml-sequence` or its name in prose if your agent does not expose
 slash invocation. Invocation syntax and discovery must be checked in your agent.
 The login request should clarify TCP versus browser/app/provider sign-in when
 context leaves it ambiguous. Generating a page uses Python 3.10+; the resulting
 HTML requires only a browser. Existing output files are never silently replaced.
 
 Each focused skill works independently. Shared resources have one canonical source
-under `skills/dynamic-umls/`; synchronized copies make every ZIP self-contained.
+under `skills/ct-dynamic-uml/`; synchronized copies make every ZIP self-contained.
 Use `make examples` after changing canonical resources or example JSON, then
 `make check` to catch drift. See [DESIGN](DESIGN.md) for visual and browser checks.
 

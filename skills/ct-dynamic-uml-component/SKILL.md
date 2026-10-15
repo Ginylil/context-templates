@@ -1,6 +1,6 @@
 ---
-name: dynamic-component-diagram
-description: "Create a standalone interactive HTML component diagram from inspected architecture, code or requirements. Use for /dynamic-component-diagram and dynamic architecture views explaining component responsibilities and dependencies."
+name: ct-dynamic-uml-component
+description: "Create a standalone interactive HTML component diagram from inspected architecture, code or requirements. Use for /ct-dynamic-uml-component and dynamic architecture views explaining component responsibilities and dependencies."
 ---
 
 # Dynamic component diagram

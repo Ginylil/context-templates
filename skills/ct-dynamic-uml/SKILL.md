@@ -1,5 +1,5 @@
 ---
-name: dynamic-umls
+name: ct-dynamic-uml
 description: "Choose and create standalone offline HTML diagram walkthroughs for sequence, class, flowchart, state, activity and component views. Use when the user asks for dynamic UMLs, an interactive architecture/process explanation, or help choosing a diagram."
 ---
 
@@ -10,12 +10,12 @@ walkthrough. This is the router for the family; individual skills also work alon
 
 | Command | Use it to understand | Example |
 | --- | --- | --- |
-| `/dynamic-sequence-diagram` | Messages between participants over time | Browser / application / identity-provider sign-in |
-| `/dynamic-class-diagram` | Types, relationships, ownership and cardinality | Orders and payments |
-| `/dynamic-flowchart` | Decisions and process paths | Review readiness and repair loop |
-| `/dynamic-state-diagram` | States, events and guards | Order lifecycle |
-| `/dynamic-activity-diagram` | Actions and concurrency | Stock and payment fork/join |
-| `/dynamic-component-diagram` | Boundaries and structural dependencies | One catalog, three agents |
+| `/ct-dynamic-uml-sequence` | Messages between participants over time | Browser / application / identity-provider sign-in |
+| `/ct-dynamic-uml-class` | Types, relationships, ownership and cardinality | Orders and payments |
+| `/ct-dynamic-uml-flowchart` | Decisions and process paths | Review readiness and repair loop |
+| `/ct-dynamic-uml-state` | States, events and guards | Order lifecycle |
+| `/ct-dynamic-uml-activity` | Actions and concurrency | Stock and payment fork/join |
+| `/ct-dynamic-uml-component` | Boundaries and structural dependencies | One catalog, three agents |
 
 Use the requested type. Otherwise select the smallest view that answers the user's
 question; explain the choice briefly. Flowcharts are general process notation.

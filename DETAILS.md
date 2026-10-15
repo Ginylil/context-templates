@@ -163,7 +163,7 @@ and human acceptance are separate evidence levels.
 
 ## Dynamic UMLs
 
-The router skill owns the shared HTML renderer, standard-library generator,
+The `ct-dynamic-uml` router skill owns the shared HTML renderer, standard-library generator,
 authoring guide, supplied Ginylil PNG, flowchart verifier, six diagram-type examples
 and an additional long sequence model (32 messages, six participants). `scripts/dynamic_umls.py` deterministically
 copies these resources into the focused skill folders and generates standalone

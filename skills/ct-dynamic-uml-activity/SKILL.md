@@ -1,6 +1,6 @@
 ---
-name: dynamic-activity-diagram
-description: "Create a standalone interactive HTML UML activity diagram for a workflow with actions, branches or concurrent work. Use for /dynamic-activity-diagram and dynamic activity walkthroughs, especially fork/join explanations."
+name: ct-dynamic-uml-activity
+description: "Create a standalone interactive HTML UML activity diagram for a workflow with actions, branches or concurrent work. Use for /ct-dynamic-uml-activity and dynamic activity walkthroughs, especially fork/join explanations."
 ---
 
 # Dynamic activity diagram

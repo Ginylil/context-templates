@@ -1,4 +1,0 @@
-interface:
-  display_name: "Dynamic Component Diagram"
-  short_description: "Explore boundaries and component dependencies"
-  default_prompt: "Use $dynamic-component-diagram to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

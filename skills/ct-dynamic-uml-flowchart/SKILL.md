@@ -1,6 +1,6 @@
 ---
-name: dynamic-flowchart
-description: "Create a standalone interactive HTML flowchart for a process, decision tree, troubleshooting path or workflow. Use for /dynamic-flowchart and requests for dynamic flowcharts with step playback and branch exploration."
+name: ct-dynamic-uml-flowchart
+description: "Create a standalone interactive HTML flowchart for a process, decision tree, troubleshooting path or workflow. Use for /ct-dynamic-uml-flowchart and requests for dynamic flowcharts with step playback and branch exploration."
 ---
 
 # Dynamic flowchart

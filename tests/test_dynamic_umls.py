@@ -53,13 +53,50 @@ class DynamicUmlTests(unittest.TestCase):
                     self.assertNotIn('<script src=', page)
                     self.assertNotIn('<link ', page)
 
+    def test_renamed_catalog_preserves_installed_legacy_copies(self):
+        legacy_names = {
+            'dynamic-umls': 'ct-dynamic-uml',
+            'dynamic-sequence-diagram': 'ct-dynamic-uml-sequence',
+            'dynamic-class-diagram': 'ct-dynamic-uml-class',
+            'dynamic-flowchart': 'ct-dynamic-uml-flowchart',
+            'dynamic-state-diagram': 'ct-dynamic-uml-state',
+            'dynamic-activity-diagram': 'ct-dynamic-uml-activity',
+            'dynamic-component-diagram': 'ct-dynamic-uml-component',
+        }
+        with tempfile.TemporaryDirectory() as temporary:
+            base = Path(temporary)
+            legacy = base / 'old-catalog'
+            home = base / 'home'
+            for name in legacy_names:
+                folder = legacy / 'skills' / name
+                folder.mkdir(parents=True)
+                (folder / 'SKILL.md').write_text(
+                    f'---\nname: {name}\ndescription: "Legacy diagram skill"\n---\nLegacy instructions.\n',
+                    encoding='utf-8')
+            with contextlib.redirect_stdout(io.StringIO()):
+                installer.install(legacy, home, list(installer.TARGETS), [], False)
+            snapshots = {}
+            for agent, destination in installer.TARGETS.items():
+                for name in legacy_names:
+                    folder = home / destination / name
+                    # Locally edited former catalog entries remain user-owned.
+                    (folder / 'SKILL.md').write_text((folder / 'SKILL.md').read_text() + 'Local note.\n')
+                    snapshots[(agent, name)] = installer.snapshot(folder)
+            with contextlib.redirect_stdout(io.StringIO()):
+                installer.install(ROOT, home, list(installer.TARGETS), list(legacy_names.values()), False)
+            for agent, destination in installer.TARGETS.items():
+                for old, new in legacy_names.items():
+                    self.assertEqual(installer.snapshot(home / destination / old), snapshots[(agent, old)])
+                    self.assertEqual(installer.snapshot(home / destination / new), installer.snapshot(ROOT / 'skills' / new))
+            self.assertFalse(set(legacy_names) & set(installer.catalog(ROOT)))
+
     def test_long_sequence_renders_from_isolated_installed_copies(self):
         with tempfile.TemporaryDirectory() as temporary:
             home = Path(temporary) / 'home'
             for agent in installer.TARGETS:
                 with contextlib.redirect_stdout(io.StringIO()):
-                    installer.install(ROOT, home, [agent], ['dynamic-sequence-diagram'], False)
-                folder = home / installer.TARGETS[agent] / 'dynamic-sequence-diagram'
+                    installer.install(ROOT, home, [agent], ['ct-dynamic-uml-sequence'], False)
+                folder = home / installer.TARGETS[agent] / 'ct-dynamic-uml-sequence'
                 output = Path(temporary) / f'{agent}-long.html'
                 result = subprocess.run([sys.executable, str(folder / 'scripts/render.py'),
                     str(folder / 'assets/long-example.json'), '--expect', 'sequence', '--output', str(output)],

@@ -1,6 +1,6 @@
 ---
-name: dynamic-state-diagram
-description: "Create a standalone interactive HTML state diagram for an entity lifecycle, status machine or event-driven system. Use for /dynamic-state-diagram and dynamic state machine walkthroughs with alternate transition paths."
+name: ct-dynamic-uml-state
+description: "Create a standalone interactive HTML state diagram for an entity lifecycle, status machine or event-driven system. Use for /ct-dynamic-uml-state and dynamic state machine walkthroughs with alternate transition paths."
 ---
 
 # Dynamic state diagram

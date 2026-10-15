@@ -1,6 +1,6 @@
 ---
-name: dynamic-sequence-diagram
-description: "Create a standalone interactive HTML sequence diagram for a protocol, login flow, API exchange or other participant interaction. Use for dynamic sequence diagram requests, including /dynamic-sequence-diagram for three-way handshake login."
+name: ct-dynamic-uml-sequence
+description: "Create a standalone interactive HTML sequence diagram for a protocol, login flow, API exchange or other participant interaction. Use for dynamic sequence diagram requests, including /ct-dynamic-uml-sequence for three-way handshake login."
 ---
 
 # Dynamic sequence diagram

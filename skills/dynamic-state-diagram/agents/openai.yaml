@@ -1,4 +1,0 @@
-interface:
-  display_name: "Dynamic State Diagram"
-  short_description: "Explore states, transition events and guards"
-  default_prompt: "Use $dynamic-state-diagram to investigate the requested subject and create a branded, standalone interactive HTML walkthrough. Ask at most five material questions and show the output."

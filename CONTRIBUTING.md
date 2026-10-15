@@ -19,8 +19,8 @@ Use `skills/<name>/SKILL.md`, with lowercase hyphenated names matching the folde
 up to 64 characters. Avoid platform-reserved names such as `con`, `nul`, `com1`,
 `synced`, and `anthropic-skills`. New skills use
 `ct-<department>-<expertise>` with a concrete action and subject, such as
-`ct-product-define-project` or `ct-rnd-build-feature`. Existing bootstrap and
-Dynamic UML names remain supported. The current dependency-free validator deliberately
+`ct-product-define-project` or `ct-rnd-build-feature`. The Dynamic UML family uses `ct-dynamic-uml` and `ct-dynamic-uml-<type>`;
+only the bootstrap retains its existing name. The current dependency-free validator deliberately
 accepts only these two frontmatter fields, one per line:
 
 ```markdown
@@ -100,7 +100,7 @@ Do not present either as live provider or human-acceptance proof.
 ## Dynamic UML contributions
 
 Read [DESIGN](DESIGN.md). Change shared resources only in
-`skills/dynamic-umls/`, then run `make examples` to refresh the focused packages
+`skills/ct-dynamic-uml/`, then run `make examples` to refresh the focused packages
 and review HTML files. The generated copies are required standalone resources;
 the catalog's hidden/generated-file restriction refers to caches and hidden files,
 not these tracked synchronized assets. CI and `make check` reject resource drift.

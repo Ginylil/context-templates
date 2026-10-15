@@ -1,6 +1,6 @@
 ---
-name: dynamic-class-diagram
-description: "Create a standalone interactive HTML class diagram from inspected code, a domain model or supplied requirements. Use for /dynamic-class-diagram, dynamic class diagrams, or explaining types, inheritance, ownership and cardinality."
+name: ct-dynamic-uml-class
+description: "Create a standalone interactive HTML class diagram from inspected code, a domain model or supplied requirements. Use for /ct-dynamic-uml-class, dynamic class diagrams, or explaining types, inheritance, ownership and cardinality."
 ---
 
 # Dynamic class diagram
