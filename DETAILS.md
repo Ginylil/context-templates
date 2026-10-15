@@ -70,6 +70,39 @@ these checks on Linux, macOS, and Windows. Local results, CI, file installation,
 agent discovery, invocation, PR submission, and maintainer acceptance are distinct
 proof stages. There is no staging environment for this repository.
 
+## Project definition
+
+`skills/ct-product-define-project/` is a standalone portable skill. Its
+`scripts/project.py` uses only Python 3.10+ standard-library modules to validate
+intake JSON, maintain a project-scoped event ledger, check a definition against
+the current input/history digests, and render a Markdown brief. No commands
+execute project code, access a service, or install dependencies.
+
+Question usage is derived from recorded `ask` events, including unanswered
+questions: no more than ten questions in two batches. Decision dependencies must
+be resolved before their question's batch. Pending batches prevent further
+batches. Submitted answers retain source text and qualifications; recommendations
+do not resolve questions. New facts and adaptive branches use distinct event
+types. Same-event retries are no-ops. Starting again with the same input preserves
+the ledger. A changed input, stale revision, duplicate ID, or existing lock stops
+the update; validated updates use an atomic replacement. The ledger is a
+cooperative consistency guard, not protection against deliberate history edits.
+
+Output validation preserves input constraints and tracking declarations, binds
+all settled decisions, and requires each unresolved decision to be carried as an
+assumption or actionable blocker. Unanswered questions and blocking decisions
+require blockers; these forbid `ready-for-planning`. GitHub repository/Project
+references may be unknown at definition time, but executable task publication
+must subsequently verify and use both. No remote state is claimed by this skill.
+New readable outputs refuse overwrite. See the bundled
+[contract](skills/ct-product-define-project/references/contract.md) for exact
+formats, commands, and the boundary between structural checks and agent judgment.
+
+Focused tests cover the limits, negative controls, adaptive and resumed sessions,
+stale artifacts/writes, retry behavior, output preservation, and CLI execution
+from isolated copies for all three installer targets and a built ZIP. These are
+package-level checks, not proof of discovery in a live agent runtime.
+
 ## Dynamic UMLs
 
 The router skill owns the shared HTML renderer, standard-library generator,

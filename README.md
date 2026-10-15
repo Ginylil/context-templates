@@ -22,7 +22,8 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
-contribute improvements or new skills through a pull request. The catalog includes the bootstrap and the Dynamic UMLs family described below;
+contribute improvements or new skills through a pull request. The catalog includes
+the bootstrap, Define a Project, and the Dynamic UMLs family described below;
 additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
@@ -42,6 +43,34 @@ scripts and resources, into that agent's local skills directory. It does not
 run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
+
+## Define a project
+
+Use [`ct-product-define-project`](skills/ct-product-define-project/SKILL.md) to
+turn an idea into a clear definition of its users, problem, first scope,
+constraints, and observable success before development planning:
+
+```text
+Use ct-product-define-project to define a small browser app for tracking client
+follow-ups. Investigate what you can, then ask only the decisions you need from me.
+```
+
+The agent prepares the structured artifacts. A bundled Python tool validates
+inputs, keeps one resumable interview ledger, and validates the output before
+rendering a readable Markdown brief. The interview allows **at most ten questions
+across two batches**, shared across agents working on the same scope. Questions
+in a batch must have their prerequisites settled; recommendations never become
+answers automatically. Clear requests can finish without questions. Missing
+critical answers produce an explicit blocked definition.
+
+Install the complete folder with
+`make install-codex SKILL=ct-product-define-project`, selecting the target agent
+you use. The skill runs independently with Python 3.10+ and no package or service
+dependencies. See its [contract and commands](skills/ct-product-define-project/references/contract.md)
+and [synthetic output example](skills/ct-product-define-project/assets/example-definition.json).
+GitHub Issues and Projects are required for subsequent executable task planning;
+this definition skill neither publishes tasks nor verifies remote tracking objects.
+Validated JSON proves contract consistency, not customer demand or user acceptance.
 
 ## Dynamic UMLs
 

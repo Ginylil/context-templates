@@ -1,0 +1,8 @@
+{
+  "id": "batch-one",
+  "type": "ask",
+  "questions": [
+    {"id": "Q1", "decision_id": "sharing", "prompt": "Does the first version need collaboration?", "options": ["Personal use only", "Shared workspaces"], "recommended_option": 0},
+    {"id": "Q2", "decision_id": "capture", "prompt": "How should users add follow-up notes in the first version?", "options": ["Type them manually", "Import them from email"], "recommended_option": 0}
+  ]
+}

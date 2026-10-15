@@ -17,7 +17,10 @@ its reviewed replacement is installed and verified.
 
 Use `skills/<name>/SKILL.md`, with lowercase hyphenated names matching the folder,
 up to 64 characters. Avoid platform-reserved names such as `con`, `nul`, `com1`,
-`synced`, and `anthropic-skills`. The current dependency-free validator deliberately
+`synced`, and `anthropic-skills`. New skills use
+`ct-<department>-<expertise>` with a concrete action and subject, such as
+`ct-product-define-project` or `ct-rnd-build-feature`. Existing bootstrap and
+Dynamic UML names remain supported. The current dependency-free validator deliberately
 accepts only these two frontmatter fields, one per line:
 
 ```markdown
@@ -71,6 +74,15 @@ Bundled resources are context for the task, not permission to broaden it.
 CI validates and tests on Linux, macOS, and Windows and builds downloadable skill
 archives. Those checks do not replace actual skill discovery/invocation checks.
 No secrets, MCP connection, or API publishing account are needed for this pipeline.
+
+For skills with structured inputs or outputs, bundle their actual validators and
+versioned examples. Exercise valid and deliberately invalid artifacts, resumable
+state transitions, and the complete CLI from an isolated installed package.
+Keep test suites under repository `tests/`, and package fixtures under `assets/`.
+Declare what scripts cannot prove; schema validation is not behavioral acceptance.
+Define a Project's focused checks run with
+`python -m unittest discover -s tests -p test_define_project.py -v` and are included
+in `make check`.
 
 ## Dynamic UML contributions
 

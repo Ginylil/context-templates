@@ -6,6 +6,8 @@
 - Canonical skills live in `skills/<name>/SKILL.md`. Keep shared instructions
   portable and put substantial supporting content in references, assets, or
   scripts. Agent-specific UI metadata belongs in `agents/`.
+- New skill names use `ct-<department>-<expertise>` with a concrete action and
+  subject. Preserve existing bootstrap and Dynamic UML names.
 - Only reviewed public content belongs here. Personal preferences and private
   experiments belong in a separate private repository. Do not migrate from
   another skill library in bulk or retire an original before verifying its replacement.
@@ -25,6 +27,10 @@
   metadata checks. Local checks are not CI or proof of discovery in each agent.
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
+- Define a Project's contract and examples live in its complete skill folder.
+  Keep its 10-question/2-batch budget in one scope ledger, with negative tests
+  and isolated CLI checks under `tests/test_define_project.py`. Do not copy
+  private project definitions or interview histories into the public package.
 - Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
