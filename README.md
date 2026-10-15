@@ -23,7 +23,7 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 contribute improvements or new skills through a pull request. The catalog includes
-the bootstrap, twenty project lifecycle skills, and the Dynamic UMLs family below;
+the bootstrap, twenty-one project lifecycle skills, and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
@@ -48,7 +48,7 @@ the equivalent Python commands are listed under [Install locally](#install-local
 
 Start with `ct-product-manage-project` to find the next useful step, or invoke a
 focused skill directly. Existing scope, source evidence and GitHub tracking are
-reused; the guide does not force every project through all twenty skills.
+reused; the guide does not force every project through all twenty-one skills.
 
 ```text
 Use ct-product-manage-project to help me define and build a small web app.
@@ -68,6 +68,7 @@ Inspect what already exists and take the next useful step toward my goal.
 | [`ct-rnd-review-code`](skills/ct-rnd-review-code/SKILL.md) | Review behavior and repository standards |
 | [`ct-rnd-improve-agent-setup`](skills/ct-rnd-improve-agent-setup/SKILL.md) | Improve agents from observed workflow problems |
 | [`ct-design-build-interface`](skills/ct-design-build-interface/SKILL.md) | Design and verify a usable interface |
+| [`ct-design-fix-interface`](skills/ct-design-fix-interface/SKILL.md) | Correct a reported interface problem across confirmed occurrences; clarify uncertain variants |
 | [`ct-qa-plan-tests`](skills/ct-qa-plan-tests/SKILL.md) | Define behavioral coverage and verification |
 | [`ct-qa-test-user-flows`](skills/ct-qa-test-user-flows/SKILL.md) | Execute flows and report actual results |
 | [`ct-security-review-project`](skills/ct-security-review-project/SKILL.md) | Assess demonstrated security risks and uncertainty |
@@ -90,6 +91,14 @@ plans require GitHub Issues and Projects with authoritative readback before
 execution. Local-only preparation is supported and remains explicitly blocked at
 that tracking gate. Completed assessments can expose failed tests or risks;
 they do not imply acceptance or permission to deploy/publish.
+
+For an interface that looks or behaves wrong, use `ct-design-fix-interface`.
+It establishes the intended correction, traces shared components and repeated
+implementations, corrects every confirmed occurrence in the inspected scope,
+and preserves justified variants. Uncertain corrections require a real answer
+before editing the affected files. Scripts check occurrence coverage, shared
+question limits, source identity and comparable screenshot/command evidence;
+they supplement actual rendered inspection.
 
 The Apple and Android release skills also work directly for an existing app.
 They keep upload, processing, tester access, device proof, review and public

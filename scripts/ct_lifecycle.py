@@ -14,8 +14,8 @@ MANAGER = ROOT / "skills/ct-product-manage-project"
 def outputs():
     catalog = json.loads((MANAGER / "assets/catalog.json").read_text(encoding="utf-8"))
     names = [item["skill"] for item in catalog]
-    if len(names) != 20 or len(set(names)) != 20:
-        raise ValueError("Expected exactly 20 unique lifecycle skill identities")
+    if len(names) != 21 or len(set(names)) != 21:
+        raise ValueError("Expected exactly 21 unique lifecycle skill identities")
     define = ROOT / "skills/ct-product-define-project"
     planner = ROOT / "skills/ct-rnd-plan-development"
     result = {}
@@ -25,7 +25,7 @@ def outputs():
             raise ValueError(f"Missing canonical lifecycle skill: {name}")
         if name != define.name:
             result[folder / "scripts/definition.py"] = (define / "scripts/project.py").read_bytes()
-            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_bytes()
+            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_text(encoding="utf-8").replace("scripts/project.py", "scripts/definition.py").encode("utf-8")
         if name not in (define.name, planner.name, MANAGER.name):
             result[folder / "scripts/workflow.py"] = (MANAGER / "scripts/workflow.py").read_bytes()
     result[MANAGER / "scripts/plan_contract.py"] = (planner / "scripts/plan.py").read_bytes()
@@ -34,7 +34,9 @@ def outputs():
     for name in ("ct-devops-release-android-app", MANAGER.name):
         result[ROOT / "skills" / name / "scripts/store_release.py"] = store.read_bytes()
         result[ROOT / "skills" / name / "scripts/configuration.py"] = store.with_name("configuration.py").read_bytes()
-    for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app"):
+    interface = ROOT / "skills/ct-design-fix-interface/scripts/interface.py"
+    result[MANAGER / "scripts/interface.py"] = interface.read_bytes()
+    for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app", "ct-design-fix-interface"):
         folder = ROOT / "skills" / name / "assets"
         intake = json.loads((folder / "example-input.json").read_text(encoding="utf-8"))
         report = json.loads((folder / "example-output.json").read_text(encoding="utf-8"))

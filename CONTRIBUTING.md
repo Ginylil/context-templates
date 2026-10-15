@@ -87,7 +87,7 @@ Define a Project's focused checks run with
 `python -m unittest discover -s tests -p test_define_project.py -v` and are included
 in `make check`.
 
-The twenty lifecycle entry points share portable support through synchronized
+The twenty-one lifecycle entry points share portable support through synchronized
 copies. Canonical sources are under Define a Project (definition validation),
 Manage a Project (domain validation and explicit command capture), and Plan
 Development (task graph and tracking validation). Run `make resources` after a
@@ -110,6 +110,14 @@ review exemptions, tester access and separate device proof. Keep signing keys,
 keystores, `.p8` files, service-account JSON and credential values outside packages.
 The secret scan reports locations/rules without matched values; do not weaken it
 with a blanket fixture allowlist. Use constructed inert strings for scanner tests.
+
+Interface correction checks are canonical in
+`skills/ct-design-fix-interface/scripts/interface.py`, synchronized into the manager.
+Test repeated occurrences, intentional exceptions, held uncertain files and resumed
+real-answer decisions as well as source/capture/viewport coverage. Synthetic PNGs
+can test artifact invariants but are not rendered browser proof. The generator
+adapts shared interview command names for focused folders; do not repair generated
+reference copies manually. Runtime scans, screenshots and interview data stay private.
 
 ## Dynamic UML contributions
 

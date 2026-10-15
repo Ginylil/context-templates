@@ -35,6 +35,7 @@
 - Lifecycle support has canonical sources: Define a Project owns
   `scripts/project.py` and its definition contract; Manage a Project owns
   `scripts/workflow.py`; Plan Development owns `scripts/plan.py` and its contract.
+  Fix Interface owns `scripts/interface.py`, copied into Manage a Project.
   Apple App Release owns `scripts/store_release.py`, copied into Android and
   Manage a Project. Run `make resources` after changing these canonical sources.
   Never hand-edit generated copies;
@@ -56,3 +57,7 @@
 - Store release helpers are canonical in the Apple release skill. Use `make resources`
   to refresh Android/manager copies and synthetic example input hashes; never copy
   private runtime discovery, app/configuration data or credentials into public fixtures.
+
+- Interface correction tests must distinguish confirmed repeated defects, justified
+  variants and unanswered corrections. Hold uncertain files unchanged and require
+  matched rendered proof; source search alone is not project-wide semantic coverage.

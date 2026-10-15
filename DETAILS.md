@@ -105,7 +105,7 @@ package-level checks, not proof of discovery in a live agent runtime.
 
 ## Lifecycle routing and domain checks
 
-The manager's `assets/catalog.json` defines twenty lifecycle identities. The
+The manager's `assets/catalog.json` defines twenty-one lifecycle identities. The
 guide routes from the current definition, task graph, repository, verified
 tracking and specialist reports; explicit specialist requests can enter directly.
 It does not run every skill or execute selected work by returning a route.
@@ -126,7 +126,7 @@ adapter supports GitHub.com Projects v2. Live verification requires GitHub CLI,
 authentication and access; unavailable readback blocks admission. The tool never
 creates or changes remote tasks itself.
 
-Seventeen specialists carry a domain policy in `assets/contract.json`, intake and
+Eighteen specialists carry a domain policy in `assets/contract.json`, intake and
 output examples, and standalone copies of the shared validator. This is a small
 explicit policy vocabulary, not an implementation of general JSON Schema. Rules
 check domain relationships such as architecture endpoints, selected acceptance
@@ -147,10 +147,10 @@ checks cannot authenticate a manual approval or make arbitrary captured data tru
 
 Canonical shared support lives in Define a Project (`scripts/project.py` and
 its contract), Manage a Project (`scripts/workflow.py`), and Plan Development
-(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 63
+(`scripts/plan.py` and its contract). `scripts/ct_lifecycle.py` synchronizes 68
 standalone resources; `make resources` refreshes them, and check/build reject
 drift. Generated copies are packaged resources, not private runtime dependencies.
-All twenty skills can be installed separately. The guide explicitly reports a
+All twenty-one skills can be installed separately. The guide explicitly reports a
 required specialist that is unavailable.
 
 Local tests cover each domain's blocked and ready artifacts, negative cases,
@@ -160,6 +160,32 @@ installation targets. Independent dry runs exercise local planning, a real
 temporary bug fix, failed QA and a blocked release. Provider APIs are mocked in
 tests; actual agent discovery, provider integrations, deployed application behavior
 and human acceptance are separate evidence levels.
+
+## Interface correction across a project
+
+`ct-design-fix-interface` handles a reported visual/interaction defect directly,
+without requiring a new product definition. It separates clear expected behavior,
+confirmed same-cause occurrences, preserved intentional variants and uncertainty.
+Uncertainty maps to actual pending questions in the shared scope ledger and holds
+the affected source file and declared shared owners unchanged. Completed
+clarification must have a recorded answer. The agent traces semantic aliases, shared consumers and route/state
+variants beyond literal search, and uses a scoped owner repair rather than a
+blind global replacement.
+
+The skill owns `scripts/interface.py`, copied into the manager. Its read-only scan
+captures bounded Git-listed frontend files and literal match identities without
+source-line contents. Checked baseline/final inventories require each match to be
+classified exactly once. Baseline source must match the failing reproduction;
+the final scan is regenerated from the current source. Fixed occurrences require
+linked rendered surfaces, declared viewport coverage, PNG identity/dimensions,
+visual inspection observations and passing interaction/regression/build evidence.
+A completed report cannot retain uncertain occurrences. These cooperative checks
+cannot prove semantic completeness, visual quality, browser authenticity or human
+acceptance. Runtime captures, source scans and ledgers remain private.
+
+Resource synchronization adapts the shared definition contract's command paths
+from `scripts/project.py` to each focused package's `scripts/definition.py`.
+It also generates the interface example's input digest from public synthetic JSON.
 
 ## Store release specialists and public-content checks
 
