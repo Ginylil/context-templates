@@ -39,7 +39,10 @@
   and isolated CLI checks under `tests/test_define_project*.py`. Do not copy
   private project definitions or interview histories into the public package.
 - Shared Python helpers live once under `shared/lifecycle/` and `shared/dynamic-uml/`.
-  Each source skill has a strict `assets/package.json` selecting helper filenames;
+  Each source skill has a strict v2 `assets/package.json` with a `scripts` list
+  of explicit `source` (repository-relative `shared/...`) and `destination`
+  (skill-relative `scripts/...`) paths. Include required sibling modules;
+  implicit filename maps and duplicate destinations are rejected.
   `assets/contract.json` remains behavioral policy. Never commit assembled script
   copies. `scripts/skills.py` is the CLI; `scripts/skill_tools/` owns the common
   payload, installation and size-limit logic. Never execute selected helpers. Use

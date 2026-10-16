@@ -1,14 +1,41 @@
 {
-  "schema_version": 1,
-  "scripts": {
-    "configuration.py": "lifecycle/configuration.py",
-    "definition.py": "lifecycle/definition.py",
-    "plan_contract.py": "lifecycle/plan.py",
-    "store_release.py": "lifecycle/store_release.py",
-    "workflow.py": "lifecycle/workflow.py",
-    "interface.py": "lifecycle/interface.py",
-    "definition_validation.py": "lifecycle/definition_validation.py",
-    "workflow_input.py": "lifecycle/workflow_input.py",
-    "workflow_rules.py": "lifecycle/workflow_rules.py"
-  }
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/lifecycle/configuration.py",
+      "destination": "scripts/configuration.py"
+    },
+    {
+      "source": "shared/lifecycle/definition.py",
+      "destination": "scripts/definition.py"
+    },
+    {
+      "source": "shared/lifecycle/plan.py",
+      "destination": "scripts/plan_contract.py"
+    },
+    {
+      "source": "shared/lifecycle/store_release.py",
+      "destination": "scripts/store_release.py"
+    },
+    {
+      "source": "shared/lifecycle/workflow.py",
+      "destination": "scripts/workflow.py"
+    },
+    {
+      "source": "shared/lifecycle/interface.py",
+      "destination": "scripts/interface.py"
+    },
+    {
+      "source": "shared/lifecycle/definition_validation.py",
+      "destination": "scripts/definition_validation.py"
+    },
+    {
+      "source": "shared/lifecycle/workflow_input.py",
+      "destination": "scripts/workflow_input.py"
+    },
+    {
+      "source": "shared/lifecycle/workflow_rules.py",
+      "destination": "scripts/workflow_rules.py"
+    }
+  ]
 }

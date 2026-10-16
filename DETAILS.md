@@ -44,22 +44,31 @@ Every source skill has `assets/package.json`, separate from its behavioral
 
 ```json
 {
-  "schema_version": 1,
-  "scripts": {
-    "definition.py": "lifecycle/definition.py",
-    "definition_validation.py": "lifecycle/definition_validation.py"
-  }
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/lifecycle/definition.py",
+      "destination": "scripts/definition.py"
+    },
+    {
+      "source": "shared/lifecycle/definition_validation.py",
+      "destination": "scripts/definition_validation.py"
+    }
+  ]
 }
 ```
 
-Keys are filenames delivered under that skill's `scripts/`; values name existing
-`shared/<family>/<script>.py` sources. An empty `scripts` object is valid. Manifest
-version, property names and types are strict, and duplicate JSON keys are rejected.
+Each `scripts` entry has exactly `source` and `destination`. Sources are literal
+repository-relative `shared/<family>/<script>.py` paths; destinations are literal
+skill-relative `scripts/<script>.py` paths. An empty list is valid. Manifest v2,
+property names and types are strict. Implicit v1 filename maps, duplicate JSON
+keys and duplicate destinations are rejected; a source may be reused with distinct
+destinations. Existing installed ownership receipts remain v1.
 There are no commands, templating, globbing, downloads or post-install hooks.
 Skill-local scripts such as the manager's `manage.py` stay local when unshared.
-The direction is destination → source; for example `"project.py":
-"lifecycle/definition.py"` installs that source under a different entry-point
-filename. Include required sibling modules explicitly; the assembler does not
+For example, setting `"destination": "scripts/project.py"` installs the same
+definition source under a different entry-point filename. Include required
+sibling modules explicitly; the assembler does not
 infer dependencies from imports. Definition delegates validation to
 `definition_validation.py`; workflow delegates to `workflow_input.py` and
 `workflow_rules.py` while preserving its existing public functions and callbacks.

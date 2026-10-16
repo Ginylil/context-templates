@@ -28,10 +28,11 @@ class PackageAssemblyTests(unittest.TestCase):
         self.helper = self.root / 'shared/runtime/helper.py'
         self.helper.parent.mkdir(parents=True)
         self.helper.write_text('print("standalone helper")\n')
-        self.manifest({'helper.py': 'runtime/helper.py'})
+        self.entry = {'source': 'shared/runtime/helper.py', 'destination': 'scripts/helper.py'}
+        self.manifest([self.entry])
 
     def manifest(self, scripts):
-        (self.skill / 'assets/package.json').write_text(json.dumps({'schema_version': 1, 'scripts': scripts}))
+        (self.skill / 'assets/package.json').write_text(json.dumps({'schema_version': 2, 'scripts': scripts}))
 
     def install(self, agents=None):
         with contextlib.redirect_stdout(io.StringIO()):
@@ -122,22 +123,55 @@ class PackageAssemblyTests(unittest.TestCase):
 
     def test_invalid_manifests_and_paths_fail_before_any_mutation(self):
         cases = [
-            {'schema_version': True, 'scripts': {}}, {'schema_version': 2, 'scripts': {}},
-            {'schema_version': 1, 'scripts': [], 'run': 'bad'},
-            {'schema_version': 1, 'scripts': {'../escape.py': 'runtime/helper.py'}},
-            {'schema_version': 1, 'scripts': {'con.py': 'runtime/helper.py'}},
-            {'schema_version': 1, 'scripts': {'Helper.py': 'runtime/helper.py'}},
+            {'schema_version': True, 'scripts': []}, {'schema_version': 1, 'scripts': []},
+            {'schema_version': 3, 'scripts': []}, {'schema_version': 2, 'scripts': {}},
+            {'schema_version': 1, 'scripts': {'helper.py': 'runtime/helper.py'}},
+            {'schema_version': 2, 'scripts': [], 'run': 'bad'},
         ]
-        for source in ['../private.py', '/tmp/private.py', 'C:/private.py', 'runtime/../private.py',
-                       'runtime\\private.py', '//server/private.py', '.hidden/helper.py',
-                       'runtime/.secret.py', 'runtime/missing.py', 'runtime/helper.py/extra']:
-            cases.append({'schema_version': 1, 'scripts': {'helper.py': source}})
+        for entry in (None, [], 'helper.py', {}, {'source': self.entry['source']},
+                      {'destination': self.entry['destination']}, {**self.entry, 'run': 'bad'}):
+            cases.append({'schema_version': 2, 'scripts': [entry]})
+        for source in [None, False, [], '../private.py', '/tmp/private.py', 'C:/private.py',
+                       'runtime/helper.py', 'shared/runtime/../private.py', 'shared/runtime\\private.py',
+                       '//server/private.py', 'shared/.hidden/helper.py', 'shared/runtime/.secret.py',
+                       'shared/runtime/missing.py', 'shared/runtime/helper.py/extra',
+                       'shared/runtime//helper.py', 'shared/runtime/Helper.py']:
+            cases.append({'schema_version': 2, 'scripts': [{**self.entry, 'source': source}]})
+        for destination in [None, False, [], 'helper.py', '../escape.py', '/scripts/helper.py',
+                            'C:/scripts/helper.py', 'scripts\\helper.py', 'scripts/../helper.py',
+                            'scripts/con.py', 'scripts/Helper.py', 'scripts/helper.py/extra',
+                            'scripts/.secret.py', 'assets/helper.py', 'scripts//helper.py']:
+            cases.append({'schema_version': 2, 'scripts': [{**self.entry, 'destination': destination}]})
         for config in cases:
             with self.subTest(config=config):
                 (self.skill / 'assets/package.json').write_text(json.dumps(config))
                 self.reject_before_output()
-        (self.skill / 'assets/package.json').write_text('{"schema_version":1,"scripts":{"helper.py":"runtime/helper.py","helper.py":"runtime/helper.py"}}')
+        (self.skill / 'assets/package.json').write_text(
+            '{"schema_version":2,"scripts":[{"source":"shared/runtime/helper.py",'
+            '"destination":"scripts/helper.py","destination":"scripts/other.py"}]}')
+        with self.assertRaisesRegex(ValueError, 'Duplicate JSON property'):
+            installer.catalog(self.root)
         self.reject_before_output()
+
+    def test_duplicate_destinations_are_rejected_before_any_output(self):
+        self.manifest([self.entry, self.entry])
+        with self.assertRaisesRegex(ValueError, 'destination collision'):
+            installer.catalog(self.root)
+        self.reject_before_output()
+
+    def test_same_source_can_have_distinct_explicit_destinations(self):
+        self.manifest([self.entry, {**self.entry, 'destination': 'scripts/alias.py'}])
+        self.install()
+        for destination in installer.TARGETS.values():
+            folder = self.home / destination / 'example/scripts'
+            self.assertEqual((folder / 'alias.py').read_bytes(), self.helper.read_bytes())
+            self.assertEqual((folder / 'helper.py').read_bytes(), self.helper.read_bytes())
+
+    def test_empty_scripts_list_installs_only_skill_local_files(self):
+        self.manifest([])
+        self.install()
+        for destination in installer.TARGETS.values():
+            self.assertEqual(set(installer.snapshot(self.home / destination / 'example')), {'SKILL.md'})
 
     def test_missing_source_manifest_is_rejected(self):
         (self.skill / 'assets/package.json').unlink()

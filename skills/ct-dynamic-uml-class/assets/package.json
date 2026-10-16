@@ -1,8 +1,17 @@
 {
-  "schema_version": 1,
-  "scripts": {
-    "render.py": "dynamic-uml/render.py",
-    "validate_flowchart.py": "dynamic-uml/validate_flowchart.py",
-    "validate_state.py": "dynamic-uml/validate_state.py"
-  }
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/dynamic-uml/render.py",
+      "destination": "scripts/render.py"
+    },
+    {
+      "source": "shared/dynamic-uml/validate_flowchart.py",
+      "destination": "scripts/validate_flowchart.py"
+    },
+    {
+      "source": "shared/dynamic-uml/validate_state.py",
+      "destination": "scripts/validate_state.py"
+    }
+  ]
 }

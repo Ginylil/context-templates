@@ -136,7 +136,11 @@ in `make check`.
 
 The twenty-one lifecycle entry points select portable helpers from `shared/lifecycle/`
 through source-only `assets/package.json` manifests. Each source skill requires a
-manifest, including an empty `scripts` object when no shared helper is needed.
+v2 manifest, including an empty `scripts` list when no shared helper is needed.
+Each entry has exactly `source` and `destination`: source paths start at the
+repository root (`shared/<family>/<script>.py`); destination paths start at the
+skill root (`scripts/<script>.py`). Destinations must be unique. Legacy implicit
+filename maps are rejected; installed ownership receipts remain v1.
 `assets/contract.json` remains runtime validation policy. See the strict manifest
 format in [DETAILS](DETAILS.md#package-composition). Do not commit generated script
 copies. Use `scripts/skills.py assemble` for local execution or review.

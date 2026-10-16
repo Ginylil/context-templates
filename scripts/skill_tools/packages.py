@@ -32,9 +32,9 @@ def safe_script(value: str) -> bool:
 
 def shared_script(root: Path, value: str) -> Path:
     # Only literal shared/<family>/<script>.py sources, no arbitrary repo paths.
-    if not isinstance(value, str) or value.count("/") != 1:
-        raise ValueError("Expected shared family/script.py source")
-    family, filename = value.split("/")
+    if not isinstance(value, str) or value.count("/") != 2 or not value.startswith("shared/"):
+        raise ValueError("Expected shared/<family>/<script>.py source")
+    _, family, filename = value.split("/")
     if not valid_name(family) or not safe_script(filename):
         raise ValueError("Invalid shared script source")
     path = root / "shared"
@@ -59,16 +59,21 @@ def package_payload(root: Path, folder: Path) -> dict:
     if manifest.is_file():
         config = json.loads(manifest.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
         if (not isinstance(config, dict) or set(config) != {"schema_version", "scripts"}
-                or type(config["schema_version"]) is not int or config["schema_version"] != 1
-                or not isinstance(config["scripts"], dict)):
+                or type(config["schema_version"]) is not int or config["schema_version"] != 2
+                or not isinstance(config["scripts"], list)):
             raise ValueError(f"{folder.name}: invalid package manifest")
-        for filename, shared in config["scripts"].items():
-            if not safe_script(filename):
+        destinations = set()
+        for entry in config["scripts"]:
+            if not isinstance(entry, dict) or set(entry) != {"source", "destination"}:
+                raise ValueError(f"{folder.name}: expected source and destination fields")
+            name = entry["destination"]
+            if (not isinstance(name, str) or not name.startswith("scripts/")
+                    or not safe_script(name[len("scripts/"):])):
                 raise ValueError(f"{folder.name}: invalid script destination")
-            name = "scripts/" + filename
-            if name in source:
+            if name in source or name in destinations:
                 raise ValueError(f"{folder.name}: script destination collision: {name}")
-            path = shared_script(root, shared)
+            destinations.add(name)
+            path = shared_script(root, entry["source"])
             payload[name] = (path.read_bytes(), bool(path.stat().st_mode & 0o111))
     # Retain truly empty source directories; omit a manifest-only assets folder.
     for name, fingerprint in source.items():

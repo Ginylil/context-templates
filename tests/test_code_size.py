@@ -81,8 +81,9 @@ class CodeSizeTests(unittest.TestCase):
             with self.subTest(shared=shared):
                 helper = 'shared/runtime/helper.py' if shared else 'skills/example/scripts/helper.py'
                 path = self.write(helper, b'# synthetic\n' * 301)
-                config = {'schema_version': 1,
-                          'scripts': {'helper.py': 'runtime/helper.py'} if shared else {}}
+                config = {'schema_version': 2,
+                          'scripts': [{'source': 'shared/runtime/helper.py',
+                                       'destination': 'scripts/helper.py'}] if shared else []}
                 manifest.write_text(json.dumps(config), encoding='utf-8')
                 output = self.root / 'output'
                 home = self.root / 'home'

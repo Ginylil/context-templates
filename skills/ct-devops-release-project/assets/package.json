@@ -1,10 +1,25 @@
 {
-  "schema_version": 1,
-  "scripts": {
-    "definition.py": "lifecycle/definition.py",
-    "workflow.py": "lifecycle/workflow.py",
-    "definition_validation.py": "lifecycle/definition_validation.py",
-    "workflow_input.py": "lifecycle/workflow_input.py",
-    "workflow_rules.py": "lifecycle/workflow_rules.py"
-  }
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/lifecycle/definition.py",
+      "destination": "scripts/definition.py"
+    },
+    {
+      "source": "shared/lifecycle/workflow.py",
+      "destination": "scripts/workflow.py"
+    },
+    {
+      "source": "shared/lifecycle/definition_validation.py",
+      "destination": "scripts/definition_validation.py"
+    },
+    {
+      "source": "shared/lifecycle/workflow_input.py",
+      "destination": "scripts/workflow_input.py"
+    },
+    {
+      "source": "shared/lifecycle/workflow_rules.py",
+      "destination": "scripts/workflow_rules.py"
+    }
+  ]
 }
