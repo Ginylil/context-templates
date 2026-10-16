@@ -21,8 +21,14 @@
   and locally edited installed copies, retain unrelated skills and removed catalog
   entries, and never execute packaged scripts during installation. Do not add force
   replacement or automatic pruning.
-- `make check` runs canonical diagram drift checks, catalog validation, and
-  isolated installer/package/rendering tests.
+- Keep every maintained coding file and packaged script at most 300 physical
+  lines, including tests, comments and blanks. Split by responsibility; do not
+  compress code to satisfy the limit. Only the eight generated standalone HTML
+  examples are exempt; their maintained template, CSS and JavaScript are checked.
+  `scripts/check_code_size.py` enforces source limits in check/build and CI;
+  payload assembly independently rejects oversized packaged code.
+- `make check` runs source-size and canonical diagram drift checks, catalog
+  validation, and isolated installer/package/rendering tests.
   `make build` generates skill ZIPs and a checksummed JSON catalog in `dist/`.
   Run both for publishable skill changes; meaningful behavior checks supplement
   metadata checks. Local checks are not CI or proof of discovery in each agent.
@@ -30,13 +36,13 @@
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
 - Define a Project's contract and examples live in its complete skill folder.
   Keep its 10-question/2-batch budget in one scope ledger, with negative tests
-  and isolated CLI checks under `tests/test_define_project.py`. Do not copy
+  and isolated CLI checks under `tests/test_define_project*.py`. Do not copy
   private project definitions or interview histories into the public package.
 - Shared Python helpers live once under `shared/lifecycle/` and `shared/dynamic-uml/`.
   Each source skill has a strict `assets/package.json` selecting helper filenames;
   `assets/contract.json` remains behavioral policy. Never commit assembled script
-  copies. `scripts/skills.py` owns the common payload logic for check, assembly,
-  installation and ZIPs; it must never execute selected helpers. Use
+  copies. `scripts/skills.py` is the CLI; `scripts/skill_tools/` owns the common
+  payload, installation and size-limit logic. Never execute selected helpers. Use
   `python3 scripts/skills.py assemble --output <new-directory>` before running
   commands from sparse source skills. Tests use disposable assembled catalogs.
 - The interface and manager manifests both select `shared/lifecycle/interface.py`.
@@ -58,7 +64,8 @@
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
   Shared Python renderer/verifiers are canonical under `shared/dynamic-uml/`;
-  template, supplied logo, guide and example JSON remain under `skills/ct-dynamic-uml/`.
+  HTML shell, CSS/JavaScript fragments, supplied logo, guide and example JSON
+  remain under `skills/ct-dynamic-uml/`.
   Regenerate focused-skill resources and HTML review examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
 

@@ -45,6 +45,14 @@ Top-level per-skill README files, hidden/generated files, links, and arbitrary
 resource directories are rejected. The installer does not execute skill scripts.
 Bundled resources are context for the task, not permission to broaden it.
 
+Keep maintained coding files and packaged scripts at most 300 physical lines,
+including comments and blanks. Split modules by responsibility rather than
+compressing code. This includes tests, HTML templates, CSS and JavaScript.
+Only the eight generated standalone HTML examples are exempt; their maintained
+inputs remain checked. `python scripts/check_code_size.py` checks tracked and
+nonignored new source files; Make and CI run it, and package assembly also checks
+every delivered coding file before creating output.
+
 ## Secret protection
 
 Install the free [Gitleaks CLI](https://github.com/gitleaks/gitleaks#installing)
@@ -93,6 +101,7 @@ blanket allowlist to make a check pass.
 3. Run `make check` and `make build`. Without Make, run:
 
    ```text
+   python scripts/check_code_size.py
    python scripts/dynamic_umls.py --check
    python scripts/ct_lifecycle.py --check
    python scripts/skills.py check
@@ -122,7 +131,7 @@ state transitions, and the complete CLI from an isolated installed package.
 Keep test suites under repository `tests/`, and package fixtures under `assets/`.
 Declare what scripts cannot prove; schema validation is not behavioral acceptance.
 Define a Project's focused checks run with
-`python -m unittest discover -s tests -p test_define_project.py -v` and are included
+`python -m unittest discover -s tests -p 'test_define_project*.py' -v` and are included
 in `make check`.
 
 The twenty-one lifecycle entry points select portable helpers from `shared/lifecycle/`
@@ -131,6 +140,8 @@ manifest, including an empty `scripts` object when no shared helper is needed.
 `assets/contract.json` remains runtime validation policy. See the strict manifest
 format in [DETAILS](DETAILS.md#package-composition). Do not commit generated script
 copies. Use `scripts/skills.py assemble` for local execution or review.
+Declare every required sibling module in the manifest: definition validation and
+workflow input/rules live in separate helpers, and imports do not add them automatically.
 Run `make resources` after changing canonical guides or synthetic examples; the
 remaining generated guides and example hashes are checked byte-for-byte. Focused
 packages use `scripts/definition.py`; generated ledger guides adapt the canonical
@@ -168,6 +179,8 @@ to refresh focused static resources and review HTML files. Script manifests
 assemble independent packages. The remaining generated static copies are required resources;
 the catalog's hidden/generated-file restriction refers to caches and hidden files,
 not these tracked synchronized assets. CI and `make check` reject resource drift.
+The renderer inlines `styles.css`, `diagram.js` and `controls.js` into
+`template.html`, retaining one offline HTML file per generated walkthrough.
 
 A diagram addition or visual change needs a concrete offline example and actual
 rendered review. With an existing Playwright installation, run

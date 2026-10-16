@@ -18,6 +18,18 @@ in CONTRIBUTING, names, package layout, manifests, assembled payloads and creden
 signatures. It rejects links (including Windows junctions/reparse points), hidden
 files and caches. It does not execute skills or certify their instructions.
 
+The CLI delegates to `scripts/skill_tools/`: `common.py` owns identity and
+snapshots, `packages.py` owns payload composition and ZIPs, `installation.py`
+owns safe updates, and `limits.py` owns the 300-line rule. Existing CLI commands
+and the `scripts/skills.py` import facade remain available.
+
+`scripts/check_code_size.py` checks tracked and nonignored new coding files,
+including tests and maintained HTML/CSS/JavaScript. Comments, blank lines and a
+final partial line count toward the 300 physical lines. Make check/build and CI
+run it. Only the eight generated HTML deliverables under `examples/dynamic-umls/`
+are exempt; their maintained inputs are checked. Package composition separately
+rejects every delivered coding file over the limit before output creation.
+
 `build` creates one ZIP per skill and a SHA-256 catalog in `dist/`. It packages
 skill-local files plus explicitly selected shared scripts, with stable ordering,
 timestamps, and executable flags. These outputs are ignored by Git. CI keeps
@@ -35,7 +47,7 @@ Every source skill has `assets/package.json`, separate from its behavioral
   "schema_version": 1,
   "scripts": {
     "definition.py": "lifecycle/definition.py",
-    "workflow.py": "lifecycle/workflow.py"
+    "definition_validation.py": "lifecycle/definition_validation.py"
   }
 }
 ```
@@ -45,6 +57,12 @@ Keys are filenames delivered under that skill's `scripts/`; values name existing
 version, property names and types are strict, and duplicate JSON keys are rejected.
 There are no commands, templating, globbing, downloads or post-install hooks.
 Skill-local scripts such as the manager's `manage.py` stay local when unshared.
+The direction is destination → source; for example `"project.py":
+"lifecycle/definition.py"` installs that source under a different entry-point
+filename. Include required sibling modules explicitly; the assembler does not
+infer dependencies from imports. Definition delegates validation to
+`definition_validation.py`; workflow delegates to `workflow_input.py` and
+`workflow_rules.py` while preserving its existing public functions and callbacks.
 
 One byte/mode payload function feeds `check`, `assemble`, installation and ZIP
 builds. Package metadata itself is excluded from delivered files. Scripts retain

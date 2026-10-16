@@ -185,7 +185,7 @@ class PackageAssemblyTests(unittest.TestCase):
         def mutate(*args):
             original(*args)
             self.helper.write_text('print("changed during staging")\n')
-        with patch.object(installer, 'write_package', side_effect=mutate):
+        with patch.object(installer.installation, 'write_package', side_effect=mutate):
             with self.assertRaisesRegex(ValueError, 'source changed'):
                 self.install(['codex'])
         self.assertEqual(installer.snapshot(folder), before)

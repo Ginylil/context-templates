@@ -180,6 +180,18 @@ def render(model, template=None, expected=None):
     validate(model, expected)
     template = template or Path(__file__).resolve().parents[1] / 'assets/template.html'
     page = template.read_text(encoding='utf-8')
+    # Author the page in cohesive resources, then inline every byte so the output
+    # remains a single offline file. Include only these fixed, local filenames.
+    fragments = {'__DIAGRAM_STYLES__': 'styles.css',
+                 '__DIAGRAM_RENDERER__': 'diagram.js',
+                 '__DIAGRAM_CONTROLS__': 'controls.js'}
+    for marker, filename in fragments.items():
+        if marker in page:
+            require(page.count(marker) == 1 and page.count(marker + '\n') == 1,
+                    f'template: expected one {marker} placeholder on its own line')
+            content = (template.parent / filename).read_text(encoding='utf-8')
+            require(content.endswith('\n'), f'template fragment: {filename} must end with a newline')
+            page = page.replace(marker + '\n', content)
     require(all(page.count(key) == 1 for key in ('__DIAGRAM_DATA__', '__PAGE_TITLE__')) and page.count('__GINYLIL_LOGO__') >= 1,
             'template: expected one title and model placeholder, and at least one logo placeholder')
     # Treat all model text as data. Escape HTML parser delimiters even in a JSON

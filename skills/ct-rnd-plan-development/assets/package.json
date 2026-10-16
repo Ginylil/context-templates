@@ -2,6 +2,7 @@
   "schema_version": 1,
   "scripts": {
     "definition.py": "lifecycle/definition.py",
-    "plan.py": "lifecycle/plan.py"
+    "plan.py": "lifecycle/plan.py",
+    "definition_validation.py": "lifecycle/definition_validation.py"
   }
 }

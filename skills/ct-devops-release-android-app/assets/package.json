@@ -4,6 +4,9 @@
     "configuration.py": "lifecycle/configuration.py",
     "definition.py": "lifecycle/definition.py",
     "store_release.py": "lifecycle/store_release.py",
-    "workflow.py": "lifecycle/workflow.py"
+    "workflow.py": "lifecycle/workflow.py",
+    "definition_validation.py": "lifecycle/definition_validation.py",
+    "workflow_input.py": "lifecycle/workflow_input.py",
+    "workflow_rules.py": "lifecycle/workflow_rules.py"
   }
 }

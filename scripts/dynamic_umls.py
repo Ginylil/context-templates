@@ -38,7 +38,8 @@ def rendered_outputs(package):
     result = {}
     for kind, name in NAMES.items():
         folder = ROOT / 'skills' / name
-        for resource in ('assets/template.html', 'assets/ginylil.png', 'references/authoring.md'):
+        for resource in ('assets/template.html', 'assets/styles.css', 'assets/diagram.js',
+                         'assets/controls.js', 'assets/ginylil.png', 'references/authoring.md'):
             result[folder / resource] = (CANONICAL / resource).read_bytes()
         model = CANONICAL / f'assets/examples/{kind}.json'
         result[folder / 'assets/example.json'] = model.read_bytes()

@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "scripts": {
-    "project.py": "lifecycle/definition.py"
+    "project.py": "lifecycle/definition.py",
+    "definition_validation.py": "lifecycle/definition_validation.py"
   }
 }

@@ -337,6 +337,9 @@ make check
 make build
 ```
 
+These commands enforce a 300-line limit for maintained code and packaged scripts.
+Generated standalone HTML examples are exempt; their maintained inputs are checked.
+
 Before contributing, install the free Gitleaks CLI and pre-commit, then run
 `make setup-hooks` once per clone to check staged files before commits. Run
 `make secret-check` to check current public files and reachable Git history.
