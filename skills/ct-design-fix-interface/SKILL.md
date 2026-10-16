@@ -1,6 +1,6 @@
 ---
 name: ct-design-fix-interface
-description: "Understand and reproduce a reported visual or interaction defect, correct the same confirmed problem across related components and screens, and verify matched before/after renders. Use when an existing interface looks or behaves wrong; ask before changing an uncertain variant."
+description: "Fix UI, UX and frontend (FE) defects across an existing project. Reproduce visual or interaction problems, correct confirmed occurrences across components and screens, and verify matched before/after renders. Ask before changing uncertain variants."
 ---
 
 # Fix an interface across the project

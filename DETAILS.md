@@ -172,6 +172,11 @@ clarification must have a recorded answer. The agent traces semantic aliases, sh
 variants beyond literal search, and uses a scoped owner repair rather than a
 blind global replacement.
 
+Its description and Codex `agents/openai.yaml` display metadata include UI, UX,
+frontend and FE terms. These identify the correction workflow; the canonical
+skill name stays `ct-design-fix-interface`. Metadata validation does not establish
+that a host's picker indexes every field; verify search behavior in that host.
+
 The skill owns `scripts/interface.py`, copied into the manager. Its read-only scan
 captures bounded Git-listed frontend files and literal match identities without
 source-line contents. Checked baseline/final inventories require each match to be

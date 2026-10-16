@@ -68,7 +68,7 @@ Inspect what already exists and take the next useful step toward my goal.
 | [`ct-rnd-review-code`](skills/ct-rnd-review-code/SKILL.md) | Review behavior and repository standards |
 | [`ct-rnd-improve-agent-setup`](skills/ct-rnd-improve-agent-setup/SKILL.md) | Improve agents from observed workflow problems |
 | [`ct-design-build-interface`](skills/ct-design-build-interface/SKILL.md) | Design and verify a usable interface |
-| [`ct-design-fix-interface`](skills/ct-design-fix-interface/SKILL.md) | Correct a reported interface problem across confirmed occurrences; clarify uncertain variants |
+| [`ct-design-fix-interface`](skills/ct-design-fix-interface/SKILL.md) | Fix UI, UX and frontend (FE) defects across confirmed occurrences; clarify uncertain variants |
 | [`ct-qa-plan-tests`](skills/ct-qa-plan-tests/SKILL.md) | Define behavioral coverage and verification |
 | [`ct-qa-test-user-flows`](skills/ct-qa-test-user-flows/SKILL.md) | Execute flows and report actual results |
 | [`ct-security-review-project`](skills/ct-security-review-project/SKILL.md) | Assess demonstrated security risks and uncertainty |
