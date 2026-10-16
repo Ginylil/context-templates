@@ -1,6 +1,8 @@
 # Implementation details
 
 The public GitHub repository contains canonical `skills/<name>/SKILL.md` folders.
+Focused definition guides adapt `scripts/project.py` commands to their packaged
+`scripts/definition.py`; Define a Project retains its canonical command.
 The README links directly to the self-contained bootstrap skill. There is no
 MCP/API publisher or separate website application. Existing GitHub Pages hosting
 serves the public static examples from `main`; it is configured outside the
