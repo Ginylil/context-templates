@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Synchronize standalone CT lifecycle support from canonical public sources."""
+"""Synchronize lifecycle guides and synthetic hashes; scripts assemble from manifests."""
 from __future__ import annotations
 
 import argparse
@@ -24,16 +24,8 @@ def outputs():
         if not name.startswith("ct-") or not (folder / "SKILL.md").is_file():
             raise ValueError(f"Missing canonical lifecycle skill: {name}")
         if name != define.name:
-            result[folder / "scripts/definition.py"] = (define / "scripts/project.py").read_bytes()
             result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_bytes()
-        if name not in (define.name, planner.name, MANAGER.name):
-            result[folder / "scripts/workflow.py"] = (MANAGER / "scripts/workflow.py").read_bytes()
-    result[MANAGER / "scripts/plan_contract.py"] = (planner / "scripts/plan.py").read_bytes()
     result[MANAGER / "references/planning-contract.md"] = (planner / "references/contract.md").read_bytes()
-    store = ROOT / "skills/ct-devops-release-apple-app/scripts/store_release.py"
-    for name in ("ct-devops-release-android-app", MANAGER.name):
-        result[ROOT / "skills" / name / "scripts/store_release.py"] = store.read_bytes()
-        result[ROOT / "skills" / name / "scripts/configuration.py"] = store.with_name("configuration.py").read_bytes()
     for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app"):
         folder = ROOT / "skills" / name / "assets"
         intake = json.loads((folder / "example-input.json").read_text(encoding="utf-8"))

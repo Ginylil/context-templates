@@ -21,7 +21,9 @@ def load(path, name):
 
 
 family = load(ROOT / 'scripts/dynamic_umls.py', 'dynamic_family')
-renderer = load(family.CANONICAL / 'scripts/render.py', 'dynamic_render')
+from assembled_catalog import SKILLS
+CANONICAL_PACKAGE = SKILLS / 'ct-dynamic-uml'
+renderer = load(CANONICAL_PACKAGE / 'scripts/render.py', 'dynamic_render')
 installer = load(ROOT / 'scripts/skills.py', 'dynamic_install')
 
 
@@ -87,7 +89,7 @@ class DynamicUmlTests(unittest.TestCase):
             for agent, destination in installer.TARGETS.items():
                 for old, new in legacy_names.items():
                     self.assertEqual(installer.snapshot(home / destination / old), snapshots[(agent, old)])
-                    self.assertEqual(installer.snapshot(home / destination / new), installer.snapshot(ROOT / 'skills' / new))
+                    self.assertEqual(installer.snapshot(home / destination / new), installer.snapshot(SKILLS / new))
             self.assertFalse(set(legacy_names) & set(installer.catalog(ROOT)))
 
     def test_long_sequence_renders_from_isolated_installed_copies(self):
@@ -108,7 +110,7 @@ class DynamicUmlTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / 'keep.html'
             output.write_text('user content')
-            result = subprocess.run([sys.executable, str(family.CANONICAL / 'scripts/render.py'),
+            result = subprocess.run([sys.executable, str(CANONICAL_PACKAGE / 'scripts/render.py'),
                 str(family.CANONICAL / 'assets/examples/class.json'), '--output', str(output)],
                 capture_output=True, text=True)
             self.assertNotEqual(result.returncode, 0)
@@ -185,7 +187,7 @@ class DynamicUmlTests(unittest.TestCase):
             renderer.validate(model)
 
     def test_orthogonal_geometry_detects_crossings_overlaps_and_shared_points(self):
-        layout = load(family.CANONICAL / 'scripts/validate_flowchart.py', 'flow_geometry')
+        layout = load(CANONICAL_PACKAGE / 'scripts/validate_flowchart.py', 'flow_geometry')
         self.assertEqual(layout.intersection(((0, 20), (80, 20)), ((40, 0), (40, 50))), (40, 20))
         self.assertEqual(layout.intersection(((0, 20), (80, 20)), ((40, 20), (100, 20))), 'overlap')
         self.assertIsNone(layout.intersection(((0, 20), (80, 20)), ((0, 40), (80, 40))))
@@ -203,7 +205,7 @@ class DynamicUmlTests(unittest.TestCase):
             layout.validate_layout(m)
 
     def test_flow_validator_cli_checks_json_and_embedded_html(self):
-        validator = family.CANONICAL / 'scripts/validate_flowchart.py'
+        validator = CANONICAL_PACKAGE / 'scripts/validate_flowchart.py'
         for path in [family.CANONICAL / 'assets/examples/flowchart.json', ROOT / 'examples/dynamic-umls/flowchart.html']:
             result = subprocess.run([sys.executable, str(validator), str(path)], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -284,7 +286,7 @@ class DynamicUmlTests(unittest.TestCase):
             renderer.validate(model)
 
     def test_state_verifier_cli_accepts_json_and_html(self):
-        validator=family.CANONICAL / 'scripts/validate_state.py'
+        validator=CANONICAL_PACKAGE / 'scripts/validate_state.py'
         for path in [family.CANONICAL / 'assets/examples/state.json', ROOT / 'examples/dynamic-umls/state.html']:
             result=subprocess.run([sys.executable,str(validator),str(path)],capture_output=True,text=True)
             self.assertEqual(result.returncode,0,result.stderr)

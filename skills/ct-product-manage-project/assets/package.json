@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "scripts": {
+    "configuration.py": "lifecycle/configuration.py",
+    "definition.py": "lifecycle/definition.py",
+    "plan_contract.py": "lifecycle/plan.py",
+    "store_release.py": "lifecycle/store_release.py",
+    "workflow.py": "lifecycle/workflow.py"
+  }
+}

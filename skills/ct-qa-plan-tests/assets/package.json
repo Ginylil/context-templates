@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "scripts": {
+    "definition.py": "lifecycle/definition.py",
+    "workflow.py": "lifecycle/workflow.py"
+  }
+}

@@ -125,20 +125,22 @@ Define a Project's focused checks run with
 `python -m unittest discover -s tests -p test_define_project.py -v` and are included
 in `make check`.
 
-The twenty lifecycle entry points share portable support through synchronized
-copies. Canonical sources are under Define a Project (definition validation),
-Manage a Project (domain validation and explicit command capture), and Plan
-Development (task graph and tracking validation). Run `make resources` after a
-canonical change, or `python scripts/ct_lifecycle.py` without Make. The generated
-files are required standalone resources; they are included in packages and
-checked byte-for-byte. Do not edit their copies manually. Bundled synthetic
+The twenty lifecycle entry points select portable helpers from `shared/lifecycle/`
+through source-only `assets/package.json` manifests. Each source skill requires a
+manifest, including an empty `scripts` object when no shared helper is needed.
+`assets/contract.json` remains runtime validation policy. See the strict manifest
+format in [DETAILS](DETAILS.md#package-composition). Do not commit generated script
+copies. Use `scripts/skills.py assemble` for local execution or review.
+Run `make resources` after changing canonical guides or synthetic examples; the
+remaining generated guides and example hashes are checked byte-for-byte.
+Bundled synthetic
 examples deliberately show blocked states when no real proof has been supplied.
 Tests must also exercise ready paths using disposable source trees and actual
 local command capture, while remote provider behavior uses mocked readbacks.
 Do not present either as live provider or human-acceptance proof.
 
-Store release checks share `scripts/store_release.py` and `scripts/configuration.py`
-from the Apple release skill, copied into Android and the manager by `make resources`.
+Store release checks select `shared/lifecycle/store_release.py` and
+`shared/lifecycle/configuration.py` for Apple, Android and the manager during assembly.
 The same generator derives both store example input hashes from their synthetic
 input JSON; never copy an application digest or hand-edit those generated fields.
 Test discovery/configuration and web-wrapper failure paths with disposable files
@@ -151,9 +153,10 @@ with a blanket fixture allowlist. Use constructed inert strings for scanner test
 
 ## Dynamic UML contributions
 
-Read [DESIGN](DESIGN.md). Change shared resources only in
-`skills/ct-dynamic-uml/`, then run `make examples` to refresh the focused packages
-and review HTML files. The generated copies are required standalone resources;
+Read [DESIGN](DESIGN.md). Change Python helpers in `shared/dynamic-uml/` and
+canonical static resources in `skills/ct-dynamic-uml/`, then run `make examples`
+to refresh focused static resources and review HTML files. Script manifests
+assemble independent packages. The remaining generated static copies are required resources;
 the catalog's hidden/generated-file restriction refers to caches and hidden files,
 not these tracked synchronized assets. CI and `make check` reject resource drift.
 

@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "scripts": {
+    "render.py": "dynamic-uml/render.py",
+    "validate_flowchart.py": "dynamic-uml/validate_flowchart.py",
+    "validate_state.py": "dynamic-uml/validate_state.py"
+  }
+}

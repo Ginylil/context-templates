@@ -15,7 +15,7 @@ from unittest.mock import patch
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ROOT / 'skills'
+from assembled_catalog import SKILLS
 spec = importlib.util.spec_from_file_location('store_engineering_fixture', ROOT / 'tests/test_engineering_lifecycle.py')
 fixture_module = importlib.util.module_from_spec(spec); spec.loader.exec_module(fixture_module)
 workflow = fixture_module.workflow

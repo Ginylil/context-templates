@@ -7,10 +7,14 @@ import html
 import importlib.util
 import json
 import sys
+import tempfile
 from pathlib import Path
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
+_assembler_spec = importlib.util.spec_from_file_location('ct_diagram_assembler', ROOT / 'scripts/skills.py')
+_assembler = importlib.util.module_from_spec(_assembler_spec)
+_assembler_spec.loader.exec_module(_assembler)
 CANONICAL = ROOT / 'skills/ct-dynamic-uml'
 NAMES = {
     'sequence': 'ct-dynamic-uml-sequence', 'class': 'ct-dynamic-uml-class',
@@ -20,13 +24,21 @@ NAMES = {
 
 
 def outputs():
-    spec = importlib.util.spec_from_file_location('diagram_renderer', CANONICAL / 'scripts/render.py')
+    # Contributor-only rendering; assembly/install/build never execute helpers.
+    with tempfile.TemporaryDirectory(prefix='ct-diagram-models-') as temporary:
+        assembled = Path(temporary) / 'skills'
+        _assembler.assemble(ROOT, assembled, ['ct-dynamic-uml'])
+        return rendered_outputs(assembled / 'ct-dynamic-uml')
+
+
+def rendered_outputs(package):
+    spec = importlib.util.spec_from_file_location('diagram_renderer', package / 'scripts/render.py')
     renderer = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(renderer)
     result = {}
     for kind, name in NAMES.items():
         folder = ROOT / 'skills' / name
-        for resource in ('assets/template.html', 'assets/ginylil.png', 'scripts/render.py', 'scripts/validate_flowchart.py', 'scripts/validate_state.py', 'references/authoring.md'):
+        for resource in ('assets/template.html', 'assets/ginylil.png', 'references/authoring.md'):
             result[folder / resource] = (CANONICAL / resource).read_bytes()
         model = CANONICAL / f'assets/examples/{kind}.json'
         result[folder / 'assets/example.json'] = model.read_bytes()

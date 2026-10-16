@@ -28,8 +28,8 @@ additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
 
-Each skill is a complete folder: `SKILL.md` tells your agent when and how to use
-it, while optional `references/`, `assets/`, and `scripts/` provide supporting
+Each installed skill or built ZIP is a complete folder. `SKILL.md` tells your agent
+when and how to use it; optional `references/`, `assets/`, and `scripts/` provide supporting
 guidance, templates, and deterministic tools. For Dynamic UMLs, the agent
 investigates your question and prepares a diagram model; bundled Python scripts
 validate that model and render one interactive HTML file you can open locally.
@@ -38,8 +38,8 @@ The page works offline, with no Python runtime needed to view it.
 The Makefile is a convenient interface to the Python installer. Choose your
 preferred agent with `make install-codex`, `make install-cursor`, or
 `make install-claude`; `make install` installs for all three. Add `SKILL=<name>`
-to install one skill. Installation copies the complete folder, including any
-scripts and resources, into that agent's local skills directory. It does not
+to install one skill. Installation assembles the complete folder from its source
+resources and JSON package manifest into that agent's local skills directory. It does not
 run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
@@ -78,7 +78,7 @@ Inspect what already exists and take the next useful step toward my goal.
 | [`ct-marketing-research-market`](skills/ct-marketing-research-market/SKILL.md) | Research audiences, competitors and positioning |
 | [`ct-marketing-launch-product`](skills/ct-marketing-launch-product/SKILL.md) | Prepare or execute an authorized launch |
 
-Each complete folder works independently. The guide checks which specialists
+Each installed folder and ZIP works independently. The guide checks which specialists
 are installed. The agent prepares JSON, while bundled Python tools validate
 structure, scope/source bindings, proof references and domain-specific rules.
 Explicit command capture records actual argv, output, exit status and source
@@ -207,10 +207,30 @@ The login request should clarify TCP versus browser/app/provider sign-in when
 context leaves it ambiguous. Generating a page uses Python 3.10+; the resulting
 HTML requires only a browser. Existing output files are never silently replaced.
 
-Each focused skill works independently. Shared resources have one canonical source
-under `skills/ct-dynamic-uml/`; synchronized copies make every ZIP self-contained.
+Each focused skill works independently after assembly. Shared Python helpers live
+once under `shared/dynamic-uml/`; JSON manifests select the installed scripts.
+Static diagram assets and guides remain canonical under `skills/ct-dynamic-uml/`,
+with synchronized focused copies.
 Use `make examples` after changing canonical resources or example JSON, then
 `make check` to catch drift. See [DESIGN](DESIGN.md) for visual and browser checks.
+
+## Source folders and standalone packages
+
+Repository skill folders select shared helpers through `assets/package.json`;
+copying a raw source folder with a generic folder-copy installer is insufficient.
+Use the supported installer or a built ZIP. To inspect or run a skill locally
+without installing it, assemble a new directory first:
+
+```sh
+python3 scripts/skills.py assemble --skill ct-rnd-fix-bug --output dist/review-skills
+```
+
+The output must not already exist. It contains a complete `ct-rnd-fix-bug/`
+folder; run its documented commands there. Omit `--skill` to assemble the full
+catalog. On Windows, use `py -3` instead of `python3`. Installation, assembly,
+and ZIP builds use the same payload logic and never execute packaged scripts.
+The existing `assets/contract.json` files still define validation policy;
+package manifests only select helpers. See [package composition](DETAILS.md#package-composition).
 
 ## Install locally
 
@@ -241,8 +261,8 @@ Select one skill with `make install-codex SKILL=context-templates`.
 | Cursor | `~/.cursor/skills/<name>/` |
 | Claude Code | `~/.claude/skills/<name>/` |
 
-The installer copies the complete skill folder, records ownership and content
-hashes, and leaves unrelated skills alone. Rerunning it is a no-op for unchanged
+The installer assembles the complete skill folder, records ownership and content
+hashes of the assembled output, and leaves unrelated skills alone. Rerunning it is a no-op for unchanged
 managed copies. Updates refuse unmanaged name conflicts, links, and locally
 edited managed copies; there is no force-overwrite option or automatic removal.
 Keep local modifications, contribute them by PR, or choose a different name
@@ -275,7 +295,7 @@ then fast-forward and reinstall:
 ```sh
 git fetch origin
 git log --oneline HEAD..origin/main
-git diff HEAD..origin/main -- skills scripts/skills.py
+git diff HEAD..origin/main -- skills shared scripts
 git pull --ff-only
 make install
 ```
@@ -319,8 +339,9 @@ in `dist/`. These files are reproducible local outputs and are also retained as
 CI artifacts. A GitHub Actions artifact download may require signing in; the raw
 bootstrap link above is public. Existing GitHub Pages hosting serves the example
 files; there is no separate website application or automatic release publication.
-Only `skills/` is packaged; private experiments belong in a separate
-private repository and must never be copied here as part of an install or build.
+Packages contain skill-local resources plus explicitly selected scripts from
+`shared/`. Source-only `assets/package.json` manifests are excluded. Private
+experiments belong in a separate private repository and must never be copied here.
 
 The previous YAML template collection and MCP/API publishing flow have been
 retired. Existing clones and third-party service data are unaffected by this

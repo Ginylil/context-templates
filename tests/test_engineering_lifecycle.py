@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ROOT / 'skills'
+from assembled_catalog import SKILLS
 NAMES = (
     'ct-rnd-design-architecture', 'ct-rnd-set-up-project', 'ct-rnd-build-feature',
     'ct-rnd-fix-bug', 'ct-rnd-review-code', 'ct-rnd-improve-agent-setup',

@@ -32,13 +32,15 @@
   Keep its 10-question/2-batch budget in one scope ledger, with negative tests
   and isolated CLI checks under `tests/test_define_project.py`. Do not copy
   private project definitions or interview histories into the public package.
-- Lifecycle support has canonical sources: Define a Project owns
-  `scripts/project.py` and its definition contract; Manage a Project owns
-  `scripts/workflow.py`; Plan Development owns `scripts/plan.py` and its contract.
-  Apple App Release owns `scripts/store_release.py`, copied into Android and
-  Manage a Project. Run `make resources` after changing these canonical sources.
-  Never hand-edit generated copies;
-  `make check` and `make build` reject drift. Every package works independently.
+- Shared Python helpers live once under `shared/lifecycle/` and `shared/dynamic-uml/`.
+  Each source skill has a strict `assets/package.json` selecting helper filenames;
+  `assets/contract.json` remains behavioral policy. Never commit assembled script
+  copies. `scripts/skills.py` owns the common payload logic for check, assembly,
+  installation and ZIPs; it must never execute selected helpers. Use
+  `python3 scripts/skills.py assemble --output <new-directory>` before running
+  commands from sparse source skills. Tests use disposable assembled catalogs.
+- `make resources` still regenerates lifecycle guides and synthetic example
+  hashes. Do not hand-edit those copies. Every assembled package works independently.
 - Public-content checks use `scripts/secret_scan.py`; check/build and CI reject
   detected credentials and signing files. Keep examples synthetic, runtime evidence
   private, and scan findings redacted. Never treat a heuristic pass as a guarantee.
@@ -53,11 +55,12 @@
 - Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
-  Shared renderer, flowchart/state verifiers, template, supplied logo, guide and example JSON are canonical under
-  `skills/ct-dynamic-uml/`. Regenerate focused-skill resources and HTML review
-  examples with `make examples`; never edit their generated copies manually.
+  Shared Python renderer/verifiers are canonical under `shared/dynamic-uml/`;
+  template, supplied logo, guide and example JSON remain under `skills/ct-dynamic-uml/`.
+  Regenerate focused-skill resources and HTML review examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
 
-- Store release helpers are canonical in the Apple release skill. Use `make resources`
-  to refresh Android/manager copies and synthetic example input hashes; never copy
+- Store release helpers are canonical under `shared/lifecycle/`, selected by the
+  Apple/Android/manager manifests. Use `make resources` to refresh synthetic example
+  input hashes; never copy
   private runtime discovery, app/configuration data or credentials into public fixtures.
