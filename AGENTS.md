@@ -21,8 +21,14 @@
   and locally edited installed copies, retain unrelated skills and removed catalog
   entries, and never execute packaged scripts during installation. Do not add force
   replacement or automatic pruning.
-- `make check` runs canonical diagram drift checks, catalog validation, and
-  isolated installer/package/rendering tests.
+- Keep every maintained coding file and packaged script at most 300 physical
+  lines, including tests, comments and blanks. Split by responsibility; do not
+  compress code to satisfy the limit. Only the eight generated standalone HTML
+  examples are exempt; their maintained template, CSS and JavaScript are checked.
+  `scripts/check_code_size.py` enforces source limits in check/build and CI;
+  payload assembly independently rejects oversized packaged code.
+- `make check` runs source-size and canonical diagram drift checks, catalog
+  validation, and isolated installer/package/rendering tests.
   `make build` generates skill ZIPs and a checksummed JSON catalog in `dist/`.
   Run both for publishable skill changes; meaningful behavior checks supplement
   metadata checks. Local checks are not CI or proof of discovery in each agent.
@@ -30,16 +36,22 @@
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
 - Define a Project's contract and examples live in its complete skill folder.
   Keep its 10-question/2-batch budget in one scope ledger, with negative tests
-  and isolated CLI checks under `tests/test_define_project.py`. Do not copy
+  and isolated CLI checks under `tests/test_define_project*.py`. Do not copy
   private project definitions or interview histories into the public package.
-- Lifecycle support has canonical sources: Define a Project owns
-  `scripts/project.py` and its definition contract; Manage a Project owns
-  `scripts/workflow.py`; Plan Development owns `scripts/plan.py` and its contract.
-  Fix Interface owns `scripts/interface.py`, copied into Manage a Project.
-  Apple App Release owns `scripts/store_release.py`, copied into Android and
-  Manage a Project. Run `make resources` after changing these canonical sources.
-  Never hand-edit generated copies;
-  `make check` and `make build` reject drift. Every package works independently.
+- Shared Python helpers live once under `shared/lifecycle/` and `shared/dynamic-uml/`.
+  Each source skill has a strict v2 `assets/package.json` with a `scripts` list
+  of explicit `source` (repository-relative `shared/...`) and `destination`
+  (skill-relative `scripts/...`) paths. Include required sibling modules;
+  implicit filename maps and duplicate destinations are rejected.
+  `assets/contract.json` remains behavioral policy. Never commit assembled script
+  copies. `scripts/skills.py` is the CLI; `scripts/skill_tools/` owns the common
+  payload, installation and size-limit logic. Never execute selected helpers. Use
+  `python3 scripts/skills.py assemble --output <new-directory>` before running
+  commands from sparse source skills. Tests use disposable assembled catalogs.
+- The interface and manager manifests both select `shared/lifecycle/interface.py`.
+  Preserve the interface policy branches in the shared workflow helper.
+- `make resources` still regenerates lifecycle guides and synthetic example
+  hashes. Do not hand-edit those copies. Every assembled package works independently.
 - Public-content checks use `scripts/secret_scan.py`; check/build and CI reject
   detected credentials and signing files. Keep examples synthetic, runtime evidence
   private, and scan findings redacted. Never treat a heuristic pass as a guarantee.
@@ -53,14 +65,19 @@
   staging acceptance, GitHub readbacks and release milestones remain explicit.
 - Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
+  Normalize ZIP creator metadata to Unix alongside the explicit POSIX modes;
+  write generated catalogs as UTF-8 with explicit LF newlines.
+  Windows, macOS and Linux CI archives and catalogs must match byte-for-byte.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
-  Shared renderer, flowchart/state verifiers, template, supplied logo, guide and example JSON are canonical under
-  `skills/ct-dynamic-uml/`. Regenerate focused-skill resources and HTML review
-  examples with `make examples`; never edit their generated copies manually.
+  Shared Python renderer/verifiers are canonical under `shared/dynamic-uml/`;
+  HTML shell, CSS/JavaScript fragments, supplied logo, guide and example JSON
+  remain under `skills/ct-dynamic-uml/`.
+  Regenerate focused-skill resources and HTML review examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
 
-- Store release helpers are canonical in the Apple release skill. Use `make resources`
-  to refresh Android/manager copies and synthetic example input hashes; never copy
+- Store release helpers are canonical under `shared/lifecycle/`, selected by the
+  Apple/Android/manager manifests. Use `make resources` to refresh synthetic example
+  input hashes; never copy
   private runtime discovery, app/configuration data or credentials into public fixtures.
 
 - Interface correction tests must distinguish confirmed repeated defects, justified

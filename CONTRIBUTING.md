@@ -45,6 +45,14 @@ Top-level per-skill README files, hidden/generated files, links, and arbitrary
 resource directories are rejected. The installer does not execute skill scripts.
 Bundled resources are context for the task, not permission to broaden it.
 
+Keep maintained coding files and packaged scripts at most 300 physical lines,
+including comments and blanks. Split modules by responsibility rather than
+compressing code. This includes tests, HTML templates, CSS and JavaScript.
+Only the eight generated standalone HTML examples are exempt; their maintained
+inputs remain checked. `python scripts/check_code_size.py` checks tracked and
+nonignored new source files; Make and CI run it, and package assembly also checks
+every delivered coding file before creating output.
+
 ## Secret protection
 
 Install the free [Gitleaks CLI](https://github.com/gitleaks/gitleaks#installing)
@@ -93,6 +101,7 @@ blanket allowlist to make a check pass.
 3. Run `make check` and `make build`. Without Make, run:
 
    ```text
+   python scripts/check_code_size.py
    python scripts/dynamic_umls.py --check
    python scripts/ct_lifecycle.py --check
    python scripts/skills.py check
@@ -122,25 +131,33 @@ state transitions, and the complete CLI from an isolated installed package.
 Keep test suites under repository `tests/`, and package fixtures under `assets/`.
 Declare what scripts cannot prove; schema validation is not behavioral acceptance.
 Define a Project's focused checks run with
-`python -m unittest discover -s tests -p test_define_project.py -v` and are included
+`python -m unittest discover -s tests -p 'test_define_project*.py' -v` and are included
 in `make check`.
 
-The twenty-one lifecycle entry points share portable support through synchronized
-copies. Canonical sources are under Define a Project (definition validation),
-Manage a Project (domain validation and explicit command capture), and Plan
-Development (task graph and tracking validation). Run `make resources` after a
-canonical change, or `python scripts/ct_lifecycle.py` without Make. The generated
-files are required standalone resources; they are included in packages and
-checked byte-for-byte. Focused packages use `scripts/definition.py`; generated
-ledger guides adapt the canonical `scripts/project.py` command to that filename.
-Do not edit their copies manually. Bundled synthetic
+The twenty-one lifecycle entry points select portable helpers from `shared/lifecycle/`
+through source-only `assets/package.json` manifests. Each source skill requires a
+v2 manifest, including an empty `scripts` list when no shared helper is needed.
+Each entry has exactly `source` and `destination`: source paths start at the
+repository root (`shared/<family>/<script>.py`); destination paths start at the
+skill root (`scripts/<script>.py`). Destinations must be unique. Legacy implicit
+filename maps are rejected; installed ownership receipts remain v1.
+`assets/contract.json` remains runtime validation policy. See the strict manifest
+format in [DETAILS](DETAILS.md#package-composition). Do not commit generated script
+copies. Use `scripts/skills.py assemble` for local execution or review.
+Declare every required sibling module in the manifest: definition validation and
+workflow input/rules live in separate helpers, and imports do not add them automatically.
+Run `make resources` after changing canonical guides or synthetic examples; the
+remaining generated guides and example hashes are checked byte-for-byte. Focused
+packages use `scripts/definition.py`; generated ledger guides adapt the canonical
+`scripts/project.py` command to that filename. Do not edit generated guides manually.
+Bundled synthetic
 examples deliberately show blocked states when no real proof has been supplied.
 Tests must also exercise ready paths using disposable source trees and actual
 local command capture, while remote provider behavior uses mocked readbacks.
 Do not present either as live provider or human-acceptance proof.
 
-Store release checks share `scripts/store_release.py` and `scripts/configuration.py`
-from the Apple release skill, copied into Android and the manager by `make resources`.
+Store release checks select `shared/lifecycle/store_release.py` and
+`shared/lifecycle/configuration.py` for Apple, Android and the manager during assembly.
 The same generator derives both store example input hashes from their synthetic
 input JSON; never copy an application digest or hand-edit those generated fields.
 Test discovery/configuration and web-wrapper failure paths with disposable files
@@ -152,7 +169,7 @@ The secret scan reports locations/rules without matched values; do not weaken it
 with a blanket fixture allowlist. Use constructed inert strings for scanner tests.
 
 Interface correction checks are canonical in
-`skills/ct-design-fix-interface/scripts/interface.py`, synchronized into the manager.
+`shared/lifecycle/interface.py`, selected by the interface and manager manifests.
 Test repeated occurrences, intentional exceptions, held uncertain files and resumed
 real-answer decisions as well as source/capture/viewport coverage. Synthetic PNGs
 can test artifact invariants but are not rendered browser proof. Runtime scans,
@@ -160,11 +177,14 @@ screenshots and interview data stay private.
 
 ## Dynamic UML contributions
 
-Read [DESIGN](DESIGN.md). Change shared resources only in
-`skills/ct-dynamic-uml/`, then run `make examples` to refresh the focused packages
-and review HTML files. The generated copies are required standalone resources;
+Read [DESIGN](DESIGN.md). Change Python helpers in `shared/dynamic-uml/` and
+canonical static resources in `skills/ct-dynamic-uml/`, then run `make examples`
+to refresh focused static resources and review HTML files. Script manifests
+assemble independent packages. The remaining generated static copies are required resources;
 the catalog's hidden/generated-file restriction refers to caches and hidden files,
 not these tracked synchronized assets. CI and `make check` reject resource drift.
+The renderer inlines `styles.css`, `diagram.js` and `controls.js` into
+`template.html`, retaining one offline HTML file per generated walkthrough.
 
 A diagram addition or visual change needs a concrete offline example and actual
 rendered review. With an existing Playwright installation, run

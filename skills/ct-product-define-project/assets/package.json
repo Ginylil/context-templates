@@ -1,0 +1,13 @@
+{
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/lifecycle/definition.py",
+      "destination": "scripts/project.py"
+    },
+    {
+      "source": "shared/lifecycle/definition_validation.py",
+      "destination": "scripts/definition_validation.py"
+    }
+  ]
+}

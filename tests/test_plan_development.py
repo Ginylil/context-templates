@@ -14,7 +14,8 @@ from unittest.mock import patch
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-SKILL = ROOT / 'skills/ct-rnd-plan-development'
+from assembled_catalog import SKILLS
+SKILL = SKILLS / 'ct-rnd-plan-development'
 
 
 def module(path, name):
@@ -218,7 +219,7 @@ class PlanTests(unittest.TestCase):
 
     def test_bundled_definition_validator_matches_source(self):
         self.assertEqual((SKILL / 'scripts/definition.py').read_bytes(),
-                         (ROOT / 'skills/ct-product-define-project/scripts/project.py').read_bytes())
+                         (SKILLS / 'ct-product-define-project/scripts/project.py').read_bytes())
 
 
 if __name__ == '__main__':

@@ -14,7 +14,7 @@ from unittest.mock import patch
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ROOT / 'skills'
+from assembled_catalog import SKILLS
 NAME = 'ct-design-fix-interface'
 
 def module(name, path):

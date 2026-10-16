@@ -13,6 +13,7 @@ spec = importlib.util.spec_from_file_location('release_store_fixture', Path(__fi
 fixtures = importlib.util.module_from_spec(spec); spec.loader.exec_module(fixtures)
 workflow = fixtures.workflow
 ROOT = fixtures.ROOT
+SKILLS = fixtures.SKILLS
 
 
 class ReleaseConfigurationTests(unittest.TestCase):
@@ -87,7 +88,7 @@ class ReleaseConfigurationTests(unittest.TestCase):
     def test_discovery_cli_is_read_only_and_refuses_output_overwrite(self):
         self.file('package.json', '{"scripts":{"postinstall":"do-not-execute"}}')
         output = self.store.base / 'cli-discovery.json'
-        argv = [sys.executable, str(ROOT / 'skills/ct-devops-release-apple-app/scripts/configuration.py'), '--repository', str(self.repo), '--platform', 'apple', '--output', str(output)]
+        argv = [sys.executable, str(SKILLS / 'ct-devops-release-apple-app/scripts/configuration.py'), '--repository', str(self.repo), '--platform', 'apple', '--output', str(output)]
         first = subprocess.run(argv, capture_output=True, text=True)
         self.assertEqual(first.returncode, 0, first.stderr)
         before = output.read_bytes()
@@ -215,7 +216,7 @@ class ReleaseConfigurationTests(unittest.TestCase):
 
     def test_generated_example_hashes_match_synthetic_inputs_and_cli(self):
         for platform in ('apple', 'android'):
-            folder = ROOT / f'skills/ct-devops-release-{platform}-app'
+            folder = SKILLS / f'ct-devops-release-{platform}-app'
             intake = fixtures.asset(platform, 'example-input.json')
             output = fixtures.asset(platform, 'example-output.json')
             expected = hashlib.sha256(json.dumps(intake, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()

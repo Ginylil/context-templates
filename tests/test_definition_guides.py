@@ -12,7 +12,7 @@ import unittest
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ROOT / 'skills'
+from assembled_catalog import SKILLS
 spec = importlib.util.spec_from_file_location('definition_guide_installer', ROOT / 'scripts/skills.py')
 installer = importlib.util.module_from_spec(spec); spec.loader.exec_module(installer)
 

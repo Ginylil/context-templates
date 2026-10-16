@@ -1,96 +1,25 @@
 """Behavioral proof for the standalone definition contract and interview ledger."""
-import contextlib
 import copy
-import importlib.util
-import io
-import json
 import os
-import subprocess
-import sys
-import tempfile
 import unittest
-import zipfile
-from pathlib import Path
 from unittest.mock import patch
 
-sys.dont_write_bytecode = True
-ROOT = Path(__file__).resolve().parents[1]
-SKILL = ROOT / "skills/ct-product-define-project"
+from define_project_fixture import (
+    DefineProjectFixture,
+    ROOT,
+    SKILLS,
+    SKILL,
+    module,
+    asset,
+    decision,
+    batch,
+    answers,
+    project,
+    installer,
+)
 
 
-def module(path, name):
-    spec = importlib.util.spec_from_file_location(name, path)
-    result = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(result)
-    return result
-
-
-project = module(SKILL / "scripts/project.py", "ct_project")
-installer = module(ROOT / "scripts/skills.py", "ct_project_installer")
-
-
-def asset(name):
-    return json.loads((SKILL / "assets" / name).read_text(encoding="utf-8"))
-
-
-def decision(key, blocking=True, dependencies=None):
-    return {"id": key, "topic": f"Choice about {key}", "depends_on": dependencies or [],
-            "blocking": blocking, "resolution": None}
-
-
-def batch(keys, start=1, event_id="batch-one"):
-    return {"id": event_id, "type": "ask", "questions": [
-        {"id": f"Q{number}", "decision_id": key, "prompt": f"Choose {key}?",
-         "options": ["First choice", "Second choice"], "recommended_option": 0}
-        for number, key in enumerate(keys, start)]}
-
-
-def answers(start=1, count=1, event_id="answers-one"):
-    return {"id": event_id, "type": "answer", "answers": [
-        {"question_id": f"Q{n}", "answer": "Second choice, with a user qualification.",
-         "source": f"Actual test user submission Q{n}"} for n in range(start, start + count)]}
-
-
-class DefineProjectTests(unittest.TestCase):
-    def setUp(self):
-        self.temporary = tempfile.TemporaryDirectory()
-        self.addCleanup(self.temporary.cleanup)
-        self.work = Path(self.temporary.name)
-        self.path = self.work / "ledger.json"
-
-    def start(self, value=None):
-        return project.start(value or asset("example-input.json"), self.path)[0]
-
-    def apply(self, event):
-        revision = project.replay(project.load(self.path))["revision"]
-        return project.apply_event(self.path, event, revision)[0]
-
-    def independent(self, count):
-        value = asset("example-input.json")
-        value["decisions"] = [decision(f"choice-{n}") for n in range(1, count + 1)]
-        self.start(value)
-        return [d["id"] for d in value["decisions"]]
-
-    def bind(self, ledger):
-        value = asset("example-definition.json")
-        value["input_sha256"] = project.digest(ledger["input"])
-        value["ledger_sha256"] = project.digest(ledger)
-        value["decisions"] = [{"id": d["id"], **d["resolution"]}
-                              for d in project.replay(ledger)["decisions"] if d["resolution"] is not None]
-        value["assumptions"] = []
-        return value
-
-    def assert_rejected_without_write(self, event, message):
-        before = self.path.read_bytes()
-        with self.assertRaisesRegex(ValueError, message):
-            self.apply(event)
-        self.assertEqual(self.path.read_bytes(), before)
-        self.assertFalse(self.path.with_suffix(".json.lock").exists())
-
-    def cli(self, *args, script=None):
-        return subprocess.run([sys.executable, str(script or SKILL / "scripts/project.py"), *map(str, args)],
-                              cwd=self.work, capture_output=True, text=True)
-
+class DefineProjectTests(DefineProjectFixture):
     def test_complete_examples_are_bound_and_renderable(self):
         ledger, value = asset("example-ledger.json"), asset("example-definition.json")
         self.assertEqual(ledger["input"], asset("example-input.json"))
@@ -125,18 +54,6 @@ class DefineProjectTests(unittest.TestCase):
         self.assert_rejected_without_write(batch(keys[7:], 8, "batch-two"), "maximum 10")
         ledger = self.apply(batch(keys[7:10], 8, "batch-two"))
         self.assertEqual(project.replay(ledger)["questions_used"], 10)
-
-    def test_cli_limit_error_preserves_ledger(self):
-        keys = self.independent(11)
-        self.apply(batch(keys[:10]))
-        self.apply(answers(count=10))
-        event = self.work / "eleventh-question.json"
-        event.write_text(project.encoded(batch(keys[10:], 11, "batch-two")), encoding="utf-8")
-        before = self.path.read_bytes()
-        result = self.cli("apply", self.path, event, "--expect-revision", 2)
-        self.assertEqual(result.returncode, 1)
-        self.assertIn("maximum 10 questions", result.stderr)
-        self.assertEqual(self.path.read_bytes(), before)
 
     def test_dependency_within_same_batch_is_rejected(self):
         value = asset("example-input.json")
@@ -344,55 +261,6 @@ class DefineProjectTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "stale ledger"):
             project.validate_output(ledger, definition)
 
-    def test_cli_rejects_duplicate_json_keys_and_nonfinite_numbers_without_traceback(self):
-        for raw in ('{"schema_version":1,"schema_version":1}', '{"schema_version":NaN}'):
-            path = self.work / "bad.json"
-            path.write_text(raw, encoding="utf-8")
-            result = self.cli("validate-input", path)
-            self.assertEqual(result.returncode, 1)
-            self.assertIn("Error:", result.stderr)
-            self.assertNotIn("Traceback", result.stderr)
-
-    def test_cli_pipeline_runs_from_isolated_installs_for_all_agents(self):
-        for agent in installer.TARGETS:
-            with self.subTest(agent=agent):
-                home = self.work / f"{agent} home"
-                with contextlib.redirect_stdout(io.StringIO()):
-                    installer.install(ROOT, home, [agent], [SKILL.name], False)
-                installed = home / installer.TARGETS[agent] / SKILL.name
-                script = installed / "scripts/project.py"
-                assets = installed / "assets"
-                ledger = self.work / f"{agent}-ledger.json"
-                for args in [
-                    ("validate-input", assets / "example-input.json"),
-                    ("start", assets / "example-input.json", "--ledger", ledger),
-                    ("apply", ledger, assets / "example-batch.json", "--expect-revision", 0),
-                    ("apply", ledger, assets / "example-answers.json", "--expect-revision", 1),
-                    ("validate-output", ledger, assets / "example-definition.json"),
-                    ("render", ledger, assets / "example-definition.json", "--output", self.work / f"{agent}.md"),
-                ]:
-                    result = self.cli(*args, script=script)
-                    self.assertEqual(result.returncode, 0, result.stderr)
-                result = self.cli("status", ledger, script=script)
-                self.assertEqual(json.loads(result.stdout)["questions_used"], 2)
-                before = (self.work / f"{agent}.md").read_bytes()
-                result = self.cli("render", ledger, assets / "example-definition.json", "--output",
-                                  self.work / f"{agent}.md", script=script)
-                self.assertEqual(result.returncode, 1)
-                self.assertEqual((self.work / f"{agent}.md").read_bytes(), before)
-
-    def test_built_archive_works_without_source_repository(self):
-        output = self.work / "dist"
-        with contextlib.redirect_stdout(io.StringIO()):
-            installer.build(ROOT, output)
-        extracted = self.work / "extracted"
-        with zipfile.ZipFile(output / f"{SKILL.name}.zip") as archive:
-            archive.extractall(extracted)
-        package = extracted / SKILL.name
-        result = self.cli("validate-output", package / "assets/example-ledger.json",
-                          package / "assets/example-definition.json", script=package / "scripts/project.py")
-        self.assertEqual(result.returncode, 0, result.stderr)
-
     @unittest.skipIf(os.name == "nt", "Windows symlink creation requires optional privileges")
     def test_ledger_symlink_does_not_modify_target(self):
         target = self.work / "target.json"
@@ -402,6 +270,7 @@ class DefineProjectTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "symlink"):
             project.start(asset("example-input.json"), self.path)
         self.assertEqual(target.read_bytes(), before)
+
 
 
 if __name__ == "__main__":

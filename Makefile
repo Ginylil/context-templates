@@ -41,6 +41,7 @@ secret-check:
 	gitleaks git --redact --log-opts="--all" .
 
 check:
+	$(PYTHON) scripts/check_code_size.py
 	$(PYTHON) scripts/dynamic_umls.py --check
 	$(PYTHON) scripts/ct_lifecycle.py --check
 	$(PYTHON) scripts/skills.py check
@@ -51,6 +52,7 @@ test:
 	$(PYTHON) -m unittest discover -s tests -v
 
 build:
+	$(PYTHON) scripts/check_code_size.py
 	$(PYTHON) scripts/dynamic_umls.py --check
 	$(PYTHON) scripts/ct_lifecycle.py --check
 	$(PYTHON) scripts/skills.py build

@@ -11,7 +11,7 @@ import unittest
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-SKILLS = ROOT / 'skills'
+from assembled_catalog import SKILLS
 NAMES = ['ct-qa-test-user-flows', 'ct-security-review-project', 'ct-devops-release-project',
          'ct-devops-maintain-project', 'ct-product-review-product',
          'ct-marketing-research-market', 'ct-marketing-launch-product']

@@ -1,7 +1,6 @@
 """Behavioral checks for standalone diagram packages and HTML generation."""
 import contextlib
 import io
-import importlib.util
 import json
 import subprocess
 import sys
@@ -9,26 +8,19 @@ import tempfile
 import unittest
 from pathlib import Path
 
-sys.dont_write_bytecode = True
-ROOT = Path(__file__).resolve().parents[1]
+from dynamic_umls_fixture import (
+    DynamicUmlFixture,
+    ROOT,
+    SKILLS,
+    CANONICAL_PACKAGE,
+    load,
+    family,
+    renderer,
+    installer,
+)
 
 
-def load(path, name):
-    spec = importlib.util.spec_from_file_location(name, path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
-
-family = load(ROOT / 'scripts/dynamic_umls.py', 'dynamic_family')
-renderer = load(family.CANONICAL / 'scripts/render.py', 'dynamic_render')
-installer = load(ROOT / 'scripts/skills.py', 'dynamic_install')
-
-
-class DynamicUmlTests(unittest.TestCase):
-    def model(self, kind='sequence'):
-        return json.loads((family.CANONICAL / f'assets/examples/{kind}.json').read_text(encoding='utf-8'))
-
+class DynamicUmlTests(DynamicUmlFixture):
     def test_canonical_copies_and_review_examples_are_current(self):
         for path, expected in family.outputs().items():
             with self.subTest(path=path):
@@ -87,7 +79,7 @@ class DynamicUmlTests(unittest.TestCase):
             for agent, destination in installer.TARGETS.items():
                 for old, new in legacy_names.items():
                     self.assertEqual(installer.snapshot(home / destination / old), snapshots[(agent, old)])
-                    self.assertEqual(installer.snapshot(home / destination / new), installer.snapshot(ROOT / 'skills' / new))
+                    self.assertEqual(installer.snapshot(home / destination / new), installer.snapshot(SKILLS / new))
             self.assertFalse(set(legacy_names) & set(installer.catalog(ROOT)))
 
     def test_long_sequence_renders_from_isolated_installed_copies(self):
@@ -108,7 +100,7 @@ class DynamicUmlTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / 'keep.html'
             output.write_text('user content')
-            result = subprocess.run([sys.executable, str(family.CANONICAL / 'scripts/render.py'),
+            result = subprocess.run([sys.executable, str(CANONICAL_PACKAGE / 'scripts/render.py'),
                 str(family.CANONICAL / 'assets/examples/class.json'), '--output', str(output)],
                 capture_output=True, text=True)
             self.assertNotEqual(result.returncode, 0)
@@ -185,7 +177,7 @@ class DynamicUmlTests(unittest.TestCase):
             renderer.validate(model)
 
     def test_orthogonal_geometry_detects_crossings_overlaps_and_shared_points(self):
-        layout = load(family.CANONICAL / 'scripts/validate_flowchart.py', 'flow_geometry')
+        layout = load(CANONICAL_PACKAGE / 'scripts/validate_flowchart.py', 'flow_geometry')
         self.assertEqual(layout.intersection(((0, 20), (80, 20)), ((40, 0), (40, 50))), (40, 20))
         self.assertEqual(layout.intersection(((0, 20), (80, 20)), ((40, 20), (100, 20))), 'overlap')
         self.assertIsNone(layout.intersection(((0, 20), (80, 20)), ((0, 40), (80, 40))))
@@ -203,7 +195,7 @@ class DynamicUmlTests(unittest.TestCase):
             layout.validate_layout(m)
 
     def test_flow_validator_cli_checks_json_and_embedded_html(self):
-        validator = family.CANONICAL / 'scripts/validate_flowchart.py'
+        validator = CANONICAL_PACKAGE / 'scripts/validate_flowchart.py'
         for path in [family.CANONICAL / 'assets/examples/flowchart.json', ROOT / 'examples/dynamic-umls/flowchart.html']:
             result = subprocess.run([sys.executable, str(validator), str(path)], capture_output=True, text=True)
             self.assertEqual(result.returncode, 0, result.stderr)
@@ -214,80 +206,6 @@ class DynamicUmlTests(unittest.TestCase):
             result = subprocess.run([sys.executable, str(validator), str(path)], capture_output=True, text=True)
             self.assertNotEqual(result.returncode, 0)
             self.assertIn('clearance', result.stderr)
-
-    def test_state_routes_and_labels_are_validated(self):
-        renderer.validate(self.model('state'))
-        mutations = [
-            (lambda m: m['edges'][1].update(labelAt={'x':1,'y':1}), 'labelOn'),
-            (lambda m: m['edges'][1].update(labelOn={'segment':99}), 'invalid segment'),
-            (lambda m: m['edges'][1].update(labelOn={'segment':0,'at':0}), 'does not fit'),
-            (lambda m: m['edges'][1].update(label='A transition label that cannot fit this short arrow segment'), 'does not fit'),
-            (lambda m: m['edges'][1].update(fromPort='top'), 'orthogonal'),
-            (lambda m: m['nodes'][2].update(x=270), 'clearance'),
-            (lambda m: m.update(orientation='diagonal'), 'orientation'),
-            (lambda m: m['nodes'].append(dict(m['nodes'][0], id='extra', x=90, y=460)), 'exceeds 7'),
-        ]
-        for mutate, error in mutations:
-            model = self.model('state'); mutate(model)
-            with self.subTest(error=error), self.assertRaisesRegex(ValueError, error):
-                renderer.validate(model)
-        model = self.model('state')
-        model['edges'].append(dict(model['edges'][0], id='duplicate'))
-        with self.assertRaisesRegex(ValueError, 'overlapping connectors'):
-            renderer.validate(model)
-
-    def state_loop_model(self):
-        model = self.model('state')
-        model.update(width=900, height=420, nodes=[
-            dict(id='a',kind='state',label='Waiting',detail='An illustrative stable state.',x=180,y=180,w=140),
-            dict(id='b',kind='state',label='Working',detail='Another illustrative stable state.',x=650,y=180,w=140)],
-            edges=[dict(id='start',kind='transition',label='start',detail='Begin work.',**{'from':'a','to':'b'},
-                fromPort='right',toPort='left',route='forward',labelOn={'segment':0}),
-                dict(id='retry',kind='transition',label='retry',detail='Return to Waiting.',**{'from':'b','to':'a'},
-                fromPort='top',toPort='top',route='loop',via=[{'x':650,'y':60},{'x':180,'y':60}],labelOn={'segment':1})],
-            scenarios=[dict(id='retry',label='Retry',steps=[dict(title='Retry the work',body='Return on an outer rail.',nodes=['a','b'],edges=['retry'])])])
-        return model
-
-    def test_state_outer_returns_self_transitions_vertical_views_and_details(self):
-        model = self.state_loop_model(); renderer.validate(model)
-        model['edges'][1]['via'] = [{'x':650,'y':130},{'x':180,'y':130}]
-        with self.assertRaisesRegex(ValueError, 'outer side rail'):
-            renderer.validate(model)
-        model = self.state_loop_model()
-        model['edges'][1].update(**{'from':'a','to':'a'},fromPort='top',toPort='bottom',
-            via=[{'x':180,'y':45},{'x':50,'y':45},{'x':50,'y':270},{'x':180,'y':270}])
-        renderer.validate(model)
-        # Rotate the same valid horizontal graph to prove the vertical policy.
-        model = self.state_loop_model();model['orientation']='vertical';model['width'],model['height']=model['height'],model['width']
-        for n in model['nodes']:n['x'],n['y']=n['y'],n['x'];n['w'],n['h']=66,140
-        sides={'right':'bottom','left':'top','top':'left','bottom':'right'}
-        for e in model['edges']:
-            e['fromPort']=sides[e['fromPort']];e['toPort']=sides[e['toPort']]
-            for p in e.get('via',[]):p['x'],p['y']=p['y'],p['x']
-        renderer.validate(model)
-        model=self.model('state');child=self.state_loop_model();child['id']='draft-detail'
-        model['nodes'][1]['subflow']='draft-detail';model['subflows']=[child]
-        renderer.validate(model)
-        model['nodes'][1]['subflow']='missing'
-        with self.assertRaisesRegex(ValueError,'local subflow'):
-            renderer.validate(model)
-
-    def test_state_label_cannot_mask_another_transition(self):
-        model = self.state_loop_model();model['edges']=model['edges'][:1]
-        for name, x in [('c',320),('d',510)]:
-            model['nodes'].append(dict(id=name,kind='state',label=name.upper(),detail='Illustrative alternate state.',x=x,y=300,w=100))
-        model['edges'].append(dict(id='alternate',kind='transition',label='go',detail='Alternate transition.',
-            **{'from':'c','to':'d'},fromPort='top',toPort='top',route='forward',
-            via=[{'x':320,'y':188},{'x':510,'y':188}],labelOn={'segment':0}))
-        model['scenarios'][0]['steps'][0]['edges']=['start']
-        with self.assertRaisesRegex(ValueError,'label covers another transition'):
-            renderer.validate(model)
-
-    def test_state_verifier_cli_accepts_json_and_html(self):
-        validator=family.CANONICAL / 'scripts/validate_state.py'
-        for path in [family.CANONICAL / 'assets/examples/state.json', ROOT / 'examples/dynamic-umls/state.html']:
-            result=subprocess.run([sys.executable,str(validator),str(path)],capture_output=True,text=True)
-            self.assertEqual(result.returncode,0,result.stderr)
 
     def test_class_relationship_direction_and_activity_parallelism(self):
         classes = self.model('class')
@@ -300,5 +218,6 @@ class DynamicUmlTests(unittest.TestCase):
         self.assertTrue({'stock-start', 'payment-start'}.issubset(parallel['edges']))
 
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     unittest.main()

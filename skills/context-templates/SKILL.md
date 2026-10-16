@@ -59,8 +59,11 @@ GitHub account are needed only when creating a contribution PR.
    `--skill` from both commands; do not pass `--skill all`. Agents are `codex`,
    `cursor`, `claude`, and `all`. On Windows, use the available `py -3` or `python`
    interpreter for the same script; native Make is not required.
-3. The installer copies complete skill folders into the documented user-level
-   directories. It records hashes and ownership, leaves unrelated skills alone,
+3. The installer assembles complete skill folders using the source-only
+   `assets/package.json` manifests and shared helpers. Use this installer or a
+   built ZIP; copying a raw source folder may omit required scripts. Installation
+   never executes packaged scripts. It records assembled-file hashes and
+   ownership in the documented user-level directories, leaves unrelated skills alone,
    and refuses unmanaged conflicts, links, and edited installed copies. Do not
    bypass a conflict with force, deletion, or an unreviewed replacement. Report
    the exact conflict; let the user preserve it or choose a distinct skill name.
@@ -70,7 +73,10 @@ GitHub account are needed only when creating a contribution PR.
    branch, or discard edits to obtain a newer version. Use a separate clean
    checkout when the existing one has local work. Rerun the selected installer;
    it updates only managed copies whose recorded hashes still match local files.
-5. Confirm the installed `SKILL.md` and resources match the source. Check actual
+5. Confirm the installed `SKILL.md` and resources match the assembled payload
+   and ownership receipt. For local inspection, use
+   `python3 scripts/skills.py assemble --skill <name> --output <new-directory>`.
+   The output directory must not exist. Check actual
    discovery in the requested agent when that runtime is available. If it does
    not appear, start a fresh session or restart the agent. File installation
    alone is not proof of discovery or successful invocation. Report the source
