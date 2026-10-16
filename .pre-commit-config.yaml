@@ -1,0 +1,15 @@
+repos:
+  - repo: local
+    hooks:
+      - id: public-credentials
+        name: Check staged public files for credentials and signing files
+        entry: python scripts/secret_scan.py --staged
+        language: python
+        pass_filenames: false
+        always_run: true
+      - id: gitleaks
+        name: Detect staged secrets with Gitleaks
+        entry: gitleaks git --pre-commit --staged --redact
+        language: system
+        pass_filenames: false
+        always_run: true
