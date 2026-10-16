@@ -202,6 +202,18 @@ checks all reachable Git blobs. This is a heuristic guard, not a guarantee that
 all secrets are detectable. It never validates tokens or prints matched values.
 New public examples use synthetic names; runtime evidence remains private.
 
+`make setup-hooks` installs the opt-in pre-commit configuration for contributors;
+it does not run during skill installation. Its repository scanner uses `--staged`
+to inspect changed index blobs rather than the working copy, including force-added
+ignored files. Gitleaks independently checks staged changes with redacted output.
+`make secret-check` runs both scanners over reachable Git history, with the
+repository scanner also checking current public files. The separate `Scan secrets
+and history` CI job checks a full checkout and installs Gitleaks 8.30.1 from its
+official release with a pinned archive SHA-256. It uses the free CLI directly,
+not the separately licensed GitHub Action wrapper. Updating the CLI version in CI
+requires updating its checksum as well. GitHub repository secret scanning and push
+protection are administrator-managed controls, independent of these local files.
+
 ## Dynamic UMLs
 
 The `ct-dynamic-uml` router skill owns the shared HTML renderer, standard-library generator,

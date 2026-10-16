@@ -308,6 +308,12 @@ make check
 make build
 ```
 
+Before contributing, install the free Gitleaks CLI and pre-commit, then run
+`make setup-hooks` once per clone to check staged files before commits. Run
+`make secret-check` to check current public files and reachable Git history.
+See [contributor security setup](CONTRIBUTING.md#secret-protection)
+for installation, Windows commands, coverage and recovery steps.
+
 Builds produce a ZIP for each complete skill plus a checksummed `catalog.json`
 in `dist/`. These files are reproducible local outputs and are also retained as
 CI artifacts. A GitHub Actions artifact download may require signing in; the raw
