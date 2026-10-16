@@ -7,6 +7,11 @@ description: "Design and implement an interface with clear hierarchy, platform-a
 
 A rendered, interactive engineering candidate with requirement and viewport coverage.
 
+For an existing reported defect that must be corrected across related screens,
+prefer `ct-design-fix-interface` when available. It inventories repeated causes
+and holds uncertain variants for clarification; this skill owns new/substantial
+interface design and implementation.
+
 ## Method
 
 Inspect the current design language, actual user flow, content, and target platform before choosing a visual direction. Read the project's design contract when present. Establish hierarchy from the user's primary task; simplify copy, competing actions, and unnecessary choices before adding ornament. Preserve recognizable patterns unless the requested change justifies replacing them.

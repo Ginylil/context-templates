@@ -125,6 +125,13 @@ def store_module():
     return result
 
 
+def interface_module():
+    spec = importlib.util.spec_from_file_location("ct_interface_fix", Path(__file__).with_name("interface.py"))
+    result = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(result)
+    return result
+
+
 def validate_input(policy, value, base=Path.cwd(), *, historical=False):
     fields(policy, "skill purpose requires_definition inputs result rules", "policy")
     fields(value, "schema_version project_id request repository ledger definition constraints sources inputs", "input")
@@ -180,6 +187,8 @@ def validate_input(policy, value, base=Path.cwd(), *, historical=False):
     for rule in policy["rules"]:
         if rule.get("type") == "store-release":
             store_module().check_input(rule, value, context, globals())
+        elif rule.get("type") == "interface-fix":
+            interface_module().check_input(rule, value, context, globals())
     return context
 
 
@@ -345,6 +354,8 @@ def rule_valid(rule, result, value, context):
                 if evidence["kind"] == "command":
                     require(evidence["data"]["exit_code"] == 0 and not evidence["data"]["timed_out"],
                             "scenario-evidence: passed scenario cites a failing or timed-out check")
+    elif kind == "interface-fix":
+        interface_module().check_ready(rule, result, value, context, globals())
     elif kind == "store-release":
         store_module().check_output(rule, result, value, context, globals())
     else:
@@ -377,6 +388,8 @@ def validate_output(policy, value, output, base=Path.cwd(), *, historical=False)
     for rule in policy["rules"]:
         if rule.get("type") == "store-release":
             store_module().check_report(rule, output["result"], value, context, globals())
+        elif rule.get("type") == "interface-fix":
+            interface_module().check_report(rule, output["result"], value, context, globals())
     if output["status"] == "ready":
         if policy["requires_definition"]:
             require(context["definition"] is not None and context["definition"]["status"] == "ready-for-planning",

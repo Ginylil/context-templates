@@ -13,6 +13,11 @@ Establish the observed and expected behavior from the report and current code. I
 
 If the behavior cannot be reproduced, gather higher-signal logs, traces, network results, or a narrow test rather than repeatedly changing code around the theory. Bound any live evidence collection and preserve private data. For a new test, first demonstrate that it fails against the affected implementation for the reported reason. Record the unmodified failing invocation and its result.
 
+For interface defects, use `ct-design-fix-interface` when available for rendered
+reproduction, related occurrence coverage and clarification of uncertain variants.
+Otherwise inspect shared owners and independent copies here; do not stop at the
+reported location when the same evidenced cause recurs.
+
 Trace the failure to the violated invariant, make a narrow repair, and rerun exactly the same regression command in the same worktree. Record a separate related check to catch plausible side effects. Explain why the change fixes the demonstrated cause and what remains untested. Use issue/Project tracking for the repair and preserve unrelated changes. If staging exists, provide the exact deployed candidate for the user's functional test before calling it accepted.
 
 ## Checked handoff

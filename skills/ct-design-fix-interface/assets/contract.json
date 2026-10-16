@@ -1,0 +1,377 @@
+{
+  "skill": "ct-design-fix-interface",
+  "purpose": "A reported interface defect corrected across confirmed occurrences, with uncertain variants held for clarification.",
+  "requires_definition": false,
+  "inputs": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "reported_behavior": {
+        "type": "string"
+      },
+      "expected_behavior": {
+        "type": "string",
+        "nullable": true
+      },
+      "understanding_source": {
+        "type": "string",
+        "enum": [
+          "user-report",
+          "repository-evidence",
+          "user-answer",
+          "unresolved"
+        ]
+      },
+      "understanding_source_ids": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "ref": "source"
+        },
+        "min_items": 0
+      },
+      "understanding_question_id": {
+        "type": "string",
+        "nullable": true
+      },
+      "search": {
+        "type": "object",
+        "fields": {
+          "roots": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          },
+          "terms": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          }
+        }
+      },
+      "before_scan": {
+        "type": "object",
+        "fields": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "viewports": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "width": {
+              "type": "integer"
+            },
+            "height": {
+              "type": "integer"
+            }
+          }
+        },
+        "min_items": 1,
+        "unique_by": "id"
+      },
+      "reproduction_argv": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 1
+      }
+    }
+  },
+  "result": {
+    "type": "object",
+    "fields": {
+      "candidate_revision": {
+        "type": "string"
+      },
+      "expected_behavior": {
+        "type": "string",
+        "nullable": true
+      },
+      "root_cause": {
+        "type": "string"
+      },
+      "after_scan": {
+        "type": "object",
+        "fields": {
+          "path": {
+            "type": "string"
+          },
+          "sha256": {
+            "type": "string"
+          }
+        },
+        "nullable": true
+      },
+      "scope_review": {
+        "type": "object",
+        "fields": {
+          "routes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 0
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 0
+          },
+          "additional_searches": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 0
+          },
+          "exclusions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "fields": {
+                "path": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              }
+            },
+            "min_items": 0
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "min_items": 1
+          }
+        }
+      },
+      "occurrences": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "context": {
+              "type": "string"
+            },
+            "scan_matches": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "fields": {
+                  "phase": {
+                    "type": "string",
+                    "enum": [
+                      "before",
+                      "after"
+                    ]
+                  },
+                  "match_id": {
+                    "type": "string"
+                  }
+                }
+              },
+              "min_items": 0
+            },
+            "verdict": {
+              "type": "string",
+              "enum": [
+                "fixed",
+                "intentional",
+                "uncertain"
+              ]
+            },
+            "rationale": {
+              "type": "string"
+            },
+            "question_id": {
+              "type": "string",
+              "nullable": true
+            },
+            "evidence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "ref": "evidence"
+              },
+              "min_items": 0
+            },
+            "surface_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 0
+            },
+            "owner_paths": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "surfaces": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "fields": {
+            "id": {
+              "type": "string"
+            },
+            "occurrence_ids": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "min_items": 1
+            },
+            "route": {
+              "type": "string"
+            },
+            "state": {
+              "type": "string"
+            },
+            "viewport_id": {
+              "type": "string"
+            },
+            "before": {
+              "type": "string",
+              "ref": "evidence"
+            },
+            "after": {
+              "type": "string",
+              "ref": "evidence"
+            },
+            "inspection": {
+              "type": "string",
+              "ref": "evidence"
+            },
+            "interaction_check": {
+              "type": "string",
+              "ref": "evidence"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "passed",
+                "failed",
+                "not-run"
+              ]
+            }
+          }
+        },
+        "min_items": 0,
+        "unique_by": "id"
+      },
+      "before_check": {
+        "type": "string",
+        "nullable": true,
+        "ref": "evidence"
+      },
+      "after_check": {
+        "type": "string",
+        "nullable": true,
+        "ref": "evidence"
+      },
+      "related_check": {
+        "type": "string",
+        "nullable": true,
+        "ref": "evidence"
+      },
+      "build_check": {
+        "type": "string",
+        "nullable": true,
+        "ref": "evidence"
+      },
+      "staging_handoff": {
+        "type": "string"
+      },
+      "remaining_limits": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "min_items": 0
+      }
+    }
+  },
+  "rules": [
+    {
+      "type": "equals-input",
+      "field": "candidate_revision",
+      "input_field": "candidate_revision"
+    },
+    {
+      "type": "repository-revision",
+      "field": "candidate_revision"
+    },
+    {
+      "type": "command",
+      "field": "before_check",
+      "exit": "nonzero"
+    },
+    {
+      "type": "command",
+      "field": "after_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command",
+      "field": "related_check",
+      "exit": "zero"
+    },
+    {
+      "type": "command",
+      "field": "build_check",
+      "exit": "zero"
+    },
+    {
+      "type": "same-command",
+      "fields": [
+        "before_check",
+        "after_check"
+      ]
+    },
+    {
+      "type": "command-matches-input",
+      "field": "before_check",
+      "input_field": "reproduction_argv"
+    },
+    {
+      "type": "interface-fix"
+    }
+  ]
+}
