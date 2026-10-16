@@ -25,7 +25,7 @@ def outputs():
             raise ValueError(f"Missing canonical lifecycle skill: {name}")
         if name != define.name:
             result[folder / "scripts/definition.py"] = (define / "scripts/project.py").read_bytes()
-            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_text(encoding="utf-8").replace("scripts/project.py", "scripts/definition.py").encode("utf-8")
+            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_bytes()
         if name not in (define.name, planner.name, MANAGER.name):
             result[folder / "scripts/workflow.py"] = (MANAGER / "scripts/workflow.py").read_bytes()
     result[MANAGER / "scripts/plan_contract.py"] = (planner / "scripts/plan.py").read_bytes()
@@ -36,6 +36,8 @@ def outputs():
         result[ROOT / "skills" / name / "scripts/configuration.py"] = store.with_name("configuration.py").read_bytes()
     interface = ROOT / "skills/ct-design-fix-interface/scripts/interface.py"
     result[MANAGER / "scripts/interface.py"] = interface.read_bytes()
+    interface_guide = ROOT / "skills/ct-design-fix-interface/references/definition-contract.md"
+    result[interface_guide] = result[interface_guide].replace(b"scripts/project.py", b"scripts/definition.py")
     for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app", "ct-design-fix-interface"):
         folder = ROOT / "skills" / name / "assets"
         intake = json.loads((folder / "example-input.json").read_text(encoding="utf-8"))

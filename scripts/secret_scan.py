@@ -42,9 +42,31 @@ def findings(data, name):
     return result
 
 
-def scan(root, packages=None, history=False):
+def scan(root, packages=None, history=False, staged=False):
     issues, count = [], 0
-    names = subprocess.check_output(['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z'], cwd=root).split(b'\0')
+    if staged:
+        # Read the index, never the potentially different working-tree contents.
+        changed = set(subprocess.check_output(
+            ['git', 'diff', '--cached', '--name-only', '--diff-filter=ACMRT', '-z'], cwd=root).split(b'\0'))
+        entries = subprocess.check_output(['git', 'ls-files', '--stage', '-z'], cwd=root).split(b'\0')
+        for entry in entries:
+            if not entry:
+                continue
+            metadata, raw_name = entry.split(b'\t', 1)
+            if raw_name not in changed:
+                continue
+            mode, oid, stage = metadata.split()
+            name = raw_name.decode('utf-8')
+            if stage != b'0':
+                raise ValueError('Unmerged index entry')
+            if mode == b'120000':
+                issues.append({'path': name, 'line': 0, 'rule': 'public-symlink'})
+            else:
+                data = subprocess.check_output(['git', 'cat-file', 'blob', oid], cwd=root)
+                issues.extend(findings(data, name)); count += 1
+        names = []
+    else:
+        names = subprocess.check_output(['git', 'ls-files', '--cached', '--others', '--exclude-standard', '-z'], cwd=root).split(b'\0')
     for raw in names:
         if not raw:
             continue
@@ -61,7 +83,11 @@ def scan(root, packages=None, history=False):
             kind = subprocess.check_output(['git', 'cat-file', '-t', oid], cwd=root, text=True).strip()
             if kind == 'blob':
                 data = subprocess.check_output(['git', 'cat-file', 'blob', oid], cwd=root)
-                issues.extend(findings(data, 'history:' + oid[:12] + ':' + name)); count += 1
+                # Classify the original filename before adding history context,
+                # so a root-level .env remains a credential-file finding.
+                for issue in findings(data, name):
+                    issues.append({**issue, 'path': 'history:' + oid[:12] + ':' + issue['path']})
+                count += 1
     if packages is not None:
         catalog = json.loads((packages / 'catalog.json').read_text(encoding='utf-8'))
         for item in catalog['skills']:
@@ -77,9 +103,10 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--packages', type=Path, help='Scan archives named in this directory catalog.json as well')
     parser.add_argument('--history', action='store_true', help='Also inspect blobs reachable from all local refs')
+    parser.add_argument('--staged', action='store_true', help='Scan changed index blobs instead of working-tree files')
     args = parser.parse_args()
     try:
-        result = scan(ROOT, args.packages, args.history)
+        result = scan(ROOT, args.packages, args.history, args.staged)
         print(json.dumps(result, indent=2))
         return 1 if result['findings'] else 0
     except (OSError, ValueError, KeyError, subprocess.CalledProcessError, zipfile.BadZipFile) as error:

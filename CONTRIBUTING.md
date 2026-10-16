@@ -45,6 +45,44 @@ Top-level per-skill README files, hidden/generated files, links, and arbitrary
 resource directories are rejected. The installer does not execute skill scripts.
 Bundled resources are context for the task, not permission to broaden it.
 
+## Secret protection
+
+Install the free [Gitleaks CLI](https://github.com/gitleaks/gitleaks#installing)
+and [pre-commit](https://pre-commit.com/#install). On macOS:
+
+```sh
+brew install gitleaks pre-commit
+make setup-hooks
+make secret-check
+```
+
+Without Make, use `pre-commit install --allow-missing-config`,
+`python3 scripts/secret_scan.py --history` and
+`gitleaks git --redact --log-opts="--all" .`. On Windows, use `py -3` in place
+of `python3`. Gitleaks must be on PATH. Hooks are opt-in for each clone; installing
+skills never installs development hooks. Pre-commit preserves existing hooks in
+migration mode and refuses a conflicting `core.hooksPath`; do not force replacement.
+Git worktrees share hooks. Older branches without this configuration skip the
+hooks; branches containing it enforce both checks and fail if Gitleaks is missing.
+
+The commit hook checks changed staged blobs, including ignored files added with
+`git add -f`; cleaning an unstaged working copy does not hide a staged secret.
+The repository scanner also rejects signing files and public symlinks. The separate
+CI job uses a full checkout, the repository history scanner, and a pinned,
+checksum-verified Gitleaks CLI, without a Gitleaks Action license or API key.
+Catalog checks, package builds and artifact uploads wait for this scan to pass.
+All scanner output is redacted; never add raw findings to issues or build artifacts.
+
+Repository administrators should keep GitHub secret scanning and push protection
+enabled for this public repository. These protections are free for public repositories;
+private repositories have different pricing. CI runs after upload, so it supplements
+local hooks and GitHub push protection. Neither scanner guarantees absence of secrets.
+History checks cover reachable local refs; fetch the branches and tags you intend
+to audit first. They do not cover GitHub discussions, logs, external downloads or
+unreachable commits. If a real credential was published, revoke or rotate it first,
+then coordinate any history rewrite separately. Do not bypass a finding or add a
+blanket allowlist to make a check pass.
+
 ## Change and validate
 
 1. Inspect current `main` and existing PRs. Use a clean branch and preserve
@@ -115,9 +153,8 @@ Interface correction checks are canonical in
 `skills/ct-design-fix-interface/scripts/interface.py`, synchronized into the manager.
 Test repeated occurrences, intentional exceptions, held uncertain files and resumed
 real-answer decisions as well as source/capture/viewport coverage. Synthetic PNGs
-can test artifact invariants but are not rendered browser proof. The generator
-adapts shared interview command names for focused folders; do not repair generated
-reference copies manually. Runtime scans, screenshots and interview data stay private.
+can test artifact invariants but are not rendered browser proof. Runtime scans,
+screenshots and interview data stay private.
 
 ## Dynamic UML contributions
 

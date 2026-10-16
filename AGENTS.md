@@ -43,6 +43,11 @@
 - Public-content checks use `scripts/secret_scan.py`; check/build and CI reject
   detected credentials and signing files. Keep examples synthetic, runtime evidence
   private, and scan findings redacted. Never treat a heuristic pass as a guarantee.
+- Contributor hooks use `.pre-commit-config.yaml` and `make setup-hooks`; they
+  inspect staged index blobs with the repository scanner and free Gitleaks CLI.
+  Run `make secret-check` for history checks. Keep the separate CI job's Gitleaks
+  version and archive checksum in sync; do not replace it with a licensed wrapper,
+  weaken findings with broad allowlists, or install hooks during skill installation.
 - Keep lifecycle assessments distinct from acceptance: `ready` may mean a
   completed assessment with findings. QA verdicts, candidate identity, human
   staging acceptance, GitHub readbacks and release milestones remain explicit.
