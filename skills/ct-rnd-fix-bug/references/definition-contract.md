@@ -8,19 +8,19 @@ with a letter. Question IDs alone use `Q1` through `Q10`.
 
 ## Commands
 
-Run `python3 <skill>/scripts/project.py` on macOS/Linux, or `py -3` on Windows.
+Run `python3 <skill>/scripts/definition.py` on macOS/Linux, or `py -3` on Windows.
 `<skill>` is the actual directory containing the installed `SKILL.md`. The
 commands also work from a source checkout. Do not assume a particular agent path.
 The following paths represent files in one existing, user-owned working directory:
 
 ```text
-python3 <skill>/scripts/project.py validate-input input.json
-python3 <skill>/scripts/project.py start input.json --ledger ledger.json
-python3 <skill>/scripts/project.py status ledger.json
-python3 <skill>/scripts/project.py apply ledger.json batch.json --expect-revision 0
-python3 <skill>/scripts/project.py apply ledger.json answers.json --expect-revision 1
-python3 <skill>/scripts/project.py validate-output ledger.json definition.json
-python3 <skill>/scripts/project.py render ledger.json definition.json --output definition.md
+python3 <skill>/scripts/definition.py validate-input input.json
+python3 <skill>/scripts/definition.py start input.json --ledger ledger.json
+python3 <skill>/scripts/definition.py status ledger.json
+python3 <skill>/scripts/definition.py apply ledger.json batch.json --expect-revision 0
+python3 <skill>/scripts/definition.py apply ledger.json answers.json --expect-revision 1
+python3 <skill>/scripts/definition.py validate-output ledger.json definition.json
+python3 <skill>/scripts/definition.py render ledger.json definition.json --output definition.md
 ```
 
 Use the revision actually returned by `status`; zero and one above are examples.

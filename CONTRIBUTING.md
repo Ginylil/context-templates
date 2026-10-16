@@ -131,7 +131,9 @@ Manage a Project (domain validation and explicit command capture), and Plan
 Development (task graph and tracking validation). Run `make resources` after a
 canonical change, or `python scripts/ct_lifecycle.py` without Make. The generated
 files are required standalone resources; they are included in packages and
-checked byte-for-byte. Do not edit their copies manually. Bundled synthetic
+checked byte-for-byte. Focused packages use `scripts/definition.py`; generated
+ledger guides adapt the canonical `scripts/project.py` command to that filename.
+Do not edit their copies manually. Bundled synthetic
 examples deliberately show blocked states when no real proof has been supplied.
 Tests must also exercise ready paths using disposable source trees and actual
 local command capture, while remote provider behavior uses mocked readbacks.

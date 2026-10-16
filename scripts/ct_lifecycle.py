@@ -25,7 +25,7 @@ def outputs():
             raise ValueError(f"Missing canonical lifecycle skill: {name}")
         if name != define.name:
             result[folder / "scripts/definition.py"] = (define / "scripts/project.py").read_bytes()
-            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_bytes()
+            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_text(encoding="utf-8").replace("scripts/project.py", "scripts/definition.py").encode("utf-8")
         if name not in (define.name, planner.name, MANAGER.name):
             result[folder / "scripts/workflow.py"] = (MANAGER / "scripts/workflow.py").read_bytes()
     result[MANAGER / "scripts/plan_contract.py"] = (planner / "scripts/plan.py").read_bytes()
