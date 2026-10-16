@@ -173,6 +173,7 @@ def build(root: Path, output: Path) -> None:
                 if content is None:
                     continue
                 entry = zipfile.ZipInfo(f"{name}/{file}", date_time=(2020, 1, 1, 0, 0, 0))
+                entry.create_system = 3  # Unix metadata matches the POSIX modes below.
                 entry.compress_type = zipfile.ZIP_DEFLATED
                 mode = 0o755 if content[1] else 0o644
                 entry.external_attr = (0o100000 | mode) << 16

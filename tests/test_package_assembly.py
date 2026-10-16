@@ -96,6 +96,25 @@ class PackageAssemblyTests(unittest.TestCase):
         for destination in installer.TARGETS.values():
             self.assertEqual((self.home / destination / 'example/scripts/helper.py').read_bytes(), self.helper.read_bytes())
 
+    def test_zip_bytes_and_catalog_hashes_ignore_host_creator_os(self):
+        original = zipfile.ZipInfo
+        outputs = []
+        for host in (0, 3):
+            class HostZipInfo(original):
+                def __init__(self, *args, **kwargs):
+                    super().__init__(*args, **kwargs)
+                    self.create_system = host
+
+            output = self.base / f'host-{host}'
+            with patch.object(zipfile, 'ZipInfo', HostZipInfo):
+                with contextlib.redirect_stdout(io.StringIO()):
+                    installer.build(self.root, output)
+            outputs.append({name: (output / name).read_bytes()
+                            for name in ('example.zip', 'catalog.json')})
+            with zipfile.ZipFile(output / 'example.zip') as bundle:
+                self.assertTrue(all(entry.create_system == 3 for entry in bundle.infolist()))
+        self.assertEqual(outputs[0], outputs[1])
+
     def test_shared_installed_edit_blocks_all_targets(self):
         self.install()
         edited = self.home / installer.TARGETS['claude'] / 'example/scripts/helper.py'
