@@ -14,8 +14,8 @@ MANAGER = ROOT / "skills/ct-product-manage-project"
 def outputs():
     catalog = json.loads((MANAGER / "assets/catalog.json").read_text(encoding="utf-8"))
     names = [item["skill"] for item in catalog]
-    if len(names) != 20 or len(set(names)) != 20:
-        raise ValueError("Expected exactly 20 unique lifecycle skill identities")
+    if len(names) != 21 or len(set(names)) != 21:
+        raise ValueError("Expected exactly 21 unique lifecycle skill identities")
     define = ROOT / "skills/ct-product-define-project"
     planner = ROOT / "skills/ct-rnd-plan-development"
     result = {}
@@ -24,9 +24,9 @@ def outputs():
         if not name.startswith("ct-") or not (folder / "SKILL.md").is_file():
             raise ValueError(f"Missing canonical lifecycle skill: {name}")
         if name != define.name:
-            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_bytes()
+            result[folder / "references/definition-contract.md"] = (define / "references/contract.md").read_text(encoding="utf-8").replace("scripts/project.py", "scripts/definition.py").encode("utf-8")
     result[MANAGER / "references/planning-contract.md"] = (planner / "references/contract.md").read_bytes()
-    for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app"):
+    for name in ("ct-devops-release-apple-app", "ct-devops-release-android-app", "ct-design-fix-interface"):
         folder = ROOT / "skills" / name / "assets"
         intake = json.loads((folder / "example-input.json").read_text(encoding="utf-8"))
         report = json.loads((folder / "example-output.json").read_text(encoding="utf-8"))

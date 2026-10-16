@@ -39,6 +39,8 @@
   installation and ZIPs; it must never execute selected helpers. Use
   `python3 scripts/skills.py assemble --output <new-directory>` before running
   commands from sparse source skills. Tests use disposable assembled catalogs.
+- The interface and manager manifests both select `shared/lifecycle/interface.py`.
+  Preserve the interface policy branches in the shared workflow helper.
 - `make resources` still regenerates lifecycle guides and synthetic example
   hashes. Do not hand-edit those copies. Every assembled package works independently.
 - Public-content checks use `scripts/secret_scan.py`; check/build and CI reject
@@ -64,3 +66,7 @@
   Apple/Android/manager manifests. Use `make resources` to refresh synthetic example
   input hashes; never copy
   private runtime discovery, app/configuration data or credentials into public fixtures.
+
+- Interface correction tests must distinguish confirmed repeated defects, justified
+  variants and unanswered corrections. Hold uncertain files unchanged and require
+  matched rendered proof; source search alone is not project-wide semantic coverage.

@@ -1,6 +1,8 @@
 # Implementation details
 
 The public GitHub repository contains canonical `skills/<name>/SKILL.md` folders.
+Focused definition guides adapt `scripts/project.py` commands to their packaged
+`scripts/definition.py`; Define a Project retains its canonical command.
 The README links directly to the self-contained bootstrap skill. There is no
 MCP/API publisher or separate website application. Existing GitHub Pages hosting
 serves the public static examples from `main`; it is configured outside the
@@ -152,7 +154,7 @@ package-level checks, not proof of discovery in a live agent runtime.
 
 ## Lifecycle routing and domain checks
 
-The manager's `assets/catalog.json` defines twenty lifecycle identities. The
+The manager's `assets/catalog.json` defines twenty-one lifecycle identities. The
 guide routes from the current definition, task graph, repository, verified
 tracking and specialist reports; explicit specialist requests can enter directly.
 It does not run every skill or execute selected work by returning a route.
@@ -173,7 +175,7 @@ adapter supports GitHub.com Projects v2. Live verification requires GitHub CLI,
 authentication and access; unavailable readback blocks admission. The tool never
 creates or changes remote tasks itself.
 
-Seventeen specialists carry a domain policy in `assets/contract.json`, intake and
+Eighteen specialists carry a domain policy in `assets/contract.json`, intake and
 output examples, and package manifests selecting the shared validator. This is a small
 explicit policy vocabulary, not an implementation of general JSON Schema. Rules
 check domain relationships such as architecture endpoints, selected acceptance
@@ -193,10 +195,10 @@ outside the measured tree or in an ignored directory. These local cooperative
 checks cannot authenticate a manual approval or make arbitrary captured data true.
 
 Canonical shared Python support lives once in `shared/lifecycle/`: definition,
-workflow, planning, store-release and configuration helpers. Per-skill JSON
+workflow, planning, interface, store-release and configuration helpers. Per-skill JSON
 manifests select their delivered filenames. `scripts/ct_lifecycle.py` continues
 to synchronize guides and synthetic example hashes; `make resources` refreshes
-those non-script outputs, and check/build reject drift. All twenty skills can
+those non-script outputs, and check/build reject drift. All twenty-one skills can
 be installed separately. The guide explicitly reports a required specialist
 that is unavailable.
 
@@ -207,6 +209,37 @@ installation targets. Independent dry runs exercise local planning, a real
 temporary bug fix, failed QA and a blocked release. Provider APIs are mocked in
 tests; actual agent discovery, provider integrations, deployed application behavior
 and human acceptance are separate evidence levels.
+
+## Interface correction across a project
+
+`ct-design-fix-interface` handles a reported visual/interaction defect directly,
+without requiring a new product definition. It separates clear expected behavior,
+confirmed same-cause occurrences, preserved intentional variants and uncertainty.
+Uncertainty maps to actual pending questions in the shared scope ledger and holds
+the affected source file and declared shared owners unchanged. Completed
+clarification must have a recorded answer. The agent traces semantic aliases, shared consumers and route/state
+variants beyond literal search, and uses a scoped owner repair rather than a
+blind global replacement.
+
+Its description and Codex `agents/openai.yaml` display metadata include UI, UX,
+frontend and FE terms. These identify the correction workflow; the canonical
+skill name stays `ct-design-fix-interface`. Metadata validation does not establish
+that a host's picker indexes every field; verify search behavior in that host.
+
+The interface and manager manifests select `shared/lifecycle/interface.py` as
+`scripts/interface.py` in their independent assembled packages. Its read-only scan
+captures bounded Git-listed frontend files and literal match identities without
+source-line contents. Checked baseline/final inventories require each match to be
+classified exactly once. Baseline source must match the failing reproduction;
+the final scan is regenerated from the current source. Fixed occurrences require
+linked rendered surfaces, declared viewport coverage, PNG identity/dimensions,
+visual inspection observations and passing interaction/regression/build evidence.
+A completed report cannot retain uncertain occurrences. These cooperative checks
+cannot prove semantic completeness, visual quality, browser authenticity or human
+acceptance. Runtime captures, source scans and ledgers remain private.
+
+Resource synchronization generates the interface example's input digest from
+public synthetic JSON.
 
 ## Store release specialists and public-content checks
 

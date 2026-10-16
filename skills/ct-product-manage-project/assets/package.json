@@ -5,6 +5,7 @@
     "definition.py": "lifecycle/definition.py",
     "plan_contract.py": "lifecycle/plan.py",
     "store_release.py": "lifecycle/store_release.py",
-    "workflow.py": "lifecycle/workflow.py"
+    "workflow.py": "lifecycle/workflow.py",
+    "interface.py": "lifecycle/interface.py"
   }
 }

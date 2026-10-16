@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "project_id": "example-interface",
+  "skill": "ct-design-fix-interface",
+  "input_sha256": "f80a76d30c74a28d5ce9345cba74658e5577908c0042faa5a0ca25899e956560",
+  "status": "blocked",
+  "summary": "Synthetic blocked intake; no repository inspected or interface changed.",
+  "constraints": [
+    "Preserve unrelated design choices and private runtime data."
+  ],
+  "evidence": [],
+  "blockers": [
+    {
+      "reason": "No project, rendered reproduction or clarified correction is available.",
+      "next_action": "Inspect the matching screen and source; state the observed issue, clarify only material uncertainty, and inventory related occurrences before editing."
+    }
+  ],
+  "result": {
+    "candidate_revision": "unresolved",
+    "expected_behavior": null,
+    "root_cause": "Not established.",
+    "after_scan": null,
+    "scope_review": {
+      "routes": [],
+      "components": [],
+      "additional_searches": [],
+      "exclusions": [],
+      "limitations": [
+        "No actual project scope has been reviewed."
+      ]
+    },
+    "occurrences": [],
+    "surfaces": [],
+    "before_check": null,
+    "after_check": null,
+    "related_check": null,
+    "build_check": null,
+    "staging_handoff": "No deployed candidate exists.",
+    "remaining_limits": [
+      "Synthetic example; no rendered or functional evidence."
+    ]
+  }
+}

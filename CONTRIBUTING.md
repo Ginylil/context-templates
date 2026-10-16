@@ -125,14 +125,16 @@ Define a Project's focused checks run with
 `python -m unittest discover -s tests -p test_define_project.py -v` and are included
 in `make check`.
 
-The twenty lifecycle entry points select portable helpers from `shared/lifecycle/`
+The twenty-one lifecycle entry points select portable helpers from `shared/lifecycle/`
 through source-only `assets/package.json` manifests. Each source skill requires a
 manifest, including an empty `scripts` object when no shared helper is needed.
 `assets/contract.json` remains runtime validation policy. See the strict manifest
 format in [DETAILS](DETAILS.md#package-composition). Do not commit generated script
 copies. Use `scripts/skills.py assemble` for local execution or review.
 Run `make resources` after changing canonical guides or synthetic examples; the
-remaining generated guides and example hashes are checked byte-for-byte.
+remaining generated guides and example hashes are checked byte-for-byte. Focused
+packages use `scripts/definition.py`; generated ledger guides adapt the canonical
+`scripts/project.py` command to that filename. Do not edit generated guides manually.
 Bundled synthetic
 examples deliberately show blocked states when no real proof has been supplied.
 Tests must also exercise ready paths using disposable source trees and actual
@@ -150,6 +152,13 @@ review exemptions, tester access and separate device proof. Keep signing keys,
 keystores, `.p8` files, service-account JSON and credential values outside packages.
 The secret scan reports locations/rules without matched values; do not weaken it
 with a blanket fixture allowlist. Use constructed inert strings for scanner tests.
+
+Interface correction checks are canonical in
+`shared/lifecycle/interface.py`, selected by the interface and manager manifests.
+Test repeated occurrences, intentional exceptions, held uncertain files and resumed
+real-answer decisions as well as source/capture/viewport coverage. Synthetic PNGs
+can test artifact invariants but are not rendered browser proof. Runtime scans,
+screenshots and interview data stay private.
 
 ## Dynamic UML contributions
 

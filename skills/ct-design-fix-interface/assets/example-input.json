@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "project_id": "example-interface",
+  "request": "Fix clipped action labels wherever the same confirmed layout problem occurs. Ask about uncertain variants.",
+  "repository": null,
+  "ledger": null,
+  "definition": null,
+  "constraints": [
+    "Preserve unrelated design choices and private runtime data."
+  ],
+  "sources": [],
+  "inputs": {
+    "candidate_revision": "unresolved",
+    "reported_behavior": "An action label is clipped on a narrow screen.",
+    "expected_behavior": null,
+    "understanding_source": "unresolved",
+    "understanding_source_ids": [],
+    "understanding_question_id": null,
+    "search": {
+      "roots": [
+        "."
+      ],
+      "terms": [
+        "ActionButton",
+        "overflow"
+      ]
+    },
+    "before_scan": null,
+    "viewports": [
+      {
+        "id": "reported-mobile",
+        "width": 390,
+        "height": 844
+      },
+      {
+        "id": "desktop",
+        "width": 1440,
+        "height": 900
+      }
+    ],
+    "reproduction_argv": [
+      "python3",
+      "ui-regression.py"
+    ]
+  }
+}

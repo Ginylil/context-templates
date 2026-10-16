@@ -55,6 +55,11 @@
     "purpose": "Create and verify an interface"
   },
   {
+    "skill": "ct-design-fix-interface",
+    "intent": "fix-interface",
+    "purpose": "Understand a reported interface issue and correct confirmed occurrences across the project"
+  },
+  {
     "skill": "ct-qa-plan-tests",
     "intent": "plan-tests",
     "purpose": "Define behavioral test coverage"

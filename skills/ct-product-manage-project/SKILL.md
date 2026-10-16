@@ -44,6 +44,9 @@ requests route directly when their contracts permit it. Market/product research
 can inform definition before implementation; architecture, interface design and
 test planning are conditional inputs, not mandatory interviews. Bug repair and
 code review can be entered directly for a narrowly identified existing change.
+Route a reported visual/interaction defect needing consistent correction to
+`ct-design-fix-interface`: it checks understanding, inventories related occurrences
+and asks before changing uncertain variants, without restarting product discovery.
 
 Before executing project tasks, require the validated development graph and
 verified GitHub Issues/Project items. Local preparation is incomplete tracking.
