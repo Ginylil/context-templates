@@ -1,5 +1,4 @@
 import contextlib
-import hashlib
 import importlib.util
 import io
 import json
@@ -8,7 +7,6 @@ import tempfile
 import subprocess
 from types import SimpleNamespace
 import unittest
-import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -163,26 +161,11 @@ class SkillTests(unittest.TestCase):
         self.assertEqual(skills.snapshot(self.destination()), original)
         self.assertEqual((self.destination().parent / skills.STATE_FILE).read_bytes(), before)
 
-    def test_build_is_reproducible_complete_and_checksummed(self):
-        output = Path(self.temporary.name) / "dist"
-        with contextlib.redirect_stdout(io.StringIO()):
-            skills.build(self.root, output)
-        archive = output / "example.zip"
-        original = archive.read_bytes()
-        entry = json.loads((output / "catalog.json").read_text())["skills"][0]
-        self.assertEqual(entry["sha256"], hashlib.sha256(original).hexdigest())
-        with zipfile.ZipFile(archive) as bundle:
-            self.assertEqual(set(bundle.namelist()), {"example/SKILL.md", "example/assets/context.txt"})
-            self.assertEqual(bundle.read("example/assets/context.txt"), b"Useful context")
-        with contextlib.redirect_stdout(io.StringIO()):
-            skills.build(self.root, output)
-        self.assertEqual(original, archive.read_bytes())
-
-    def test_private_hidden_file_blocks_packaging(self):
+    def test_private_hidden_file_blocks_assembly(self):
         (self.source / ".env").write_text("private", encoding="utf-8")
         output = Path(self.temporary.name) / "dist"
         with self.assertRaisesRegex(ValueError, "hidden/generated"):
-            skills.build(self.root, output)
+            skills.assemble(self.root, output, [])
         self.assertFalse(output.exists())
 
     def test_invalid_names_and_frontmatter_fail(self):

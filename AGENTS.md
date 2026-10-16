@@ -25,12 +25,11 @@
   lines, including tests, comments and blanks. Split by responsibility; do not
   compress code to satisfy the limit. Only the eight generated standalone HTML
   examples are exempt; their maintained template, CSS and JavaScript are checked.
-  `scripts/check_code_size.py` enforces source limits in check/build and CI;
+  `scripts/check_code_size.py` enforces source limits in `make check` and CI;
   payload assembly independently rejects oversized packaged code.
 - `make check` runs source-size and canonical diagram drift checks, catalog
   validation, and isolated installer/package/rendering tests.
-  `make build` generates skill ZIPs and a checksummed JSON catalog in `dist/`.
-  Run both for publishable skill changes; meaningful behavior checks supplement
+  Run `make check` for publishable skill changes; meaningful behavior checks supplement
   metadata checks. Local checks are not CI or proof of discovery in each agent.
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
@@ -52,7 +51,7 @@
   Preserve the interface policy branches in the shared workflow helper.
 - `make resources` still regenerates lifecycle guides and synthetic example
   hashes. Do not hand-edit those copies. Every assembled package works independently.
-- Public-content checks use `scripts/secret_scan.py`; check/build and CI reject
+- Public-content checks use `scripts/secret_scan.py`; `make check` and CI reject
   detected credentials and signing files. Keep examples synthetic, runtime evidence
   private, and scan findings redacted. Never treat a heuristic pass as a guarantee.
 - Contributor hooks use `.pre-commit-config.yaml` and `make setup-hooks`; they
@@ -63,11 +62,11 @@
 - Keep lifecycle assessments distinct from acceptance: `ready` may mean a
   completed assessment with findings. QA verdicts, candidate identity, human
   staging acceptance, GitHub readbacks and release milestones remain explicit.
-- Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
-  assets; diagram drift checks and package hashes depend on checkout byte consistency.
-  Normalize ZIP creator metadata to Unix alongside the explicit POSIX modes;
-  write generated catalogs as UTF-8 with explicit LF newlines.
-  Windows, macOS and Linux CI archives and catalogs must match byte-for-byte.
+- Install through Make or Python from the checkout. Do not reintroduce ZIP
+  builds, a generated download catalog or CI skill artifact uploads. Keep
+  `assemble` for local inspection and execution; `dist/` stays ignored for local proof.
+- Keep `.gitattributes` LF normalization for text and binary handling for PNG
+  assets; diagram drift checks and installed payload hashes depend on checkout bytes.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
   Shared Python renderer/verifiers are canonical under `shared/dynamic-uml/`;
   HTML shell, CSS/JavaScript fragments, supplied logo, guide and example JSON

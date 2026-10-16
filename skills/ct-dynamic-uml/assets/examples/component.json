@@ -1,7 +1,7 @@
 {
   "type": "component",
   "title": "One source, three agents",
-  "lede": "A structural view of this repository\u2019s direct skill installation and packaging.",
+  "lede": "A structural view of this repository\u2019s direct skill installation and standalone assembly.",
   "kicker": "Dynamic UMLs / component",
   "width": 1000,
   "height": 640,
@@ -27,14 +27,14 @@
       "role": "Python / standard library"
     },
     {
-      "id": "archives",
-      "label": "Skill ZIPs",
+      "id": "assembly",
+      "label": "Standalone assembly",
       "kind": "component",
       "x": 835,
       "y": 100,
-      "detail": "scripts/skills.py build creates reproducible ZIPs plus checksums.",
+      "detail": "scripts/skills.py assemble creates complete folders for local inspection without installation.",
       "w": 240,
-      "role": "Downloadable artifacts"
+      "role": "Local review folders"
     },
     {
       "id": "installer",
@@ -87,12 +87,12 @@
       "detail": "The validator depends on the canonical skill catalog."
     },
     {
-      "id": "package",
-      "from": "archives",
+      "id": "assemble-source",
+      "from": "assembly",
       "to": "catalog",
-      "label": "built from",
+      "label": "assembled from",
       "kind": "dependency",
-      "detail": "ZIPs are built from validated catalog content.",
+      "detail": "Assembly combines skill-local resources and explicitly selected shared scripts.",
       "via": [
         {
           "x": 835,
@@ -228,25 +228,25 @@
       ]
     },
     {
-      "id": "download",
-      "label": "Build downloads",
+      "id": "review",
+      "label": "Assemble for review",
       "steps": [
         {
           "title": "Read the canonical catalog",
-          "body": "The ZIP builder reads public skill resources from the catalog.",
+          "body": "The assembler reads public skill resources and explicitly selected shared scripts from the checkout.",
           "nodes": [
             "catalog",
-            "archives"
+            "assembly"
           ],
           "edges": [
-            "package"
+            "assemble-source"
           ]
         },
         {
-          "title": "Produce reproducible archives",
-          "body": "A checksum catalog and complete per-skill ZIPs are local outputs. Publishing a release is a separate action.",
+          "title": "Create standalone folders",
+          "body": "The assemble command writes complete folders to a new local directory. It does not register skills in agent homes; use Make or Python install for that.",
           "nodes": [
-            "archives"
+            "assembly"
           ],
           "edges": []
         }

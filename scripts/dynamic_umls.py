@@ -24,7 +24,7 @@ NAMES = {
 
 
 def outputs():
-    # Contributor-only rendering; assembly/install/build never execute helpers.
+    # Contributor-only rendering; assembly/install never execute helpers.
     with tempfile.TemporaryDirectory(prefix='ct-diagram-models-') as temporary:
         assembled = Path(temporary) / 'skills'
         _assembler.assemble(ROOT, assembled, ['ct-dynamic-uml'])

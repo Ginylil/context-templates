@@ -78,7 +78,7 @@ The commit hook checks changed staged blobs, including ignored files added with
 The repository scanner also rejects signing files and public symlinks. The separate
 CI job uses a full checkout, the repository history scanner, and a pinned,
 checksum-verified Gitleaks CLI, without a Gitleaks Action license or API key.
-Catalog checks, package builds and artifact uploads wait for this scan to pass.
+Catalog, standalone assembly and installer checks wait for this scan to pass.
 All scanner output is redacted; never add raw findings to issues or build artifacts.
 
 Repository administrators should keep GitHub secret scanning and push protection
@@ -98,7 +98,7 @@ blanket allowlist to make a check pass.
 2. Implement the canonical skill and its necessary resources. Keep agent-specific
    adaptations limited to actual differences. Document prerequisites, authorized
    side effects, failure states, and observable completion when relevant.
-3. Run `make check` and `make build`. Without Make, run:
+3. Run `make check`. Without Make, run:
 
    ```text
    python scripts/check_code_size.py
@@ -107,8 +107,6 @@ blanket allowlist to make a check pass.
    python scripts/skills.py check
    python scripts/secret_scan.py
    python -m unittest discover -s tests -v
-   python scripts/skills.py build
-   python scripts/secret_scan.py --packages dist
    ```
 
 4. Check meaningful behavior with a realistic request in an isolated workspace.
@@ -121,8 +119,9 @@ blanket allowlist to make a check pass.
 6. Open or update a PR targeting public `main`. Explain purpose, behavior,
    validation, and limitations. Do not merge it as part of contribution submission.
 
-CI validates and tests on Linux, macOS, and Windows and builds downloadable skill
-archives. Those checks do not replace actual skill discovery/invocation checks.
+CI validates and tests standalone assembly and safe installation on Linux,
+macOS, and Windows. It does not build or upload skill downloads. Those checks
+do not replace actual skill discovery/invocation checks.
 No secrets, MCP connection, or API publishing account are needed for this pipeline.
 
 For skills with structured inputs or outputs, bundle their actual validators and

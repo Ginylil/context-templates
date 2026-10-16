@@ -6,7 +6,6 @@ from pathlib import Path
 import subprocess
 import tempfile
 import unittest
-import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 spec = importlib.util.spec_from_file_location('public_secret_scan', ROOT / 'scripts/secret_scan.py')
@@ -39,7 +38,7 @@ class SecretScanTests(unittest.TestCase):
             self.assertEqual(scanner.findings(b'', name)[0]['rule'], 'credential-file')
         self.assertEqual(scanner.findings(b'', '.env.example'), [])
 
-    def test_scan_includes_untracked_public_files_and_catalog_zip_contents(self):
+    def test_scan_includes_untracked_public_files(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             subprocess.run(['git', 'init', '-q'], cwd=root, check=True, capture_output=True)
@@ -47,14 +46,6 @@ class SecretScanTests(unittest.TestCase):
             self.assertFalse(scanner.scan(root)['findings'])
             (root / 'upload.p8').write_text('Synthetic; no key material.')
             self.assertTrue(scanner.scan(root)['findings'])
-            # Keep the package fixture outside the public working tree.
-            packages = root / 'dist'; packages.mkdir()
-            (root / '.gitignore').write_text('dist/\n')
-            with zipfile.ZipFile(packages / 'example.zip', 'w') as archive:
-                archive.writestr('example/secret.txt', b'ghp_' + b'notavalidcredential0123456789ABCDEFG')
-            (packages / 'catalog.json').write_text(json.dumps({'skills': [{'archive': 'example.zip'}]}))
-            report = scanner.scan(root, packages)
-            self.assertTrue(any(x['path'].startswith('example.zip:') for x in report['findings']))
 
     def test_staged_scan_reads_index_even_after_working_copy_is_cleaned(self):
         with tempfile.TemporaryDirectory() as temporary:

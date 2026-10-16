@@ -89,7 +89,6 @@ class CodeSizeTests(unittest.TestCase):
                 home = self.root / 'home'
                 with contextlib.redirect_stdout(io.StringIO()):
                     actions = (
-                        lambda: installer.build(self.root, output),
                         lambda: installer.assemble(self.root, output, []),
                         lambda: installer.install(self.root, home, ['codex'], [], False),
                     )

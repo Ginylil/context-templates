@@ -220,14 +220,11 @@ class InterfaceFixTests(unittest.TestCase):
         ledger['input']['decisions']=[{'id':f'decision-{i}','topic':f'Question {i}', 'depends_on':[], 'blocking':True, 'resolution':None} for i in range(1,12)]
         self.intake['ledger']=self.write('ledger.json',ledger);self.bind();self.reject('maximum 10 questions')
 
-    def test_ready_cli_from_each_agent_install_and_zip(self):
-        import contextlib,io,zipfile
+    def test_ready_cli_from_each_agent_install(self):
+        import contextlib,io
         with contextlib.redirect_stdout(io.StringIO()):
             installer.install(ROOT,self.base/'home',list(installer.TARGETS),[NAME],False)
-            installer.build(ROOT,self.base/'packages')
         paths=[self.base/'home'/p/NAME for p in installer.TARGETS.values()]
-        with zipfile.ZipFile(self.base/'packages'/(NAME+'.zip')) as z:z.extractall(self.base/'zip')
-        paths.append(self.base/'zip'/NAME)
         intake=self.write('input.json',self.intake);report=self.write('output.json',self.report)
         for i,path in enumerate(paths):
             for args in (['validate-input',str(self.base/intake['path'])], ['validate-output',str(self.base/intake['path']),str(self.base/report['path'])],
