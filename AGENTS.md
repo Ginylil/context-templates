@@ -66,6 +66,7 @@
 - Keep `.gitattributes` LF normalization for text and binary handling for PNG/ZIP
   assets; diagram drift checks and package hashes depend on checkout byte consistency.
   Normalize ZIP creator metadata to Unix alongside the explicit POSIX modes;
+  write generated catalogs as UTF-8 with explicit LF newlines.
   Windows, macOS and Linux CI archives and catalogs must match byte-for-byte.
 - Dynamic UMLs visual rules and proof requirements live in `DESIGN.md`.
   Shared Python renderer/verifiers are canonical under `shared/dynamic-uml/`;

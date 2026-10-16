@@ -96,8 +96,9 @@ class PackageAssemblyTests(unittest.TestCase):
         for destination in installer.TARGETS.values():
             self.assertEqual((self.home / destination / 'example/scripts/helper.py').read_bytes(), self.helper.read_bytes())
 
-    def test_zip_bytes_and_catalog_hashes_ignore_host_creator_os(self):
+    def test_zip_and_catalog_bytes_ignore_host_platform_defaults(self):
         original = zipfile.ZipInfo
+        write_text = Path.write_text
         outputs = []
         for host in (0, 3):
             class HostZipInfo(original):
@@ -105,8 +106,12 @@ class PackageAssemblyTests(unittest.TestCase):
                     super().__init__(*args, **kwargs)
                     self.create_system = host
 
+            def host_write_text(path, data, **kwargs):
+                kwargs.setdefault('newline', '\r\n' if host == 0 else '\n')
+                return write_text(path, data, **kwargs)
+
             output = self.base / f'host-{host}'
-            with patch.object(zipfile, 'ZipInfo', HostZipInfo):
+            with patch.object(zipfile, 'ZipInfo', HostZipInfo), patch.object(Path, 'write_text', host_write_text):
                 with contextlib.redirect_stdout(io.StringIO()):
                     installer.build(self.root, output)
             outputs.append({name: (output / name).read_bytes()

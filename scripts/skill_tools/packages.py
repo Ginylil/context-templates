@@ -184,6 +184,6 @@ def build(root: Path, output: Path) -> None:
             "sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
         })
     (output / "catalog.json").write_text(
-        json.dumps({"schema_version": 1, "skills": entries}, indent=2) + "\n", encoding="utf-8"
+        json.dumps({"schema_version": 1, "skills": entries}, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     print(f"Built {len(entries)} skill archive(s) in {output}")
