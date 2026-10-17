@@ -1,4 +1,3 @@
 # Canonical sources, generated HTML, and packages use the same bytes on every OS.
 * text=auto eol=lf
 *.png binary
-*.zip binary

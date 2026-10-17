@@ -9,7 +9,6 @@ import subprocess
 import sys
 import tempfile
 import unittest
-import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 from assembled_catalog import SKILLS
@@ -35,7 +34,7 @@ class DefinitionGuideTests(unittest.TestCase):
             with self.subTest(skill=item['skill']):
                 self.run_documented_status(SKILLS / item['skill'], ledger)
 
-    def test_documented_command_runs_from_isolated_agent_and_zip_copies(self):
+    def test_documented_command_runs_from_isolated_agent_copies(self):
         name = 'ct-rnd-fix-bug'
         with tempfile.TemporaryDirectory() as directory:
             base = Path(directory)
@@ -43,11 +42,7 @@ class DefinitionGuideTests(unittest.TestCase):
             ledger.write_bytes((SKILLS / 'ct-product-define-project/assets/example-ledger.json').read_bytes())
             with contextlib.redirect_stdout(io.StringIO()):
                 installer.install(ROOT, base / 'home', list(installer.TARGETS), [name], False)
-                installer.build(ROOT, base / 'packages')
             folders = [base / 'home' / target / name for target in installer.TARGETS.values()]
-            with zipfile.ZipFile(base / 'packages' / (name + '.zip')) as archive:
-                archive.extractall(base / 'zip')
-            folders.append(base / 'zip' / name)
             for folder in folders:
                 with self.subTest(folder=folder):
                     self.run_documented_status(folder, ledger)

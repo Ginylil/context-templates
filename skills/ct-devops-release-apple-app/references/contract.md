@@ -125,8 +125,8 @@ The envelope is `schema_version`, `project_id`, `skill`, `input_sha256`, `status
 SHA-256 is UTF-8 sorted-key compact JSON, preserving Unicode. Compute it with
 `hash-input`; never paste a digest from another project. Both public example
 `input_sha256` values are generated from their included synthetic intake JSON by
-`make resources`; check/build reject stale generated values. File/artifact
-references instead hash actual bytes; package ZIP digests come from `make build`.
+`make resources`; `make check` rejects stale generated values. File/artifact
+references instead hash actual bytes, as do installer ownership receipts.
 A digest identifies content and is not a credential. Example files contain no
 real candidate, private app identity or provider receipt. `ready` has no
 blockers; `blocked` has actionable `{reason, next_action}` entries and never means

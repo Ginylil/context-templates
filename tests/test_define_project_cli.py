@@ -3,7 +3,6 @@ import contextlib
 import io
 import json
 import unittest
-import zipfile
 
 from define_project_fixture import (
     DefineProjectFixture,
@@ -49,18 +48,14 @@ class DefineProjectCliTests(DefineProjectFixture):
                 self.assertEqual(result.returncode, 1)
                 self.assertEqual((self.work / f"{agent}.md").read_bytes(), before)
 
-    def test_built_archive_works_without_source_repository(self):
-        output = self.work / "dist"
+    def test_assembled_folder_works_without_source_repository(self):
+        output = self.work / "assembled"
         with contextlib.redirect_stdout(io.StringIO()):
-            installer.build(ROOT, output)
-        extracted = self.work / "extracted"
-        with zipfile.ZipFile(output / f"{SKILL.name}.zip") as archive:
-            archive.extractall(extracted)
-        package = extracted / SKILL.name
+            installer.assemble(ROOT, output, [SKILL.name])
+        package = output / SKILL.name
         result = self.cli("validate-output", package / "assets/example-ledger.json",
                           package / "assets/example-definition.json", script=package / "scripts/project.py")
         self.assertEqual(result.returncode, 0, result.stderr)
-
 
     def test_cli_limit_error_preserves_ledger(self):
         keys = self.independent(11)

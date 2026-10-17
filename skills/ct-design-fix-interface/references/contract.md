@@ -81,7 +81,7 @@ The output envelope is `schema_version`, `project_id`, `skill`, `input_sha256`,
 `status` (ready/blocked), `summary`, `constraints`, `evidence`, `blockers`, `result`.
 Compute `input_sha256` with `hash-input` (canonical compact sorted-key UTF-8 JSON,
 preserving Unicode). `make resources` derives the synthetic example's input hash;
-check/build reject stale generated output. File/artifact hashes bind real bytes,
+`make check` rejects stale generated output. File/artifact hashes bind real bytes,
 not a copied example value. Evidence is `{id, kind, reference}`. `record` produces
 command proof; artifacts reference actual files. Observations reference JSON with
 `kind: ct-observation.v1`, `source`, timezone-qualified `observed_at`, `statement`,

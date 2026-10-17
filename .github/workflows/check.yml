@@ -58,13 +58,5 @@ jobs:
         run: python scripts/ct_lifecycle.py --check
       - name: Check public files for credential signatures
         run: python scripts/secret_scan.py
-      - name: Test safe installation and packaging
+      - name: Test safe installation and standalone skill assembly
         run: python -m unittest discover -s tests -v
-      - name: Build downloadable skill archives
-        run: python scripts/skills.py build
-      - name: Check packaged files for credential signatures
-        run: python scripts/secret_scan.py --packages dist
-      - uses: actions/upload-artifact@v4
-        with:
-          name: skills-${{ matrix.os }}
-          path: dist/

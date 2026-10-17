@@ -60,9 +60,9 @@ GitHub account are needed only when creating a contribution PR.
    `cursor`, `claude`, and `all`. On Windows, use the available `py -3` or `python`
    interpreter for the same script; native Make is not required.
 3. The installer assembles complete skill folders using the source-only
-   `assets/package.json` manifests and shared helpers. Use this installer or a
-   built ZIP; copying a raw source folder may omit required scripts. Installation
-   never executes packaged scripts. It records assembled-file hashes and
+   `assets/package.json` manifests and shared helpers. Use the Make or
+   Python installer; copying a raw source folder may omit required scripts.
+   Installation never executes packaged scripts. It records assembled-file hashes and
    ownership in the documented user-level directories, leaves unrelated skills alone,
    and refuses unmanaged conflicts, links, and edited installed copies. Do not
    bypass a conflict with force, deletion, or an unreviewed replacement. Report
@@ -108,9 +108,8 @@ Requests to install or update local copies alone do not authorize a PR.
    Use `references/`, `assets/`, or `scripts/` only when they serve the workflow;
    keep agent-specific adaptations small. Follow the current frontmatter and
    package validation contract in CONTRIBUTING.
-4. Run `make check` (or the documented Python equivalents), `make build`, and
-   any checks specific to the changed skill. Test meaningful behavior in an
-   isolated workspace; do not submit paid jobs, messages, or production changes
+4. Run `make check` (or the documented Python equivalents) and any checks
+   specific to the changed skill. Test meaningful behavior in an isolated workspace; do not submit paid jobs, messages, or production changes
    merely to test a skill. Reconcile docs and catalog links affected by the change.
 5. Review the full diff for scope and private content. Stage only the intended
    paths, commit, and push the contribution branch to the verified upstream or

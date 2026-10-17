@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only, redacted heuristic credential checks for public files and packages."""
+"""Read-only, redacted heuristic credential checks for public files."""
 from __future__ import annotations
 import argparse
 import json
@@ -7,7 +7,6 @@ from pathlib import Path
 import re
 import subprocess
 import sys
-import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 SIGNATURES = {
@@ -42,7 +41,7 @@ def findings(data, name):
     return result
 
 
-def scan(root, packages=None, history=False, staged=False):
+def scan(root, history=False, staged=False):
     issues, count = [], 0
     if staged:
         # Read the index, never the potentially different working-tree contents.
@@ -88,28 +87,20 @@ def scan(root, packages=None, history=False, staged=False):
                 for issue in findings(data, name):
                     issues.append({**issue, 'path': 'history:' + oid[:12] + ':' + issue['path']})
                 count += 1
-    if packages is not None:
-        catalog = json.loads((packages / 'catalog.json').read_text(encoding='utf-8'))
-        for item in catalog['skills']:
-            with zipfile.ZipFile(packages / item['archive']) as archive:
-                for name in archive.namelist():
-                    if not name.endswith('/'):
-                        issues.extend(findings(archive.read(name), item['archive'] + ':' + name)); count += 1
     return {'scanned': count, 'findings': issues,
             'limitation': 'Heuristic signatures and credential-file checks; no validation of credential activity or guarantee of absence.'}
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--packages', type=Path, help='Scan archives named in this directory catalog.json as well')
     parser.add_argument('--history', action='store_true', help='Also inspect blobs reachable from all local refs')
     parser.add_argument('--staged', action='store_true', help='Scan changed index blobs instead of working-tree files')
     args = parser.parse_args()
     try:
-        result = scan(ROOT, args.packages, args.history, args.staged)
+        result = scan(ROOT, history=args.history, staged=args.staged)
         print(json.dumps(result, indent=2))
         return 1 if result['findings'] else 0
-    except (OSError, ValueError, KeyError, subprocess.CalledProcessError, zipfile.BadZipFile) as error:
+    except (OSError, ValueError, KeyError, subprocess.CalledProcessError) as error:
         print(f'Secret scan could not complete: {type(error).__name__}', file=sys.stderr)
         return 1
 

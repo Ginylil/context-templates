@@ -4,7 +4,6 @@ import hashlib
 import importlib.util
 import json
 import re
-import zipfile
 from pathlib import Path
 from .common import PACKAGE_MANIFEST, is_link, valid_name, metadata, snapshot, selected_names
 from .limits import check_code_length
@@ -159,31 +158,3 @@ def assemble(root: Path, output: Path, names: list[str]) -> None:
     for name, payload in payloads.items():
         write_package(payload, output / name)
     print(f"Assembled {len(payloads)} skill(s) in {output}")
-
-
-def build(root: Path, output: Path) -> None:
-    available = catalog(root)
-    payloads = {name: package_payload(root, folder) for name, folder in available.items()}
-    output.mkdir(parents=True, exist_ok=True)
-    entries = []
-    for name, folder in available.items():
-        archive = output / f"{name}.zip"
-        with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
-            for file, content in payloads[name].items():
-                if content is None:
-                    continue
-                entry = zipfile.ZipInfo(f"{name}/{file}", date_time=(2020, 1, 1, 0, 0, 0))
-                entry.create_system = 3  # Unix metadata matches the POSIX modes below.
-                entry.compress_type = zipfile.ZIP_DEFLATED
-                mode = 0o755 if content[1] else 0o644
-                entry.external_attr = (0o100000 | mode) << 16
-                bundle.writestr(entry, content[0])
-        entries.append({
-            **metadata(folder),
-            "archive": archive.name,
-            "sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
-        })
-    (output / "catalog.json").write_text(
-        json.dumps({"schema_version": 1, "skills": entries}, indent=2) + "\n", encoding="utf-8", newline="\n"
-    )
-    print(f"Built {len(entries)} skill archive(s) in {output}")

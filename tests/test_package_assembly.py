@@ -1,6 +1,5 @@
 """Composition, upgrade compatibility and malicious-manifest controls."""
 import contextlib
-import hashlib
 import io
 import json
 import os
@@ -10,7 +9,6 @@ import sys
 import tempfile
 import unittest
 from unittest.mock import patch
-import zipfile
 
 from assembled_catalog import installer
 
@@ -44,18 +42,15 @@ class PackageAssemblyTests(unittest.TestCase):
             with self.assertRaises((ValueError, OSError)):
                 installer.install(self.root, self.home, list(installer.TARGETS), [], False)
             with self.assertRaises((ValueError, OSError)):
-                installer.build(self.root, output)
-            with self.assertRaises((ValueError, OSError)):
                 installer.assemble(self.root, output, [])
         self.assertFalse(self.home.exists())
         self.assertFalse(output.exists())
 
-    def test_same_payload_for_assembly_all_installers_and_zip(self):
+    def test_same_payload_for_assembly_all_installers(self):
         assembled = self.base / 'assembled'
         with contextlib.redirect_stdout(io.StringIO()):
             installer.assemble(self.root, assembled, [])
             self.install()
-            installer.build(self.root, self.base / 'dist')
         expected = installer.snapshot(assembled / 'example')
         self.assertNotIn('assets/package.json', expected)
         self.assertNotIn('assets/', expected)  # Manifest-only folder is source metadata.
@@ -67,17 +62,6 @@ class PackageAssemblyTests(unittest.TestCase):
             result = subprocess.run([sys.executable, str(folder / 'scripts/helper.py')], capture_output=True, text=True, cwd=self.base)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertEqual(result.stdout.strip(), 'standalone helper')
-        with zipfile.ZipFile(self.base / 'dist/example.zip') as bundle:
-            for name, value in installer.package_payload(self.root, self.skill).items():
-                if value is not None:
-                    self.assertEqual(bundle.read('example/' + name), value[0])
-            self.assertNotIn('example/assets/package.json', bundle.namelist())
-        before = (self.base / 'dist/example.zip').read_bytes()
-        with contextlib.redirect_stdout(io.StringIO()):
-            installer.build(self.root, self.base / 'dist')
-        self.assertEqual((self.base / 'dist/example.zip').read_bytes(), before)
-        catalog = json.loads((self.base / 'dist/catalog.json').read_text())
-        self.assertEqual(catalog['skills'][0]['sha256'], hashlib.sha256(before).hexdigest())
 
     def test_unmodified_v1_receipt_remains_valid_and_shared_updates_propagate(self):
         # Simulate the old complete-folder source layout and existing v1 receipt.
@@ -96,30 +80,6 @@ class PackageAssemblyTests(unittest.TestCase):
         for destination in installer.TARGETS.values():
             self.assertEqual((self.home / destination / 'example/scripts/helper.py').read_bytes(), self.helper.read_bytes())
 
-    def test_zip_and_catalog_bytes_ignore_host_platform_defaults(self):
-        original = zipfile.ZipInfo
-        write_text = Path.write_text
-        outputs = []
-        for host in (0, 3):
-            class HostZipInfo(original):
-                def __init__(self, *args, **kwargs):
-                    super().__init__(*args, **kwargs)
-                    self.create_system = host
-
-            def host_write_text(path, data, **kwargs):
-                kwargs.setdefault('newline', '\r\n' if host == 0 else '\n')
-                return write_text(path, data, **kwargs)
-
-            output = self.base / f'host-{host}'
-            with patch.object(zipfile, 'ZipInfo', HostZipInfo), patch.object(Path, 'write_text', host_write_text):
-                with contextlib.redirect_stdout(io.StringIO()):
-                    installer.build(self.root, output)
-            outputs.append({name: (output / name).read_bytes()
-                            for name in ('example.zip', 'catalog.json')})
-            with zipfile.ZipFile(output / 'example.zip') as bundle:
-                self.assertTrue(all(entry.create_system == 3 for entry in bundle.infolist()))
-        self.assertEqual(outputs[0], outputs[1])
-
     def test_shared_installed_edit_blocks_all_targets(self):
         self.install()
         edited = self.home / installer.TARGETS['claude'] / 'example/scripts/helper.py'
@@ -136,7 +96,6 @@ class PackageAssemblyTests(unittest.TestCase):
         self.helper.write_text('from pathlib import Path\nPath(' + repr(str(marker)) + ').touch()\nraise RuntimeError("not safe to execute")\n')
         self.install()
         with contextlib.redirect_stdout(io.StringIO()):
-            installer.build(self.root, self.base / 'dist')
             installer.assemble(self.root, self.base / 'assembled', [])
         self.assertFalse(marker.exists())
 

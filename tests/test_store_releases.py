@@ -1,7 +1,6 @@
 """Offline store contracts. Synthetic receipts do not prove provider behavior."""
 import contextlib
 import io
-import zipfile
 import datetime as dt
 import json
 import subprocess
@@ -27,20 +26,16 @@ class StoreReleaseTests(StoreReleaseFixture):
                 with self.subTest(platform=platform, stage=stage):
                     self.validate(self.case(platform, stage))
 
-    def test_ready_cli_runs_from_each_agent_install_and_built_zip(self):
+    def test_ready_cli_runs_from_each_agent_install(self):
         names = ['ct-devops-release-apple-app', 'ct-devops-release-android-app']
         home = self.base / 'home'
         with contextlib.redirect_stdout(io.StringIO()):
             installer.install(ROOT, home, list(installer.TARGETS), names, False)
-            installer.build(ROOT, self.base / 'packages')
         for platform in ('apple', 'android'):
             name = f'ct-devops-release-{platform}-app'
             values = self.case(platform, 'testflight-external' if platform == 'apple' else 'play-closed')
             intake = self.f.write('cli-input.json', values[1]); output = self.f.write('cli-output.json', values[2])
             locations = [(agent, home / target / name) for agent, target in installer.TARGETS.items()]
-            with zipfile.ZipFile(self.base / 'packages' / (name + '.zip')) as archive:
-                archive.extractall(self.base / 'unpacked')
-            locations.append(('zip', self.base / 'unpacked' / name))
             for label, folder in locations:
                 script = folder / 'scripts/workflow.py'
                 for command in (['validate-input', str(self.base / intake['path'])],

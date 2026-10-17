@@ -3,11 +3,11 @@ SKILL ?=
 INSTALL_ARGS ?=
 
 .DEFAULT_GOAL := help
-.PHONY: help catalog install install-codex install-cursor install-claude check test build examples resources setup-hooks secret-check
+.PHONY: help catalog install install-codex install-cursor install-claude check test examples resources setup-hooks secret-check
 
 help:
 	@$(PYTHON) scripts/skills.py --help
-	@echo "make catalog | install-codex | install-cursor | install-claude | install | examples | resources | check | build"
+	@echo "make catalog | install-codex | install-cursor | install-claude | install | examples | resources | check"
 	@echo "Contributor security: make setup-hooks | secret-check"
 	@echo 'Select one skill: make install-codex SKILL=context-templates'
 	@echo 'Preview: make install INSTALL_ARGS=--dry-run'
@@ -50,10 +50,3 @@ check:
 
 test:
 	$(PYTHON) -m unittest discover -s tests -v
-
-build:
-	$(PYTHON) scripts/check_code_size.py
-	$(PYTHON) scripts/dynamic_umls.py --check
-	$(PYTHON) scripts/ct_lifecycle.py --check
-	$(PYTHON) scripts/skills.py build
-	$(PYTHON) scripts/secret_scan.py --packages dist

@@ -28,7 +28,7 @@ additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
 
-Each installed skill or built ZIP is a complete folder. `SKILL.md` tells your agent
+Each installed skill is a complete folder. `SKILL.md` tells your agent
 when and how to use it; optional `references/`, `assets/`, and `scripts/` provide supporting
 guidance, templates, and deterministic tools. For Dynamic UMLs, the agent
 investigates your question and prepares a diagram model; bundled Python scripts
@@ -79,7 +79,7 @@ Inspect what already exists and take the next useful step toward my goal.
 | [`ct-marketing-research-market`](skills/ct-marketing-research-market/SKILL.md) | Research audiences, competitors and positioning |
 | [`ct-marketing-launch-product`](skills/ct-marketing-launch-product/SKILL.md) | Prepare or execute an authorized launch |
 
-Each installed folder and ZIP works independently. The guide checks which specialists
+Each installed folder works independently. The guide checks which specialists
 are installed. The agent prepares JSON, while bundled Python tools validate
 structure, scope/source bindings, proof references and domain-specific rules.
 Explicit command capture records actual argv, output, exit status and source
@@ -227,7 +227,7 @@ Use `make examples` after changing canonical resources or example JSON, then
 
 Repository skill folders select shared helpers through `assets/package.json`;
 copying a raw source folder with a generic folder-copy installer is insufficient.
-Use the supported installer or a built ZIP. To inspect or run a skill locally
+Use the Make or Python installer. To inspect or run a skill locally
 without installing it, assemble a new directory first:
 
 ```sh
@@ -236,8 +236,8 @@ python3 scripts/skills.py assemble --skill ct-rnd-fix-bug --output dist/review-s
 
 The output must not already exist. It contains a complete `ct-rnd-fix-bug/`
 folder; run its documented commands there. Omit `--skill` to assemble the full
-catalog. On Windows, use `py -3` instead of `python3`. Installation, assembly,
-and ZIP builds use the same payload logic and never execute packaged scripts.
+catalog. On Windows, use `py -3` instead of `python3`. Installation and assembly
+use the same payload logic and never execute packaged scripts.
 The existing `assets/contract.json` files still define validation policy;
 package manifests only select helpers. See [package composition](DETAILS.md#package-composition).
 
@@ -330,14 +330,13 @@ for maintainer review. GitHub authentication is needed for submission; a local
 installation request alone does not create a PR. See [CONTRIBUTING](CONTRIBUTING.md)
 for the canonical folder format and validation requirements.
 
-## Maintainer checks and downloads
+## Maintainer checks
 
 ```sh
 make check
-make build
 ```
 
-These commands enforce a 300-line limit for maintained code and packaged scripts.
+This command enforces a 300-line limit for maintained code and packaged scripts.
 Generated standalone HTML examples are exempt; their maintained inputs are checked.
 Shared scripts are selected through v2 package manifests with explicit source
 and destination paths; see [package composition](DETAILS.md#package-composition).
@@ -348,11 +347,11 @@ Before contributing, install the free Gitleaks CLI and pre-commit, then run
 See [contributor security setup](CONTRIBUTING.md#secret-protection)
 for installation, Windows commands, coverage and recovery steps.
 
-Builds produce a ZIP for each complete skill plus a checksummed `catalog.json`
-in `dist/`. These files are reproducible local outputs and are also retained as
-CI artifacts. A GitHub Actions artifact download may require signing in; the raw
-bootstrap link above is public. Existing GitHub Pages hosting serves the example
-files; there is no separate website application or automatic release publication.
+Installation uses the checked-out repository through Make or Python; there is
+no ZIP build, generated download catalog, or skill artifact upload in CI. The
+ignored `dist/` directory may hold local assembled review folders and browser
+proof. Existing GitHub Pages hosting serves the example files; there is no
+separate website application or automatic release publication.
 Packages contain skill-local resources plus explicitly selected scripts from
 `shared/`. Source-only `assets/package.json` manifests are excluded. Private
 experiments belong in a separate private repository and must never be copied here.

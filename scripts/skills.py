@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate, assemble, package and safely install the public skill catalog."""
+"""Validate, assemble and safely install the public skill catalog."""
 from __future__ import annotations
 import argparse
 import json
@@ -19,7 +19,7 @@ from skill_tools.common import (
 )
 from skill_tools.packages import (
     unique_object, safe_script, shared_script, package_payload, payload_snapshot,
-    write_package, catalog, assemble, build,
+    write_package, catalog, assemble,
 )
 from skill_tools.installation import read_state, install
 
@@ -35,8 +35,6 @@ def main() -> int:
     installing.add_argument("--skill", action="append", default=[])
     installing.add_argument("--home", type=Path, default=Path.home())
     installing.add_argument("--dry-run", action="store_true")
-    building = sub.add_parser("build", help="Create per-skill ZIPs and a checksummed catalog")
-    building.add_argument("--output", type=Path, default=ROOT / "dist")
     assembling = sub.add_parser("assemble", help="Create standalone folders in a new output directory")
     assembling.add_argument("--output", type=Path, required=True)
     assembling.add_argument("--skill", action="append", default=[])
@@ -45,8 +43,6 @@ def main() -> int:
         if args.command == "install":
             agents = list(TARGETS) if args.agent == "all" else [args.agent]
             install(ROOT, args.home.expanduser().resolve(), agents, args.skill, args.dry_run)
-        elif args.command == "build":
-            build(ROOT, args.output)
         elif args.command == "assemble":
             assemble(ROOT, args.output, args.skill)
         else:
