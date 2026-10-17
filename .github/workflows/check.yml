@@ -50,6 +50,8 @@ jobs:
           python-version: '3.10'
       - name: Limit maintained code to 300 physical lines
         run: python scripts/check_code_size.py
+      - name: Check website catalog and sitemap drift
+        run: python scripts/website_catalog.py --check
       - name: Check canonical diagram resources and examples
         run: python scripts/dynamic_umls.py --check
       - name: Validate catalog

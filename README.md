@@ -4,6 +4,10 @@ Public agent skills for **Codex, Cursor, and Claude Code**. Visit
 [contexttemplates.com](https://contexttemplates.com) for the website; GitHub is
 the source of truth.
 
+Browse [all skills on the website](https://contexttemplates.com/catalog/) for short
+explanations and individual installation pages for Codex, Cursor and Claude Code.
+Search or filter by area of work; every page includes preview and install commands.
+
 The [static website source](index.html) and [reviewed build journal](build-notes/index.html)
 live in this repository. Preview locally with `make website-serve`, then open
 [the local website](http://127.0.0.1:8766/). The journal documents use of

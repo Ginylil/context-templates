@@ -18,6 +18,25 @@ the skill-guided work. No raw session, private traffic data, account screenshots
 credentials or command logs belong in that page. No third-party resource request,
 remote font, telemetry script or backend is needed to render these pages.
 
+`catalog/index.html` lists every canonical skill, with progressive search and
+category filtering. Each `catalog/<name>/index.html` presents the skill's complete
+description, optional existing UML example, and agent-specific Python/Make preview
+and installation commands. HTML includes all instructions without JavaScript;
+`website/catalog.js` adds filtering, agent selection and clipboard recovery.
+`website/catalog.css` extends the existing design. Run `make website-catalog`
+after metadata changes: `scripts/website_catalog.py` reads the existing catalog
+validator and canonical headings/frontmatter, then renders `website/templates/`.
+Generated pages and the public `sitemap.xml` are committed; `make check` and CI
+reject drift. Removed pages require explicit reconciliation rather than deletion.
+This browsing catalog does not build or distribute installable archives.
+
+Canonical metadata uses `https://contexttemplates.com`; `robots.txt` advertises
+the generated sitemap. Search Console registration uses the domain's authoritative
+DNS provider for a verification TXT record, preserving other records. Keep tokens,
+account screens and registration receipts out of the public journal. After deploying,
+submit the live sitemap and read back its status. Verification, sitemap processing,
+URL indexing and Search Performance are separate observations.
+
 Run `make website-serve` and open [the local preview](http://127.0.0.1:8766/).
 The server binds to loopback and serves the checkout; keep it local. For browser
 proof, run `make website-check` in another terminal. It uses an existing Node.js,
@@ -27,7 +46,9 @@ if they are not found by default. `WEBSITE_URL` can override the local URL;
 `WEBSITE_PROOF` can override the ignored `dist/website-proof/` output directory.
 The browser check verifies mobile/desktop overflow, keyboard entry, actual
 clipboard success, denied-clipboard selection recovery, no-JavaScript access,
-local links and absence of third-party resource requests. Inspect the captured
+local links, catalog search/filter recovery, per-agent copying, and absence of
+third-party resource requests. Isolated tests execute published installation
+commands against temporary homes. Inspect the captured
 screenshots too; passing assertions do not establish visual quality or acceptance.
 
 Preview preparation is separate from publication. Publication uses the existing
