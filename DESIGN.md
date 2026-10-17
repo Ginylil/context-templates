@@ -2,7 +2,7 @@
 
 These are portable artifact templates. A generated page is one HTML file; the
 example gallery works locally and through the repository's existing GitHub Pages
-hosting. No separate website application is built. The user's supplied
+hosting. The diagram renderer does not build the catalog's static website. The user's supplied
 sequence page informed the dark canvas, warm accent and light explanatory notes.
 The renderer is repo-owned. The Ginylil coffee-and-sun logo is the PNG supplied
 by the owner, stored at `assets/ginylil.png` in the canonical skill and embedded

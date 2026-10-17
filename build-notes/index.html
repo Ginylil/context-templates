@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How we used a Context Templates skill to prepare this website: the brief, design decisions, browser checks and publication boundary.">
+  <title>Building with our own skills — Context Templates</title>
+  <link rel="icon" href="../skills/ct-dynamic-uml/assets/ginylil.png">
+  <link rel="stylesheet" href="../website/style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="masthead wrap">
+    <a class="wordmark" href="../" aria-label="Context Templates home"><span class="mark" aria-hidden="true">ct.</span> context templates</a>
+    <nav aria-label="Main navigation"><a href="../#skills">The skills</a><a href="./" aria-current="page">Build journal</a><a class="repo-link" href="https://github.com/Ginylil/context-templates">GitHub <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="main" class="journal wrap">
+    <p class="eyebrow">BUILD JOURNAL / 001 / <time datetime="2026-10-17">17 OCTOBER 2026</time></p>
+    <h1>A website built with<br>its own toolkit.</h1>
+    <p class="intro">The catalog needed a front door. We used one of its own skills to prepare it, and kept a record of the decisions that mattered.</p>
+    <p class="preview-note"><strong>Initial checkpoint: local website preview.</strong> This entry records the design and local checks before publication. Local proof remains distinct from a live deployment.</p>
+    <h2>01 — Start with a bounded brief</h2>
+    <p>The goal was a simple website for Context Templates, in the existing public repository, with a useful explanation of the catalog and a way to get started. The process itself would become a public example.</p>
+    <p>For this preview, we chose a written build journal as the first record. This is an edited account of the work, rather than a session transcript.</p>
+    <pre aria-label="Reusable example brief">Use ct-design-build-interface to prepare a simple public website for this skill catalog.
+
+Help visitors understand the skills, copy the discovery prompt and try an interactive example.
+Document the design decisions and actual checks in a reviewed build journal.
+Keep secrets, personal data and private session material out of public content.
+Prepare a local preview for review before publication.</pre>
+    <p>This is a reusable brief based on the task, not a verbatim export of a private conversation.</p>
+    <h2>02 — Use a real skill</h2>
+    <p>We used <a href="https://github.com/Ginylil/context-templates/tree/main/skills/ct-design-build-interface"><code>ct-design-build-interface</code></a>. Its method calls for inspecting the existing design language, defining the main user flow, producing a reviewable direction and checking the rendered result.</p>
+    <p>The package was assembled from the repository's explicit manifest. Its bundled tools validated an input describing the scope, constraints and viewports before the page was built. The record distinguishes source identity, command results and screenshots.</p>
+    <p>The agent chose the content and visual hierarchy. The scripts checked structure and evidence bindings. Those checks cannot decide whether a page is useful or whether a person likes its design.</p>
+    <h2>03 — Keep the first version small</h2>
+    <ul>
+      <li><strong>One primary action:</strong> copy the existing discovery prompt. The agent recommends skills and waits for a choice, including an explicit “Install all skills” option.</li>
+      <li><strong>Working examples:</strong> link directly to the catalog's interactive UML pages, preserving their existing URLs.</li>
+      <li><strong>Familiar materials:</strong> reuse the dark green, copper, mint and system fonts from the diagram design language; introduce a light paper background for reading.</li>
+      <li><strong>A static page:</strong> use HTML, CSS and a small clipboard enhancement. It needs no backend, account system, remote fonts or analytics scripts.</li>
+    </ul>
+    <h2>04 — Check the actual page</h2>
+    <p>The local proof covers a 390 × 844 mobile viewport and a 1440 × 1000 desktop viewport. Browser checks exercise the discovery prompt, example and journal links, keyboard access, page overflow, and the clipboard-denied recovery path. The prompt also remains readable without JavaScript.</p>
+    <p>The maintained browser check is <a href="https://github.com/Ginylil/context-templates/blob/main/scripts/check_website.cjs"><code>scripts/check_website.cjs</code></a>. It uses an already available Playwright installation and Chromium browser. Screenshots and raw command captures remain local and are excluded from the public source.</p>
+    <table>
+      <caption>What each kind of proof establishes</caption>
+      <thead><tr><th scope="col">Check</th><th scope="col">Its limit</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Repository checks</th><td>Local catalog and source checks; not remote CI.</td></tr>
+        <tr><th scope="row">Browser checks and screenshots</th><td>Local interaction and layout evidence; not human acceptance.</td></tr>
+        <tr><th scope="row">Public-content review and scanner</th><td>Reviewed scope and known signature checks; not a guarantee that a heuristic can find everything.</td></tr>
+      </tbody>
+    </table>
+    <h2>05 — Publish the lesson, protect the session</h2>
+    <p>This page includes only reviewed project information, a reusable brief, design decisions and bounded descriptions of checks. It excludes raw chat, account details, local filesystem paths, credentials, private traffic analytics and unreviewed command logs.</p>
+    <p>The website's own assets load locally, without third-party scripts. Following a GitHub link or using the hosted site is still subject to the host's normal request processing.</p>
+    <h2>From preview to publication</h2>
+    <p>After reviewing this direction, the owner approved publication through a pull request, passing CI and the existing GitHub Pages host at <a href="https://contexttemplates.com">contexttemplates.com</a>. The release checks must bind the Pages build to its source commit, verify DNS and HTTPS, and exercise the live landing page, journal and example links.</p>
+    <p>This journal preserves the initial design checkpoint. Raw deployment records and account-management screens remain private.</p>
+    <a class="text-link" href="../">Back to the website <span aria-hidden="true">→</span></a>
+  </main>
+  <footer class="wrap footer"><a class="brand-credit" href="https://github.com/Ginylil"><img src="../skills/ct-dynamic-uml/assets/ginylil.png" width="32" height="32" alt="">A Ginylil project</a><span>A reviewed account of the work.</span><a href="https://github.com/Ginylil/context-templates">Browse the source <span aria-hidden="true">↗</span></a></footer>
+</body>
+</html>

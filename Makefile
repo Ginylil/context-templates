@@ -3,12 +3,13 @@ SKILL ?=
 INSTALL_ARGS ?=
 
 .DEFAULT_GOAL := help
-.PHONY: help catalog install install-codex install-cursor install-claude check test examples resources setup-hooks secret-check
+.PHONY: help catalog install install-codex install-cursor install-claude check test examples resources setup-hooks secret-check website-serve website-check
 
 help:
 	@$(PYTHON) scripts/skills.py --help
 	@echo "make catalog | install-codex | install-cursor | install-claude | install | examples | resources | check"
 	@echo "Contributor security: make setup-hooks | secret-check"
+	@echo "Website preview: make website-serve | website-check (existing Playwright/browser required)"
 	@echo 'Select one skill: make install-codex SKILL=context-templates'
 	@echo 'Preview: make install INSTALL_ARGS=--dry-run'
 
@@ -39,6 +40,12 @@ setup-hooks:
 secret-check:
 	$(PYTHON) scripts/secret_scan.py --history
 	gitleaks git --redact --log-opts="--all" .
+
+website-serve:
+	$(PYTHON) -m http.server 8766 --bind 127.0.0.1
+
+website-check:
+	node scripts/check_website.cjs
 
 check:
 	$(PYTHON) scripts/check_code_size.py

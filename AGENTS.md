@@ -1,8 +1,14 @@
 # Context Templates
 
 - This is the public skill catalog for Codex, Cursor, and Claude Code. GitHub is
-  the source of truth. Existing GitHub Pages hosting mirrors static examples;
-  there is no separate website application, MCP server, or API publisher.
+  the source of truth. The static website entry is `index.html`, with resources
+  under `website/` and an edited public journal under `build-notes/`. Existing
+  GitHub Pages hosts static examples; there is no backend, MCP server, or API publisher.
+- Keep the website dependency-free and its links relative so project Pages and a
+  custom domain both work. Keep raw session material and proof in ignored `dist/`;
+  publish only reviewed journal prose. Domain, DNS, and hosting settings need their
+  own authorization. `make website-check` is optional rendered browser proof;
+  it requires an existing Playwright/browser and a running local preview server.
 - Canonical skills live in `skills/<name>/SKILL.md`. Keep shared instructions
   portable and put substantial supporting content in references, assets, or
   scripts. Agent-specific UI metadata belongs in `agents/`.
