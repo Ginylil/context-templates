@@ -11,6 +11,20 @@ ROOT = Path(__file__).resolve().parents[1]
 MANAGER = ROOT / "skills/ct-product-manage-project"
 
 
+def session_examples():
+    folder = ROOT / 'skills/ct-rnd-prepare-next-session/assets'
+    intake = json.loads((folder / 'example-input.json').read_text(encoding='utf-8'))
+    reference = intake['sources'][0]['reference']
+    if reference['path'] != 'example-source.md':
+        raise ValueError('Session fixture must reference its public synthetic source')
+    reference['sha256'] = hashlib.sha256((folder / 'example-source.md').read_bytes()).hexdigest()
+    report = json.loads((folder / 'example-output.json').read_text(encoding='utf-8'))
+    report['input_sha256'] = hashlib.sha256(json.dumps(
+        intake, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
+    return {folder / name: (json.dumps(data, indent=2) + '\n').encode('utf-8')
+            for name, data in [('example-input.json', intake), ('example-output.json', report)]}
+
+
 def outputs():
     catalog = json.loads((MANAGER / "assets/catalog.json").read_text(encoding="utf-8"))
     names = [item["skill"] for item in catalog]
@@ -18,7 +32,7 @@ def outputs():
         raise ValueError("Expected exactly 21 unique lifecycle skill identities")
     define = ROOT / "skills/ct-product-define-project"
     planner = ROOT / "skills/ct-rnd-plan-development"
-    result = {}
+    result = session_examples()
     for name in names:
         folder = ROOT / "skills" / name
         if not name.startswith("ct-") or not (folder / "SKILL.md").is_file():

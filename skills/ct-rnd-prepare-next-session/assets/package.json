@@ -1,0 +1,17 @@
+{
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/lifecycle/handoff.py",
+      "destination": "scripts/handoff.py"
+    },
+    {
+      "source": "shared/lifecycle/handoff_validation.py",
+      "destination": "scripts/handoff_validation.py"
+    },
+    {
+      "source": "shared/lifecycle/public_content.py",
+      "destination": "scripts/public_content.py"
+    }
+  ]
+}

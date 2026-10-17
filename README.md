@@ -23,7 +23,8 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 contribute improvements or new skills through a pull request. The catalog includes
-the bootstrap, twenty-one project lifecycle skills, and the Dynamic UMLs family below;
+the bootstrap, a next-session handoff utility, twenty-one project lifecycle skills,
+and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
 ## How skills and scripts work together
@@ -43,6 +44,27 @@ resources and JSON package manifest into that agent's local skills directory. It
 run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
+
+## Next-session handoffs
+
+Use [`ct-rnd-prepare-next-session`](skills/ct-rnd-prepare-next-session/SKILL.md)
+when you need a copy-paste prompt for a fresh conversation. It refreshes relevant
+context, preserves decisions and constraints, separates checked work from
+uncertainty, and selects one immediate objective. Completed work gets an explicit
+no-follow-up result. It prepares context without starting another chat or doing
+the next task.
+
+```sh
+make install-codex SKILL=ct-rnd-prepare-next-session
+# Without Make, or use py -3 on Windows:
+python3 scripts/skills.py install --agent codex --skill ct-rnd-prepare-next-session
+```
+
+The agent prepares private input/output JSON and uses the bundled `handoff.py`
+validator and renderer. Scripts check source hashes, input binding, constraint
+retention, uncertainty and known secret signatures. Factual truth, observation
+freshness and the choice of goal still require agent review. This utility works
+independently of the lifecycle manager; see its [contract and examples](skills/ct-rnd-prepare-next-session/references/contract.md).
 
 ## Project lifecycle skills
 

@@ -147,6 +147,35 @@ three agents. Make CLI checks run where Make is available. Local results, CI,
 file installation, agent discovery, invocation, PR submission, and maintainer
 acceptance are distinct proof stages. There is no staging environment for this repository.
 
+## Next-session handoffs
+
+`ct-rnd-prepare-next-session` is a standalone utility outside the twenty-one-skill
+lifecycle graph. It adapts the execution-handoff approach of `draft-next-prompt`
+into portable instructions and checked artifacts, with no dependency on the
+private skill or an authenticated provider for non-remote work. Its manifest
+selects `handoff.py`, `handoff_validation.py` and `public_content.py` from
+`shared/lifecycle/`. The repository scanner imports the same pure credential
+signatures and redacted findings from `public_content.py`; Git/index/history
+scanning remains in `scripts/secret_scan.py` with its existing CLI.
+
+The helper validates exact input/output fields, bounded source files and actual
+hashes, timezone-qualified observation timestamps, canonical input binding,
+constraint retention, source-ID relationships and declared continuation states.
+Unverified sources need a first check and cannot support verified prose or a
+claimed executed check. Blocked work needs a resolution goal; undecided work
+needs a next-action assessment; completed work cannot invent another task.
+`make resources` computes synthetic source/input hashes and `make check` rejects
+fixture drift. Runtime observations and prompts remain private.
+
+The render command writes one plain-text prompt outside the installed skill and
+inspected workspace. It refuses links and different existing files; an identical
+file is a no-op. The helper never executes project code, Git, tests, shell or
+network requests. Hashes authenticate file identity, not the source's author or
+semantic truth. Observations can become stale after capture, and secret checks
+are heuristic. Native picker discovery and live provider state are separate
+from the isolated all-agent installer/CLI tests. See the skill's
+[contract](skills/ct-rnd-prepare-next-session/references/contract.md).
+
 ## Project definition
 
 The assembled `ct-product-define-project/` is a standalone portable skill. Its

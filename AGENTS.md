@@ -82,3 +82,9 @@
 - Interface correction tests must distinguish confirmed repeated defects, justified
   variants and unanswered corrections. Hold uncertain files unchanged and require
   matched rendered proof; source search alone is not project-wide semantic coverage.
+
+- Prepare Next Session is a standalone utility, outside the lifecycle manager's
+  twenty-one-skill graph. Keep its helpers under `shared/lifecycle/handoff*.py`,
+  synthetic fixtures in its skill folder, and generated hashes in `make resources`.
+  Repository and handoff secret checks share `shared/lifecycle/public_content.py`;
+  preserve scanner CLI/index/history behavior when changing that pure module.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ct-rnd-prepare-next-session · Handoff / Next Prompt"
+  short_description: "Prepare next-session, continuation and handoff prompts"
+  default_prompt: "Use $ct-rnd-prepare-next-session to prepare a checked continuation prompt for my next chat."
