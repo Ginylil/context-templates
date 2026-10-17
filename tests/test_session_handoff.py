@@ -149,7 +149,8 @@ class HandoffTests(HandoffFixture):
                 self.assertNotIn(token, str(error.exception))
 
     def test_signing_and_environment_sources_are_rejected_before_reading(self):
-        for name in ('.env', '.env.production', 'upload.p8', 'signing.keystore'):
+        for name in ('.env', '.env.production', '.ENV', '.ENV.PRODUCTION',
+                     'upload.p8', 'signing.keystore'):
             path = self.base / name
             path.write_text('Synthetic private configuration.', encoding='utf-8')
             reference = self.intake['sources'][0]['reference']

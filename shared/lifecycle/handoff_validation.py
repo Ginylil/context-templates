@@ -42,7 +42,9 @@ def records(value, where):
 
 
 def safe(data, name):
-    require(not _content.findings(data, name), 'Credential/signing-file finding; contents redacted')
+    # Environment-file spelling must be safe on case-insensitive filesystems too.
+    require(not _content.findings(data, str(name).casefold()),
+            'Credential/signing-file finding; contents redacted')
 
 
 def digest(value):

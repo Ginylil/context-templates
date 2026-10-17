@@ -2,7 +2,8 @@
 
 All JSON uses schema version integer `1`. Unknown/missing fields, duplicate JSON
 properties, non-finite numbers and known credential/signing-file signatures are
-rejected. Text fields are nonempty single lines without control characters;
+rejected. Private filename checks include uppercase `.ENV` variants. Text fields
+are nonempty single lines without control characters;
 lists of strings contain distinct entries. Helpers use Python 3.10+ only and
 never run project code, shell commands, Git or network requests.
 
