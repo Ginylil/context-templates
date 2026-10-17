@@ -30,12 +30,15 @@ clipboard success, denied-clipboard selection recovery, no-JavaScript access,
 local links and absence of third-party resource requests. Inspect the captured
 screenshots too; passing assertions do not establish visual quality or acceptance.
 
-Preview preparation is separate from publication. Reusing the existing Pages
-host is the proposed route, after visual review and an authorized PR/publication
-step. Domain/DNS changes require their own exact reviewed change, followed by
-HTTPS and live-link checks. Do not add a `CNAME` or alter hosting settings just
-to prepare a preview. There is no separate staging environment; local proof is
-not CI or live acceptance. The build journal records the initial preview boundary.
+Preview preparation is separate from publication. Publication uses the existing
+GitHub Pages host, sourced from `main` at the repository root, after visual
+review and a passing PR. The root `CNAME` selects `contexttemplates.com`.
+Domain/DNS changes require their own authorization; preserve a readback of the
+previous records for recovery, change only website records, then check DNS,
+HTTPS and the live landing page, journal and existing example URLs. Verify the
+Pages build commit and compare live assets with that exact source revision.
+There is no separate staging environment; local proof is not CI or live
+acceptance. The build journal records the initial preview boundary.
 
 ## Catalog and packages
 

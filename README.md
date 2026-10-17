@@ -1,14 +1,14 @@
 # Context Templates
 
-Public agent skills for **Codex, Cursor, and Claude Code**. GitHub is the source
-of truth. [contexttemplates.com](https://contexttemplates.com) leads here.
+Public agent skills for **Codex, Cursor, and Claude Code**. Visit
+[contexttemplates.com](https://contexttemplates.com) for the website; GitHub is
+the source of truth.
 
-A [static website preview](index.html) and [reviewed build journal](build-notes/index.html)
-now live in this repository. Preview locally with `make website-serve`, then open
+The [static website source](index.html) and [reviewed build journal](build-notes/index.html)
+live in this repository. Preview locally with `make website-serve`, then open
 [the local website](http://127.0.0.1:8766/). The journal documents use of
 `ct-design-build-interface` without publishing raw sessions or private evidence.
-The custom domain still redirects to GitHub; the preview has not been published
-there. See [website development and publication](DETAILS.md#website-preview).
+See [website development and publication](DETAILS.md#website-preview).
 
 ## Quick start — copy into your agent
 
@@ -380,7 +380,7 @@ Installation uses the checked-out repository through Make or Python; there is
 no ZIP build, generated download catalog, or skill artifact upload in CI. The
 ignored `dist/` directory may hold local assembled review folders and browser
 proof. Existing GitHub Pages hosting serves the example files. The repository also
-contains a static landing-page preview; it has no backend or automatic release
+contains the static landing page; it has no backend or automatic release
 publication.
 Packages contain skill-local resources plus explicitly selected scripts from
 `shared/`. Source-only `assets/package.json` manifests are excluded. Private
