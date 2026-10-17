@@ -6,6 +6,14 @@ Contribute a focused improvement or new public skill through a pull request to
 complete that workflow. Requests, bugs, and questions can also be discussed in
 GitHub issues. Maintainers review PRs before merging.
 
+Website changes use the same focused PR workflow. The entry is `index.html`;
+`website/` owns its CSS and clipboard enhancement, and `build-notes/` contains
+reviewed public prose. Keep private sessions, screenshots of desktop/account
+surfaces, traffic analytics and raw command captures out of journal entries.
+Use `make website-serve` for local preview and `make website-check` with an
+existing Playwright/browser for narrow/wide interaction proof. These checks are
+local; domain configuration and publication require separate scoped approval.
+
 ## Public suitability and canonical source
 
 Keep one canonical source per skill. A new skill needs a clear user task and a

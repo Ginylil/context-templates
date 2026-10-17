@@ -4,10 +4,38 @@ The public GitHub repository contains canonical `skills/<name>/SKILL.md` folders
 Focused definition guides adapt `scripts/project.py` commands to their packaged
 `scripts/definition.py`; Define a Project retains its canonical command.
 The README links directly to the self-contained bootstrap skill. There is no
-MCP/API publisher or separate website application. Existing GitHub Pages hosting
+MCP/API publisher or backend website application. Existing GitHub Pages hosting
 serves the public static examples from `main`; it is configured outside the
 repo-owned Makefile workflow. Private skills and personal context
 belong in a separate private repository.
+
+## Website preview
+
+`index.html` is the static entry, `website/style.css` supplies its design, and
+`website/main.js` enhances the readable discovery prompt with clipboard copying
+and a selection fallback. `build-notes/index.html` is an edited public account of
+the skill-guided work. No raw session, private traffic data, account screenshots,
+credentials or command logs belong in that page. No third-party resource request,
+remote font, telemetry script or backend is needed to render these pages.
+
+Run `make website-serve` and open [the local preview](http://127.0.0.1:8766/).
+The server binds to loopback and serves the checkout; keep it local. For browser
+proof, run `make website-check` in another terminal. It uses an existing Node.js,
+Playwright and Chromium installation; nothing is downloaded automatically. Set
+`WEBSITE_PLAYWRIGHT` to the module path and `WEBSITE_CHROME` to a browser executable
+if they are not found by default. `WEBSITE_URL` can override the local URL;
+`WEBSITE_PROOF` can override the ignored `dist/website-proof/` output directory.
+The browser check verifies mobile/desktop overflow, keyboard entry, actual
+clipboard success, denied-clipboard selection recovery, no-JavaScript access,
+local links and absence of third-party resource requests. Inspect the captured
+screenshots too; passing assertions do not establish visual quality or acceptance.
+
+Preview preparation is separate from publication. Reusing the existing Pages
+host is the proposed route, after visual review and an authorized PR/publication
+step. Domain/DNS changes require their own exact reviewed change, followed by
+HTTPS and live-link checks. Do not add a `CNAME` or alter hosting settings just
+to prepare a preview. There is no separate staging environment; local proof is
+not CI or live acceptance. The build journal records the initial preview boundary.
 
 ## Catalog and packages
 
