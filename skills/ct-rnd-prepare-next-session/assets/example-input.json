@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "scope": {
+    "description": "the synthetic helper review",
+    "workspace": null
+  },
+  "request": "Prepare a continuation prompt for the already selected read-only review.",
+  "constraints": [
+    "Preserve unrelated edits.",
+    "Review only; do not implement, publish or merge."
+  ],
+  "continuation": "needed",
+  "selected_next_action": "Review the synthetic helper change and report actionable defects.",
+  "sources": [
+    {
+      "id": "request",
+      "kind": "conversation",
+      "location": "Synthetic request in example-source.md",
+      "status": "verified",
+      "checked_at": "2026-01-01T00:00:00Z",
+      "reference": {
+        "path": "example-source.md",
+        "sha256": "c3e5640c59bbc973b43d15edf450a977c7c5160e639b283ee33cd237adcf1bc9"
+      }
+    },
+    {
+      "id": "remote",
+      "kind": "github",
+      "location": "https://github.com/example/session-demo/pull/1",
+      "status": "unverified",
+      "checked_at": null,
+      "reference": null
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "input_sha256": "edf5eeddcbfaa3232229fe0e92d564f693e52c21684308e6480ef93281f6ecb8",
+  "status": "ready",
+  "summary": "Prepared a synthetic read-only review handoff; live state remains unchecked.",
+  "read_first": [
+    {
+      "source_id": "request",
+      "instruction": "Read the selected scope and preserve its read-only boundary."
+    },
+    {
+      "source_id": "remote",
+      "instruction": "Check access and current PR state before relying on it."
+    }
+  ],
+  "verified_state": [
+    {
+      "statement": "The synthetic user selected a read-only review and did not authorize publishing.",
+      "source_ids": [
+        "request"
+      ]
+    }
+  ],
+  "unverified_state": [
+    {
+      "statement": "The real workspace, PR state and CI have not been verified.",
+      "check_first": "Locate the intended checkout, read its AGENTS instructions and Makefile, then inspect the relevant PR and CI if accessible.",
+      "source_ids": [
+        "remote"
+      ]
+    }
+  ],
+  "decision_frame": {
+    "deciding": [
+      "Whether the existing helper change has actionable defects."
+    ],
+    "not_deciding": [
+      "Whether to implement fixes or merge a PR."
+    ],
+    "reason": "The user already selected review; preserve that next action."
+  },
+  "objective": "Review the synthetic helper change and report actionable defects.",
+  "objective_kind": "continue-work",
+  "constraints": [
+    "Preserve unrelated edits.",
+    "Review only; do not implement, publish or merge."
+  ],
+  "validation": [
+    {
+      "instruction": "Read the real repository validation commands and report checks not run; this fixture claims no executed tests.",
+      "previous_result": "not-run",
+      "source_ids": []
+    }
+  ],
+  "blockers": [],
+  "final_response": [
+    "Actionable findings with source references, or no findings.",
+    "What was checked, remaining uncertainty, and any real blockers."
+  ]
+}
