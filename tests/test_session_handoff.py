@@ -11,7 +11,7 @@ class HandoffTests(HandoffFixture):
     def test_synthetic_examples_validate_and_render_uncertainty(self):
         self.validate()
         prompt = handoff.render(self.intake, self.output, self.base)
-        for text in (self.output['objective'], str(self.base / 'example-source.md'),
+        for text in (self.output['objective'], str((self.base / 'example-source.md').resolve()),
                      'Unverified state', 'Workspace is unverified', 'not new authorization',
                      self.intake['constraints'][1]):
             self.assertIn(text, prompt)
