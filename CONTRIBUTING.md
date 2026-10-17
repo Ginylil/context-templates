@@ -14,6 +14,12 @@ Use `make website-serve` for local preview and `make website-check` with an
 existing Playwright/browser for narrow/wide interaction proof. These checks are
 local; domain configuration and publication require separate scoped approval.
 
+The website catalog is generated from each canonical skill's heading and
+frontmatter. Edit `website/templates/` for its HTML, then run `make website-catalog`.
+Do not hand-edit `catalog/**/*.html` or `sitemap.xml`. `make check` and CI reject
+drift, including newly added skills without website pages. The generated website
+contains browsing and installation guidance; it is not a downloadable skill package.
+
 ## Public suitability and canonical source
 
 Keep one canonical source per skill. A new skill needs a clear user task and a

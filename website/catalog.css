@@ -1,0 +1,54 @@
+.catalog-main, .skill-detail { padding-block: 58px 72px; }
+.catalog-main h1 { max-width: 800px; }
+.catalog-intro { max-width: 690px; color: var(--muted); font-size: 18px; line-height: 1.8; }
+.catalog-filters { display: flex; flex-wrap: wrap; align-items: end; gap: 20px; margin-top: 40px; padding: 24px; background: #e8ecdf; }
+.catalog-filters label, .agent-picker { display: grid; gap: 9px; font-size: 13px; font-weight: 600; }
+.catalog-filters label:first-child { flex: 1; min-width: 240px; }
+.catalog-filters input, select { color: var(--ink); background: #fcfbf7; border: 1px solid #99a591; border-radius: 0; font: inherit; min-height: 48px; padding: 10px 12px; width: 100%; }
+.catalog-filters button { min-height: 48px; border: 0; background: transparent; text-decoration: underline; cursor: pointer; color: var(--green); }
+.catalog-count { margin-block: 25px; color: var(--muted); font: 12px ui-monospace, monospace; }
+.catalog-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.catalog-card { display: flex; flex-direction: column; border: 1px solid var(--line); padding: 25px; }
+.catalog-card .card-number { color: #586e50; margin: 0 0 24px; }
+.catalog-card h2 { margin: 0 0 16px; font: 26px/1.2 Georgia, serif; letter-spacing: -.5px; }
+.catalog-card h2 a { display: block; text-decoration: none; }
+.catalog-card h2 a:hover { text-decoration: underline; }
+.catalog-card h2 span { font: 20px system-ui, sans-serif; }
+.catalog-card > p:not(.card-number) { margin: 0 0 24px; color: var(--muted); font-size: 14px; line-height: 1.75; }
+.catalog-card > code { margin-top: auto; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
+.catalog-empty { border: 1px solid var(--line); padding: 30px; }
+.catalog-empty h2, .catalog-help h2, .install-guide h2 { font: 34px/1.2 Georgia, serif; letter-spacing: -.6px; }
+.catalog-help { margin-top: 48px; padding: 30px; background: #e8ecdf; }
+.catalog-help h2 { margin-top: 0; }
+.catalog-help p, .source-note, .install-guide p { line-height: 1.8; color: var(--muted); font-size: 15px; }
+.skill-detail { max-width: 850px; }
+.skill-detail > .eyebrow { margin-top: 36px; }
+.skill-detail h1 { font-size: clamp(40px, 5vw, 64px); letter-spacing: -2px; }
+.skill-name { display: block; color: var(--muted); font-size: 13px; overflow-wrap: anywhere; }
+.install-guide { margin-top: 44px; padding-top: 20px; border-top: 1px solid var(--line); }
+.install-guide h3 { margin-top: 30px; font-size: 18px; }
+.install-guide code { overflow-wrap: anywhere; }
+.install-guide .install-note { font-size: 13px; }
+.agent-picker { max-width: 290px; margin-block: 24px; }
+.command-box { border: 1px solid var(--line); background: #fcfbf7; margin-block: 14px; }
+.command-toolbar { min-height: 52px; padding: 6px 16px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.command-toolbar span { font: 11px ui-monospace, monospace; }
+.command-toolbar button { color: var(--ink); background: transparent; min-height: 40px; padding: 8px 14px; border: 1px solid var(--line); cursor: pointer; }
+.command-toolbar button:hover { background: #e8ecdf; }
+.command-box pre { padding: 18px; }
+.command-box .command-status { padding: 0 18px 14px; margin: 0; font-size: 12px; }
+.make-alternative summary { min-height: 44px; padding-block: 12px; cursor: pointer; font-size: 14px; }
+.source-note { margin-top: 32px; font-size: 13px; }
+@media (max-width: 1000px) {
+  .catalog-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 650px) {
+  .catalog-main, .skill-detail { padding-block: 38px 48px; }
+  .catalog-grid { grid-template-columns: 1fr; }
+  .catalog-filters { padding: 18px; }
+  .catalog-filters label { width: 100%; }
+  .catalog-filters label:first-child { min-width: 0; }
+  .catalog-intro { font-size: 16px; }
+  .catalog-help { padding: 22px; }
+  .skill-detail h1 { letter-spacing: -1px; }
+}

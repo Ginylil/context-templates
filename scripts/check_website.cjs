@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const {chromium} = require(process.env.WEBSITE_PLAYWRIGHT || 'playwright');
+const {checkCatalog, checkCatalogFallback, checkCatalogNoScript} = require('./check_website_catalog.cjs');
 const root = path.resolve(__dirname, '..');
 const output = path.resolve(process.env.WEBSITE_PROOF || path.join(root, 'dist/website-proof'));
 const origin = process.env.WEBSITE_URL || 'http://127.0.0.1:8766/';
@@ -56,6 +57,8 @@ async function checkLinks(page) {
       const readme = await fs.readFile(path.join(root, 'README.md'), 'utf8');
       assert.equal(prompt, readme.match(/```text\n([\s\S]*?)\n```/)[1], 'Prompt differs from README');
       await checkLinks(page);
+      await page.goto(origin);
+      await checkCatalog(page, {origin, root, output, size, noOverflow, checkLinks});
       // Existing generated examples have their own browser suite. Verify this
       // destination separately so their console events cannot race our checks.
       const example = await context.newPage();
@@ -88,6 +91,7 @@ async function checkLinks(page) {
       await fallback.locator('#install-prompt').textContent());
     assert.equal(await fallback.locator(':focus').getAttribute('id'), 'install-prompt');
     await noOverflow(fallback);
+    await checkCatalogFallback(fallback, origin, noOverflow);
     await denied.close();
     const plain = await browser.newContext({javaScriptEnabled: false, viewport: {width: 390, height: 844}});
     const noScript = await plain.newPage();
@@ -96,10 +100,11 @@ async function checkLinks(page) {
     assert.match(await noScript.locator('#install-prompt').textContent(), /Install all skills/);
     await noOverflow(noScript);
     await checkLinks(noScript);
+    await checkCatalogNoScript(noScript, origin, noOverflow, checkLinks, root);
     await plain.close();
     assert.deepEqual(errors, [], 'Browser console or page errors');
     assert.deepEqual(external, [], 'Third-party resource requests');
-    console.log('PASS: desktop/mobile layout, keyboard, clipboard, denied fallback, no-JS, local links; no browser errors or external resources.');
+    console.log('PASS: desktop/mobile layout, keyboard, clipboard, search/filter/empty recovery, agent commands, denied fallback, no-JS, local links; no browser errors or external resources.');
   } finally {
     await browser.close();
   }

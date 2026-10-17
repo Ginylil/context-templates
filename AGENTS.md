@@ -9,6 +9,12 @@
   publish only reviewed journal prose. Domain, DNS, and hosting settings need their
   own authorization. `make website-check` is optional rendered browser proof;
   it requires an existing Playwright/browser and a running local preview server.
+- Generate `catalog/` pages and `sitemap.xml` with `make website-catalog` from
+  canonical skill metadata and `website/templates/`; do not edit those outputs.
+  Keep installation guidance on the site, including agent-specific previews and
+  Python commands for Windows. `make check` and CI enforce website catalog drift.
+  Search Console ownership and sitemap receipts stay private; sitemap submission
+  is not proof of indexing. Preserve unrelated DNS records during verification.
 - Canonical skills live in `skills/<name>/SKILL.md`. Keep shared instructions
   portable and put substantial supporting content in references, assets, or
   scripts. Agent-specific UI metadata belongs in `agents/`.
