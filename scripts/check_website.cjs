@@ -56,9 +56,13 @@ async function checkLinks(page) {
       const readme = await fs.readFile(path.join(root, 'README.md'), 'utf8');
       assert.equal(prompt, readme.match(/```text\n([\s\S]*?)\n```/)[1], 'Prompt differs from README');
       await checkLinks(page);
-      await page.getByRole('link', {name: 'Try a live example'}).click();
-      assert.match(new URL(page.url()).pathname, /examples\/dynamic-umls\/sequence.html$/);
-      await page.goBack();
+      // Existing generated examples have their own browser suite. Verify this
+      // destination separately so their console events cannot race our checks.
+      const example = await context.newPage();
+      await example.goto(origin);
+      await example.getByRole('link', {name: 'Try a live example'}).click();
+      assert.match(new URL(example.url()).pathname, /examples\/dynamic-umls\/sequence.html$/);
+      await example.close();
       await page.getByRole('link', {name: 'Read the build journal'}).click();
       assert.match(await page.title(), /Building with our own skills/);
       await noOverflow(page);
