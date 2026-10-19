@@ -134,6 +134,23 @@ Requests to install or update local copies alone do not authorize a PR.
    acceptance. In Codex, attach the created PR to the current chat when the host
    provides an artifact-attachment tool. Maintainers decide whether to merge.
 
+## Authorized merge, release, or publication
+
+Use [`ct-devops-release-project`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-devops-release-project/SKILL.md)
+for release work, including an explicitly requested contribution merge and
+publication verification. Use the CT release skill rather than `wrap-up-and-ship`.
+Read its instructions and the target repository's real release procedure; use an
+installed complete package when its helpers are needed.
+
+A contribution request alone still ends at the PR. When the user also authorizes
+merging, verify the exact PR head and all applicable checks before merging, then
+read back the merge revision. Follow the repository's existing publication lane
+within that authorization and verify the live result against the merged source.
+Report absent staging explicitly; do not invent a release, deployment, or test
+environment. Preserve unrelated work when returning to the updated default branch.
+Installing or updating local skills remains a separate action using the supported
+preview/install workflow above. Never prune other installed skills as part of it.
+
 ## Completion
 
 Discovery returns the available choices and a recommendation relevant to the
@@ -142,3 +159,5 @@ draft, plus a blocker when submission was requested but unavailable. Installatio
 returns the selected skills, source revision, destinations, and verification.
 Contributions return a real PR URL or a concrete access blocker together with
 the completed local patch and its validation.
+An authorized release also reports the merge revision, checks, publication
+readback and any remaining acceptance or installation gap.
