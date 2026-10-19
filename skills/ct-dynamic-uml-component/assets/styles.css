@@ -17,3 +17,4 @@
 .canvas-scroll.flowchart-view>#diagram{max-width:var(--flow-width);min-height:0;margin-inline:auto}
 .flow-navigation{display:flex;align-items:center;gap:16px;padding:12px 0;font:12px var(--mono);color:var(--mint)}.flow-navigation[hidden]{display:none}#flow-path{overflow-wrap:anywhere}.folio #open-subflow{margin-top:16px;color:#263328;border-color:#557360}.folio #open-subflow:hover{background:#dce4d9}.folio #open-subflow[hidden]{display:none}
 @media(max-width:800px){.brand-logo{width:32px;height:32px}.brand-destination{display:none}.scenario-picker{min-width:150px}.flow-navigation{align-items:start;flex-direction:column;gap:8px}}
+.zoom{display:flex;align-items:center;gap:4px}.zoom #zoom-in,.zoom #zoom-out{width:38px;padding:9px 0}.zoom output{min-width:48px;text-align:center;font:12px var(--mono);color:var(--muted)}.zoom #zoom-focus[hidden]{display:none}.canvas-scroll.zoomed>#diagram{min-width:0;max-width:none;margin-inline:auto}

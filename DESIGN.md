@@ -52,6 +52,15 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
 - Make nodes and relationships keyboard-selectable with meaningful labels and
   a text inspector. Announce step changes. Keep keyboard focus on direct step
   buttons when their active state changes. Ignore global shortcuts in controls.
+- Readers can always zoom: −/+ buttons, `+`/`-`/`0` keys and Ctrl/Cmd + wheel
+  (pinch) scale the SVG's pixel width from 50% to 300% of Fit, anchored at the
+  pointer or canvas center. Height follows the viewBox, so zoom never adds an
+  inner vertical scrollport. Focus (default, all types except sequence) zooms each
+  step up to 200% to frame its active elements plus directly connected nodes and
+  relationships, then centers them; steps wider than the canvas still follow their
+  destination. Manual zoom disables Focus and persists across steps; Fit shows the
+  whole diagram; Reset and nested views restore the default. Sequence keeps its
+  density layout and offers manual zoom only; headers scale with the lifelines.
 - Honor reduced motion and avoid animated layout/scrolling. On mobile, keep the
   page within the viewport width. The document owns vertical scrolling for all
   six types; diagram canvases expand to their content height and only pan
@@ -122,7 +131,10 @@ Participant strips follow the native
 [CSS sticky positioning rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position);
 an overflowing ancestor would make them stick to that container instead of the page.
 The scenario menu keyboard/below-trigger checks and subprocess drill-down/return
-checks supplement these regressions. State label checks compare label centers
+checks supplement these regressions. The zoom check uses the class example to
+verify Focus framing on every step, manual zoom steps and limits, keyboard
+shortcuts, Fit, Overview, mobile destination follow without page overflow, and
+sequence header/lifeline width sync while zoomed. State label checks compare label centers
 against the actual SVG connector path and verify readable mobile sizing;
 matched state before/after captures use 1440×960. Short-window state checks at
 1250×673 verify width fit, the absence of inner vertical scrolling, page auto-follow,
