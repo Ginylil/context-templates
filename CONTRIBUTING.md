@@ -4,7 +4,12 @@ Contribute a focused improvement or new public skill through a pull request to
 `Ginylil/context-templates:main`. Use the downloadable
 [Context Templates skill](skills/context-templates/SKILL.md) to have your agent
 complete that workflow. Requests, bugs, and questions can also be discussed in
-GitHub issues. Maintainers review PRs before merging.
+GitHub issues. Use
+[`ct-product-request-skill-change`](skills/ct-product-request-skill-change/SKILL.md)
+to request a new skill, an update to an existing CT skill, or a catalog feature.
+It checks for duplicates and supports authorized follow-up comments. Issues and
+comments are public; submitting a request does not promise implementation.
+Maintainers review PRs before merging.
 
 Website changes use the same focused PR workflow. The entry is `index.html`;
 `website/` owns its CSS and clipboard enhancement, and `build-notes/` contains

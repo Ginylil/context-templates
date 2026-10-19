@@ -33,8 +33,9 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
-contribute improvements or new skills through a pull request. The catalog includes
-the bootstrap, a next-session handoff utility, twenty-one project lifecycle skills,
+request changes through GitHub issues or contribute implementations through a
+pull request. The catalog includes the bootstrap, a skill-request utility,
+a next-session handoff utility, twenty-one project lifecycle skills,
 and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
@@ -55,6 +56,25 @@ resources and JSON package manifest into that agent's local skills directory. It
 run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
+
+## Request a new skill or an update
+
+Use [`ct-product-request-skill-change`](skills/ct-product-request-skill-change/SKILL.md)
+to request a new CT skill, improve an existing skill, or suggest a catalog feature
+in [GitHub issues](https://github.com/Ginylil/context-templates/issues). It checks
+the current catalog and existing requests, prepares a useful draft, and submits
+when asked. Follow-up messages use public issue comments. Drafting or asking how
+messages work does not post anything.
+
+```text
+Use ct-product-request-skill-change to submit a request to improve an existing
+CT skill. Check its current instructions and search for duplicates first.
+```
+
+Read the skill directly or install it through the normal preview/install workflow.
+Requests work without a local clone when GitHub tools are available. This utility
+is separate from the twenty-one-skill lifecycle graph. Asking to implement a change
+uses the bootstrap's contribution PR workflow instead.
 
 ## Next-session handoffs
 

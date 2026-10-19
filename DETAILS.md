@@ -199,6 +199,18 @@ three agents. Make CLI checks run where Make is available. Local results, CI,
 file installation, agent discovery, invocation, PR submission, and maintainer
 acceptance are distinct proof stages. There is no staging environment for this repository.
 
+## Skill change requests
+
+`ct-product-request-skill-change` is a standalone instruction-only utility for
+`Ginylil/context-templates`, outside the twenty-one-skill lifecycle graph. It
+handles new skills, updates to existing CT skills, catalog features and follow-up
+issue comments. Its v2 package manifest has no scripts. No local clone or other
+installed skill is required for requests; GitHub access is needed for submission.
+It checks upstream behavior and duplicate conversations, distinguishes drafting
+from authorized posting, and requires readback before claiming verified delivery.
+Ambiguous write results require inspection before retrying. Implementing a change
+still uses the bootstrap's contribution workflow and a PR.
+
 ## Next-session handoffs
 
 `ct-rnd-prepare-next-session` is a standalone utility outside the twenty-one-skill
