@@ -75,11 +75,18 @@ Those are different subjects. Do not silently substitute one for the other.
    when needed. Follow the active message through page scrolling, keeping it below
    both sticky regions; include visible previous/next arrows when their combined
    height fits the window. Nested view Back restores
-   the parent document scroll and horizontal pan.
+   the parent document scroll, horizontal pan and zoom.
+   Zoom controls (−, +, Fit, Focus; keys `+`, `-`, `0`; Ctrl/Cmd + wheel or pinch)
+   scale the SVG width from 50% to 300% of Fit; the page still scrolls vertically.
+   Focus is on by default for every type except sequence: each step zooms (up to
+   200%) to frame its active elements plus directly connected nodes and
+   relationships. Manual zoom turns Focus off and persists across steps; Fit shows
+   the whole diagram; Reset restores Focus. Overview shows the whole diagram while
+   Focus is on.
 5. Open the actual file in a browser when available. Inspect desktop and narrow
    widths, label collisions, clipping, edge routing, relationship direction and
    readability. Test next/previous/reset, playback to end, scenario changes,
-   keyboard activation, inspector, overview, modal pause/resume, paused-state
+   keyboard activation, inspector, overview, zoom/Focus, modal pause/resume, paused-state
    preservation and optional sidebar. Check the active message is inside the
    actual browser viewport in a short window, not merely inside the canvas
    container. Check every type has no inner vertical canvas overflow, including

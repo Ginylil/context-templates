@@ -18,5 +18,7 @@ If unknown, omit unsupported members/cardinalities and state the limitation.
 The walkthrough explores structure; it does not claim to simulate object behavior.
 Use a small domain slice, concise members and orthogonal routes without collisions.
 Render using this skill's `scripts/render.py --expect class`. Deliver one offline
-HTML with inspector, overview and a guided explanation. Show actual rendered proof,
+HTML with inspector, overview, zoom and a guided explanation. Each step's classes
+are Focus-framed with their direct neighbors; readers can zoom in/out or Fit at
+any time. Write steps that name the classes they make active. Show actual rendered proof,
 state minimal assumptions, and retain Ginylil linked to https://contexttemplates.com.

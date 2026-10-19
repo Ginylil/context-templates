@@ -7,6 +7,8 @@ module.exports = async function checkState({page, root, output}) {
   // Match the owner's short, wide window: state diagrams must not need two canvas scroll axes.
   await page.setViewportSize({width:1250,height:673});
   await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/state.html')).href);
+  // Focus framing zooms in by default; Fit is the whole-diagram width contract.
+  await page.locator('#zoom-fit').click();
   const canvasSizing=()=>page.locator('#canvas-scroll').evaluate(el=>({
     vertical:el.scrollHeight>el.clientHeight+1,horizontal:el.scrollWidth>el.clientWidth+1,top:el.scrollTop
   }));
