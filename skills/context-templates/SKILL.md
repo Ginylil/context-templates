@@ -1,6 +1,6 @@
 ---
 name: context-templates
-description: "Find, install, and update skills from Ginylil/context-templates, or propose improvements and new skills through pull requests to that repository."
+description: "Find, install, and update skills from Ginylil/context-templates, request new skills or improvements through GitHub issues, or contribute implemented changes through pull requests to that repository."
 ---
 
 # Context Templates
@@ -13,19 +13,29 @@ downloaded and given to an agent before anything is installed.
 ## Establish the task
 
 Identify whether the user wants to discover skills, install/update their local
-copies, improve a published skill, or contribute a new skill. A local update and
-an upstream change are different actions: only the latter opens a PR.
+copies, request a change, improve a published skill, or contribute a new skill.
+A request is a GitHub issue or follow-up comment; an implemented upstream
+contribution opens a PR. A local update does neither.
+
+For requests for new skills, changes to existing CT skills, or catalog features,
+read [`ct-product-request-skill-change`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-product-request-skill-change/SKILL.md).
+It supports drafts, duplicate discovery, authorized issue submission and follow-up
+comments in this repository. A question about sending messages is not itself
+permission to post. Reading the skill requires no installation or local clone.
 
 Resolve the actual operating system, available Git/Python/Make commands, target
 agent (Codex, Cursor, Claude Code, or all three), checkout location, and selected
 skill names from the user's request and local evidence. Ask only for choices
 that cannot be inferred safely. Keep checkout paths specific to this computer.
 
-Use an existing checkout only after checking its remote, branch, worktree, and
-dirty state. Otherwise clone the public repository into an unused user-owned
-directory. Do not clone over an existing folder or change an unrelated checkout.
-Git and Python 3.10+ are needed; Make is optional. GitHub CLI and an authenticated
-GitHub account are needed only when creating a contribution PR.
+For local installation or implementation, use an existing checkout only after
+checking its remote, branch, worktree, and dirty state. Otherwise clone the public
+repository into an unused user-owned directory. Do not clone over an existing
+folder or change an unrelated checkout.
+Git and Python 3.10+ are needed for local installation; Make is optional. An
+authenticated GitHub account is needed to submit issues, comments or PRs.
+Requests can use an available connector or browser; contribution commands below
+use GitHub CLI.
 
 ## Discover, install, or update
 
@@ -84,9 +94,10 @@ GitHub account are needed only when creating a contribution PR.
 
 ## Improve or add a skill: create a PR
 
-When the user asks to improve a published skill or contribute a new one, carry
-that exact contribution through a PR. Do not stop with an issue, an installed
-local edit, or an unsubmitted patch when PR creation is available and authorized.
+When the user asks to implement an improvement to a published skill or contribute
+a new one, carry that exact contribution through a PR. Do not stop with an issue,
+an installed local edit, or an unsubmitted patch when PR creation is available
+and authorized.
 Requests to install or update local copies alone do not authorize a PR.
 
 1. Check `gh auth status` without printing credentials. Read the current public
@@ -126,6 +137,8 @@ Requests to install or update local copies alone do not authorize a PR.
 ## Completion
 
 Discovery returns the available choices and a recommendation relevant to the
-user's task. Installation returns the selected skills, source revision,
-destinations, and verification. Contributions return a real PR URL or a concrete
-access blocker together with the completed local patch and its validation.
+user's task. Requests return a verified issue/comment URL or an explicitly unsent
+draft, plus a blocker when submission was requested but unavailable. Installation
+returns the selected skills, source revision, destinations, and verification.
+Contributions return a real PR URL or a concrete access blocker together with
+the completed local patch and its validation.
