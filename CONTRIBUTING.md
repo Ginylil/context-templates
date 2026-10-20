@@ -41,8 +41,10 @@ Use `skills/<name>/SKILL.md`, with lowercase hyphenated names matching the folde
 up to 64 characters. Avoid platform-reserved names such as `con`, `nul`, `com1`,
 `synced`, and `anthropic-skills`. New skills use
 `ct-<department>-<expertise>` with a concrete action and subject, such as
-`ct-product-define-project` or `ct-rnd-build-feature`. The Dynamic UML family uses `ct-dynamic-uml` and `ct-dynamic-uml-<type>`;
-only the bootstrap retains its existing name. The current dependency-free validator deliberately
+`ct-product-define-project` or `ct-rnd-build-feature`. The Dynamic UML family uses
+`ct-dynamic-uml` and `ct-dynamic-uml-<type>`.
+Catalog maintenance uses `context-templates` and `ct-context-templates-update`.
+The current dependency-free validator deliberately
 accepts only these two frontmatter fields, one per line:
 
 ```markdown

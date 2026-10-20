@@ -17,6 +17,12 @@ copies, request a change, improve a published skill, or contribute a new skill.
 A request is a GitHub issue or follow-up comment; an implemented upstream
 contribution opens a PR. A local update does neither.
 
+The dedicated `ct-context-templates-update` entrypoint offers the same update
+workflow below. Its canonical instructions are at
+[`ct-context-templates-update`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-context-templates-update/SKILL.md).
+The bootstrap also handles requests such as "update my installed CT skills";
+neither mode needs a website API or a paid service.
+
 For requests for new skills, changes to existing CT skills, or catalog features,
 read [`ct-product-request-skill-change`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-product-request-skill-change/SKILL.md).
 It supports drafts, duplicate discovery, authorized issue submission and follow-up
@@ -83,6 +89,12 @@ use GitHub CLI.
    branch, or discard edits to obtain a newer version. Use a separate clean
    checkout when the existing one has local work. Rerun the selected installer;
    it updates only managed copies whose recorded hashes still match local files.
+   For "update installed skills", select only names in the ownership receipt
+   that still have installed folders and remain in the current catalog, honoring
+   any named subset. Pass repeated `--skill <name>` arguments to preview and
+   install that set. Do not install missing catalog entries or recreate locally
+   removed skills unless requested. Preserve unknown/removed entries. Omit the
+   selection only when the requested set is the entire current catalog.
 5. Confirm the installed `SKILL.md` and resources match the assembled payload
    and ownership receipt. For local inspection, use
    `python3 scripts/skills.py assemble --skill <name> --output <new-directory>`.

@@ -28,4 +28,4 @@ hierarchical state execution, entry/exit actions or history pseudostates.
 Render with this skill's `scripts/render.py --expect state`. Produce one offline
 HTML page with playback, transition inspector and scenario choices where useful.
 Check guards, directions and alternate paths, show a real rendered preview and
-keep Ginylil branding linked to https://contexttemplates.com. State minimal assumptions.
+keep Ginylil branding linked to https://contexttemplates.com/index.html. State minimal assumptions.

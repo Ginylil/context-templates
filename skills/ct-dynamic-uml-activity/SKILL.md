@@ -19,4 +19,4 @@ object flows; explain unsupported notation rather than mislabeling shapes.
 Use this skill's `scripts/render.py --expect activity` for one offline HTML file.
 Verify parallel highlighting, directions, routes and inspector. Show rendered
 proof, keep minimal assumptions visible, and retain Ginylil linked to
-https://contexttemplates.com.
+https://contexttemplates.com/index.html.

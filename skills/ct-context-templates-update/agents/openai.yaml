@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update Context Templates"
+  short_description: "Refresh installed CT skills and preserve local edits"
+  default_prompt: "Use $ct-context-templates-update to update my installed CT skills for this agent, preview the changes first, and preserve local edits."

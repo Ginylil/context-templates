@@ -26,4 +26,4 @@ node limit, spacing, routing and references. Rendering enforces these rules too.
 Render with this skill's `scripts/render.py --expect flowchart`. Deliver one
 standalone offline HTML with stepping, playback and an element inspector. Verify
 branch switching and layout, show rendered proof, and retain the Ginylil logo
-linked to https://contexttemplates.com. List minimal assumptions in the page.
+linked to https://contexttemplates.com/index.html. List minimal assumptions in the page.

@@ -20,4 +20,4 @@ Render with this skill's `scripts/render.py --expect component`. Deliver one
 offline HTML with a structural walkthrough, inspector and overview. State source
 files, simplifications and unverified boundaries. Verify direction and layout,
 show a real rendered preview, and keep the Ginylil logo linked to
-https://contexttemplates.com.
+https://contexttemplates.com/index.html.

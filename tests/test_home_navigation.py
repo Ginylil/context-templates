@@ -58,6 +58,17 @@ class HomeNavigationTests(unittest.TestCase):
         parsed.feed((ROOT / "index.html").read_text(encoding="utf-8"))
         self.assertEqual(parsed.canonical, [ORIGIN])
 
+    def test_diagram_instructions_use_the_same_home_target(self):
+        instructions = sorted((ROOT / "skills").glob("ct-dynamic-uml*/SKILL.md"))
+        self.assertEqual(len(instructions), 7)
+        for path in instructions:
+            with self.subTest(skill=path.parent.name):
+                body = path.read_text(encoding="utf-8")
+                urls = re.findall(r"https://contexttemplates\.com[^\s)\]<>]*", body)
+                self.assertTrue(urls)
+                self.assertTrue(all(url.rstrip(".,;") == ORIGIN + "index.html"
+                                    for url in urls))
+
 
 if __name__ == "__main__":
     unittest.main()

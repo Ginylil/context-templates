@@ -34,8 +34,8 @@ and attach it to your agent ([view its source](skills/context-templates/SKILL.md
 The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 request changes through GitHub issues or contribute implementations through a
-pull request. The catalog includes the bootstrap, a skill-request utility,
-a next-session handoff utility, twenty-one project lifecycle skills,
+pull request. The catalog includes the bootstrap, an update-only entrypoint,
+a skill-request utility, a next-session handoff utility, twenty-one project lifecycle skills,
 and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
@@ -356,8 +356,23 @@ py -3 scripts/skills.py install --agent claude
 
 ### Receive updates on another computer
 
-In a clean checkout tracking this repository's `main`, review upstream changes,
-then fast-forward and reinstall:
+The bootstrap already handles local updates. For a focused update command, use
+[`ct-context-templates-update`](skills/ct-context-templates-update/SKILL.md):
+
+```text
+Use $ct-context-templates-update to update my installed CT skills for Codex.
+Preview changes first and preserve local edits.
+```
+
+It uses the public GitHub source behind contexttemplates.com and the existing
+installer. By default it refreshes only managed skills that are still installed;
+it does not install missing catalog entries, recreate locally removed skills,
+prune old skills or publish anything. The utility is independent of the lifecycle
+graph. For a full-catalog installation, ask for "Install all skills" explicitly.
+
+To explicitly refresh the full catalog for all three agents, use a clean checkout
+tracking this repository's `main`, review upstream changes, then fast-forward
+and reinstall:
 
 ```sh
 git fetch origin

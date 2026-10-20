@@ -168,6 +168,15 @@ The bootstrap skill offers individual selections and an explicit "Install all
 skills" option. The latter selects the full catalog for the requested agent;
 installing for all three agents is a separate target choice.
 
+The bootstrap also supports updating existing installations. The standalone
+`ct-context-templates-update` entrypoint reuses that workflow and has no scripts
+or lifecycle-graph membership. It fetches the public GitHub source behind the
+website, selects managed names that remain installed and in the current catalog,
+and passes them explicitly to the installer. It previews the selection first;
+missing catalog skills, locally removed folders and retired entries are preserved
+without reinstalling or pruning them. Full-catalog installation remains an
+explicit choice. Neither entrypoint changes the installer's conflict checks.
+
 The installer preflights every requested skill and target before making changes.
 Each target directory holds `.context-templates-install.json`, identifying this
 repository and recording content hashes and executable flags for managed copies.
