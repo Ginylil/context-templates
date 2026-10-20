@@ -57,6 +57,11 @@ run bundled skill scripts; your agent uses them when carrying out the skill.
 Python 3.10+ is required for installation and UML generation. Make is optional:
 the equivalent Python commands are listed under [Install locally](#install-locally).
 
+For an authorized merge or release, the bootstrap routes to
+[`ct-devops-release-project`](skills/ct-devops-release-project/SKILL.md), which
+checks the exact candidate and verifies the repository's actual publication lane.
+A contribution request alone still stops at a PR; installation is separate.
+
 ## Request a new skill or an update
 
 Use [`ct-product-request-skill-change`](skills/ct-product-request-skill-change/SKILL.md)

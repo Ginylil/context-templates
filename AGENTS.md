@@ -45,6 +45,9 @@
   metadata checks. Local checks are not CI or proof of discovery in each agent.
 - Reconcile README, CONTRIBUTING, and DETAILS with behavior before committing.
   Preserve a focused local commit for skill changes; pushing and merging are separate actions.
+- Use `ct-devops-release-project` for authorized catalog merge, release and
+  publication work. The bootstrap contribution workflow stops at a PR unless
+  further publication is authorized; local installation remains a separate step.
 - Define a Project's contract and examples live in its complete skill folder.
   Keep its 10-question/2-batch budget in one scope ledger, with negative tests
   and isolated CLI checks under `tests/test_define_project*.py`. Do not copy

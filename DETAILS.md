@@ -191,6 +191,12 @@ GitHub CLI when available, forks for contributors without upstream write access,
 checks for duplicate PRs, and leaves merge decisions to maintainers. It carries
 no credentials and does not require another skill or connector.
 
+For explicitly authorized merge, release and publication work, the bootstrap
+routes to `ct-devops-release-project` rather than `wrap-up-and-ship`. The CT release
+skill owns candidate/check and publication evidence; the supported installer
+still owns local skill updates. Contributions alone stop at a PR. Neither release
+routing nor installation authorizes pruning other installed skills.
+
 `make check` runs canonical diagram drift checks, catalog validation, and isolated
 installer/package/rendering tests.
 The read-only GitHub Actions workflow runs these checks on Linux, macOS, and
