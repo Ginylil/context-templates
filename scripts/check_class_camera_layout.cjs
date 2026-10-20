@@ -1,7 +1,8 @@
 const assert = require('node:assert/strict');
 const path = require('node:path');
-const root = path.join(__dirname,'../prototypes/class-camera');
-const model = require(path.join(root,'model.js'));
+const root = path.join(__dirname,'../skills/ct-dynamic-uml/assets/class-camera');
+const prepare = require(path.join(root,'adapter.js'));
+const model = prepare(require('../skills/ct-dynamic-uml/assets/examples/class.json'));
 const layout = require(path.join(root,'layout.js'));
 const routing = require(path.join(root,'routing.js'));
 

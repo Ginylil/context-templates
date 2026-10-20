@@ -24,6 +24,7 @@ function toggleTour(){if(CC.playing){pauseTour();paint();}else startTour();}
 function updateStory() {
   const step=DemoModel.tour[CC.step],node=nodesById.get(CC.focus);
   const onStep=step.view===CC.view.id&&step.focus===CC.focus;
+  byId('scenario').value=step.scenario;
   byId('step-count').textContent=`${String(CC.step+1).padStart(2,'0')} / ${DemoModel.tour.length} · ${CC.view.label}`;
   byId('story-title').textContent=onStep?step.title:`Explore ${node.label}.`;
   byId('story-body').textContent=onStep?step.body:node.detail;
@@ -45,4 +46,11 @@ function showDetails(title,body,items) {
 for(const view of DemoModel.views){const option=document.createElement('option');option.value=view.id;option.textContent=view.label;byId('view').append(option);}
 DemoModel.tour.forEach((step,i)=>{const button=document.createElement('button');button.textContent=String(i+1);
   button.setAttribute('aria-label',`Step ${i+1}: ${step.title}`);button.onclick=()=>goStep(i,false);byId('steps').append(button);});
+byId('title').textContent=DemoModel.title;byId('lede').textContent=DemoModel.lede;
+byId('evidence').textContent=DemoModel.evidence;
+for(const item of DemoModel.legend){const li=document.createElement('li');li.textContent=item.label;byId('legend').append(li);}
+for(const assumption of DemoModel.assumptions){const li=document.createElement('li');li.textContent=assumption;byId('assumptions').append(li);}
+for(const source of DemoModel.sources){const li=document.createElement('li'),a=document.createElement('a');a.href=source.href;a.textContent=source.label;a.rel='noopener';li.append(a);byId('sources').append(li);}
+for(const scenario of DemoModel.scenarios){const o=document.createElement('option');o.value=scenario.id;o.textContent=scenario.label;byId('scenario').append(o);}
+byId('scenario-picker').hidden=DemoModel.scenarios.length<2;
 drawView();focusLayout(false);

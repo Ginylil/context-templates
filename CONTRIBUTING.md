@@ -208,6 +208,11 @@ the catalog's hidden/generated-file restriction refers to caches and hidden file
 not these tracked synchronized assets. CI and `make check` reject resource drift.
 The renderer inlines `styles.css`, `diagram.js` and `controls.js` into
 `template.html`, retaining one offline HTML file per generated walkthrough.
+Class diagrams instead inline the canonical `assets/class-camera/` fragments
+through `shared/dynamic-uml/class_camera.py`. Keep linked-view coverage complete
+and each class at twenty relationships or fewer within each view. The remote
+`Class camera demo` workflow renders the assembled standalone class skill and
+records camera/gesture proof; its builder must not maintain a separate demo viewer.
 
 A diagram addition or visual change needs a concrete offline example and actual
 rendered review. With an existing Playwright installation, run

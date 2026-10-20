@@ -60,6 +60,14 @@ def identifiers(items, where):
     return set(ids)
 
 
+def class_camera():
+    sys.dont_write_bytecode = True
+    spec = importlib.util.spec_from_file_location('class_camera', Path(__file__).with_name('class_camera.py'))
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
 def validate(model, expected=None, _depth=0):
     require(_depth <= 4, "subflows: maximum nesting depth is four")
     require(isinstance(model, dict), 'model: expected object')
@@ -173,11 +181,15 @@ def validate(model, expected=None, _depth=0):
     else:
         require('subflows' not in model and all('subflow' not in n for n in nodes),
                 'subflows: supported only in flowcharts and state diagrams')
+    if kind == 'class':
+        class_camera().validate(model)
     return model
 
 
 def render(model, template=None, expected=None):
     validate(model, expected)
+    if model['type'] == 'class' and template is None:
+        return class_camera().render(model)
     template = template or Path(__file__).resolve().parents[1] / 'assets/template.html'
     page = template.read_text(encoding='utf-8')
     # Author the page in cohesive resources, then inline every byte so the output

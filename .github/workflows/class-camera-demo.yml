@@ -4,14 +4,18 @@ on:
   pull_request:
     paths:
       - 'prototypes/class-camera/**'
+      - 'skills/ct-dynamic-uml*/**'
+      - 'shared/dynamic-uml/**'
+      - 'scripts/dynamic_umls.py'
       - 'scripts/*class_camera*'
+      - 'scripts/class-camera-browser/**'
       - '.github/workflows/class-camera-demo.yml'
 
 permissions:
   contents: read
 
 jobs:
-  prototype:
+  class-camera:
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -25,7 +29,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
-      - name: Assemble offline prototype and check layout
+      - name: Assemble offline class skill and check layout
         run: |
           python scripts/build_class_camera_demo.py --output dist/class-camera-proof/class-camera-demo.html
           node scripts/check_class_camera_layout.cjs

@@ -1,7 +1,7 @@
 'use strict';
 DemoLayout.validate(DemoModel);
 const byId=id=>document.getElementById(id),SVG_NS='http://www.w3.org/2000/svg';
-const CC={model:DemoModel,view:DemoModel.views[0],focus:'order',step:0,playing:false,mode:'focus',
+const CC={model:DemoModel,view:DemoModel.views.find(v=>v.id===DemoModel.tour[0].view),focus:DemoModel.tour[0].focus,step:0,playing:false,mode:'focus',
   positions:{},routes:{},camera:{x:0,y:0,k:1},animation:0,animating:false,timer:0,
   metrics:DemoLayout.metrics(innerWidth,innerHeight),nodeEls:new Map(),edgeEls:new Map(),neighbors:[],dense:false};
 const nodesById=new Map(DemoModel.nodes.map(n=>[n.id,n]));
@@ -15,10 +15,17 @@ function element(tag,attrs={},text) {
 function add(parent,tag,attrs,text){const child=element(tag,attrs,text);parent.append(child);return child;}
 function localNodes(){return CC.view.nodes.map(id=>nodesById.get(id));}
 function localEdges(){return CC.view.edges.map(id=>edgesById.get(id));}
+function cardText(parent,attrs,value,width) {
+  const t=add(parent,'text',attrs,value),characters=[...value];
+  while(t.getComputedTextLength()>width&&characters.length){characters.pop();t.textContent=characters.join('')+'…';}
+  add(t,'title',{},value);return t;
+}
 function drawView() {
   world.replaceChildren();CC.nodeEls.clear();CC.edgeEls.clear();CC.routes={};
   const defs=add(world,'defs');
   for(const [name,d,fill,refX]of [['diamond','M0 6 L6 1 L12 6 L6 11 Z','#efa86d',0],
+    ['hollow','M0 6 L6 1 L12 6 L6 11 Z','#202420',0],
+    ['open','M1 1 L12 6 L1 11','none',12],
     ['triangle','M1 1 L12 6 L1 11 Z','#202420',12]]) {
     const marker=add(defs,'marker',{id:name,viewBox:'0 0 14 12',refX,refY:6,markerWidth:13,markerHeight:12,orient:'auto',markerUnits:'userSpaceOnUse'});
     add(marker,'path',{d,fill,stroke:'#efa86d','stroke-width':1.4});
@@ -27,13 +34,15 @@ function drawView() {
     const g=add(world,'g',{class:'edge',tabindex:0,role:'button','data-edge':edge.id,
       'aria-label':`${nodesById.get(edge.from).label} ${edge.label} ${nodesById.get(edge.to).label}. ${edge.kind}. Inspect relationship.`});
     add(g,'path',{class:'hit'});const path=add(g,'path',{class:'stroke'});
-    if(edge.kind==='composition')path.setAttribute('marker-start','url(#diamond)');
+    if(['composition','aggregation'].includes(edge.kind))path.setAttribute('marker-start',edge.kind==='composition'?'url(#diamond)':'url(#hollow)');
+    if(edge.kind==='dependency'){path.setAttribute('stroke-dasharray','6 5');path.setAttribute('marker-end','url(#open)');}
     if(edge.kind==='inheritance')path.setAttribute('marker-end','url(#triangle)');
     add(g,'text',{class:'label','text-anchor':'middle'},edge.label);
     for(const key of ['sourceMultiplicity','targetMultiplicity'])if(edge[key])add(g,'text',{class:`multiplicity ${key}`},edge[key]);
     const inspect=()=>showDetails(`${nodesById.get(edge.from).label} → ${nodesById.get(edge.to).label}`,edge.detail,
       [`Relationship: ${edge.kind}`,`Diagram: ${CC.view.label}`,
-        ...(edge.sourceMultiplicity?[`${nodesById.get(edge.from).label}: ${edge.sourceMultiplicity}; ${nodesById.get(edge.to).label}: ${edge.targetMultiplicity}`]:[])]);
+        ...[['sourceMultiplicity',edge.from],['targetMultiplicity',edge.to]]
+          .filter(([key])=>edge[key]).map(([key,id])=>`${nodesById.get(id).label}: ${edge[key]}`)]);
     g.addEventListener('click',()=>{if(!CC.suppressClick)inspect();});
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();inspect();}});
     CC.edgeEls.set(edge.id,g);
@@ -43,12 +52,11 @@ function drawView() {
     const g=add(world,'g',{class:'node',tabindex:0,role:'button','data-node':node.id,
       'aria-label':`${node.label}. Focus class and show its direct relationships.`});
     add(g,'rect',{x:-w/2,y:-h/2,width:w,height:h,rx:5});
-    const title=add(g,'text',{class:'title',x:0,y:-h/2+(CC.metrics.mobile?21:25),'text-anchor':'middle'},node.label);
-    title.style.fontSize=Math.min(CC.metrics.mobile?13:16,(w-16)/(node.label.length*.62))+'px';
+    cardText(g,{class:'title',x:0,y:-h/2+(CC.metrics.mobile?21:25),'text-anchor':'middle'},node.label,w-16);
     add(g,'line',{x1:-w/2,y1:-h/2+(CC.metrics.mobile?30:36),x2:w/2,y2:-h/2+(CC.metrics.mobile?30:36)});
-    add(g,'text',{class:'member',x:-w/2+10,y:CC.metrics.mobile?8:3},node.fields[0]);
+    cardText(g,{class:'member',x:-w/2+10,y:CC.metrics.mobile?8:3},node.fields[0]||'No listed attributes',w-20);
     add(g,'line',{x1:-w/2,y1:CC.metrics.mobile?14:15,x2:w/2,y2:CC.metrics.mobile?14:15});
-    add(g,'text',{class:'member',x:-w/2+10,y:CC.metrics.mobile?28:39},node.methods[0]);
+    cardText(g,{class:'member',x:-w/2+10,y:CC.metrics.mobile?28:39},node.methods[0]||'No listed operations',w-20);
     const focus=()=>focusClass(node.id);
     g.addEventListener('click',()=>{if(!CC.suppressClick)focus();});
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();focus();}});

@@ -3,6 +3,7 @@ const fs = require('node:fs/promises');
 const path = require('node:path');
 const {pathToFileURL} = require('node:url');
 const {execFileSync} = require('node:child_process');
+const checkCompatibility = require('./class-camera-browser/compatibility.cjs');
 const {chromium} = require(process.env.CLASS_CAMERA_PLAYWRIGHT || 'playwright');
 const root = path.resolve(__dirname,'..'),output=path.join(root,'dist/class-camera-proof');
 const url=pathToFileURL(path.join(output,'class-camera-demo.html')).href;
@@ -145,6 +146,8 @@ async function run() {
   assert((await state()).camera.x>keyBefore.camera.x);assert.equal((await state()).mode,'explore');
   await page.keyboard.press('f');await verifyFocus('Keyboard Focus');
   proof.checks.push('all tour steps, responsive orientations, keyboard alternatives and reduced motion');
+  await checkCompatibility(context,output);
+  proof.checks.push('standalone canonical JSON, arbitrary IDs, multiple scenarios, all relationship kinds and complete member/cardinality details');
 
   // Chromium's touch input path generates real browser pointer events.
   const touch=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,offline:true});

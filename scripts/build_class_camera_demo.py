@@ -1,25 +1,32 @@
 #!/usr/bin/env python3
-"""Assemble the review-only class-camera prototype into one offline HTML file."""
+"""Assemble the standalone class skill and render its canonical review example."""
 import argparse
-import base64
+import importlib.util
+import json
+import sys
+import tempfile
 from pathlib import Path
 
+sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / 'prototypes/class-camera'
+
+
+def load(path, name):
+    spec = importlib.util.spec_from_file_location(name, path)
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def build():
-    page = (SOURCE / 'template.html').read_text(encoding='utf-8')
-    fragments = {'STYLES': 'styles.css', 'MODEL': 'model.js', 'LAYOUT': 'layout.js',
-                 'ROUTING': 'routing.js', 'VIEW': 'view.js', 'CAMERA': 'camera.js',
-                 'INPUT': 'input.js', 'TOUR': 'tour.js'}
-    for key, filename in fragments.items():
-        marker = f'__{key}__\n'
-        if page.count(marker) != 1:
-            raise ValueError(f'Expected one standalone {marker.strip()} marker')
-        page = page.replace(marker, (SOURCE / filename).read_text(encoding='utf-8'))
-    logo = (ROOT / 'skills/ct-dynamic-uml/assets/ginylil.png').read_bytes()
-    return page.replace('__LOGO__', 'data:image/png;base64,' + base64.b64encode(logo).decode('ascii'))
+    cli = load(ROOT / 'scripts/skills.py', 'class_demo_assembler')
+    with tempfile.TemporaryDirectory(prefix='ct-class-review-') as temporary:
+        destination = Path(temporary) / 'skills'
+        cli.assemble(ROOT, destination, ['ct-dynamic-uml-class'])
+        package = destination / 'ct-dynamic-uml-class'
+        renderer = load(package / 'scripts/render.py', 'class_demo_renderer')
+        model = json.loads((package / 'assets/example.json').read_text(encoding='utf-8'))
+        return renderer.render(model, expected='class')
 
 
 def main():

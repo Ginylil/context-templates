@@ -3,7 +3,7 @@ const path = require('node:path');
 const {pathToFileURL} = require('node:url');
 
 module.exports = async function checkExamples({page, root, output, kinds}) {
-  for (const kind of kinds) {
+  for (const kind of kinds.filter(kind=>kind!=='class')) {
     await page.goto(pathToFileURL(path.join(root, `examples/dynamic-umls/${kind}.html`)).href);
     const model = await page.locator('#diagram-data').textContent().then(JSON.parse);
     assert.equal(await page.title(), model.title);

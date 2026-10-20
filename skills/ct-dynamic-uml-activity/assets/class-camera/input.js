@@ -71,7 +71,12 @@ byId('follow').onclick=()=>{pauseTour();focusLayout();};byId('map').onclick=show
 byId('resume').onclick=()=>startTour();byId('play').onclick=()=>toggleTour();
 byId('prev').onclick=()=>goStep(Math.max(0,CC.step-1),false);
 byId('next').onclick=()=>goStep(Math.min(DemoModel.tour.length-1,CC.step+1),false);
-byId('view').onchange=()=>goStep(DemoModel.tour.findIndex(s=>s.view===byId('view').value),false);
+byId('view').onchange=()=>{
+  const id=byId('view').value,index=DemoModel.tour.findIndex(s=>s.view===id);
+  if(index>=0)goStep(index,false);else{changeView(id);focusClass(CC.view.nodes[0]);}
+};
+byId('scenario').onchange=()=>goStep(DemoModel.tour.findIndex(s=>s.scenario===byId('scenario').value),false);
+byId('inspect-class').onclick=()=>{const node=nodesById.get(CC.focus);showDetails(node.label,node.detail,[...node.fields,...node.methods]);};
 byId('linked').onclick=()=>{
   const views=DemoModel.views.filter(v=>v.nodes.includes(CC.focus)),current=views.findIndex(v=>v.id===CC.view.id);
   const focus=CC.focus;changeView(views[(current+1)%views.length].id);focusClass(focus);
@@ -81,7 +86,7 @@ byId('info').onclick=()=>showDetails('Explore the model at your pace.',
     'Mouse mode: a wheel zooms at the pointer. Shift + wheel pans.',
     'Trackpad mode: two-finger scrolling pans; pinch still zooms. Browsers do not reliably identify the wheel hardware, so choose the intended scroll behavior explicitly.',
     'Keyboard in the diagram: arrows pan; + / − zoom; 0 shows the view map; F restores focus; Space plays or pauses.',
-    'More than 20 relationships for one class: use linked diagram views. Order has 27, split into three groups of nine.',
+    'More than 20 relationships for one class within a diagram: use linked views while retaining every class and relationship.',
     'All direct neighbors in the selected diagram remain visible. Smaller screens use smaller cards when needed.',
     'Reduced motion: camera and class positions change immediately. Playback remains opt-in.'
   ]);
