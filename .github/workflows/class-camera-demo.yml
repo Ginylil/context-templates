@@ -1,0 +1,49 @@
+name: Class camera demo
+
+on:
+  pull_request:
+    paths:
+      - 'prototypes/class-camera/**'
+      - 'scripts/*class_camera*'
+      - '.github/workflows/class-camera-demo.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  prototype:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.10'
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Assemble offline prototype and check layout
+        run: |
+          python scripts/build_class_camera_demo.py --output dist/class-camera-proof/class-camera-demo.html
+          node scripts/check_class_camera_layout.cjs
+      - name: Install browser tools on the remote runner
+        run: |
+          npm install --prefix "$RUNNER_TEMP/class-camera-browser" --no-save playwright@1.63.0
+          "$RUNNER_TEMP/class-camera-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Exercise camera, gestures and viewports; record the demo
+        env:
+          CLASS_CAMERA_PLAYWRIGHT: ${{ runner.temp }}/class-camera-browser/node_modules/playwright
+        run: node scripts/check_class_camera_demo.cjs
+      - name: Convert walkthrough for inline playback
+        run: |
+          ffmpeg -y -i dist/class-camera-proof/camera-walkthrough.webm -c:v libx264 -pix_fmt yuv420p -movflags +faststart -an dist/class-camera-proof/camera-walkthrough.mp4
+      - name: Save reviewable demo and proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: class-camera-demo
+          path: dist/class-camera-proof/
+          retention-days: 7

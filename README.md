@@ -202,6 +202,11 @@ Validated JSON proves contract consistency, not customer demand or user acceptan
 
 ## Dynamic UMLs
 
+The [class-camera prototype](prototypes/class-camera/README.md) explores a moving
+focus window, manual pan/zoom with playback takeover, and linked diagram views
+for classes above twenty relationships. Its remote CI artifact is the review
+demo; the installed skills and published examples keep their current behavior.
+
 Use Dynamic UMLs to explain how a system works: messages over time, types and
 relationships, decision paths, state changes, parallel activities, or component
 boundaries. Ask for a diagram in plain language, for example

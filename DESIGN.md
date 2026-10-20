@@ -109,6 +109,15 @@ generated walkthroughs remain standalone offline HTML and are exempt.
 
 ## Proof path
 
+The experimental class camera lives under `prototypes/class-camera/`, separately
+from the canonical templates. Its proposed focus window is 5 × 5 on desktop,
+3 × 5 on portrait mobile and 5 × 3 on landscape mobile, with every direct neighbor
+retained. It decomposes classes above twenty relationships into linked diagram
+views. Manual pan/zoom pauses following; explicit resume restores it. The PR's
+`Class camera demo` workflow produces the offline HTML and rendered gesture proof
+remotely. This is a review candidate, not an installed-skill behavior change or a
+production publication. Its README owns prototype-specific controls and limits.
+
 Run `make check`. Optional `node scripts/check_dynamic_umls.cjs`
 uses an already available Playwright package/browser (no auto-install). Override
 module resolution with `DYNAMIC_UMLS_PLAYWRIGHT` and browser executable with

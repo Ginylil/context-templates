@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A moving neighborhood — Dynamic class diagram prototype</title>
+<style>
+__STYLES__
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="https://contexttemplates.com/index.html"><img src="__LOGO__" alt="Ginylil — Brewing Brilliant Code"><span>context templates</span></a>
+  <span class="eyebrow">Dynamic UML / Class camera prototype</span>
+  <h1>Follow the class. Keep its context.</h1>
+  <p class="lede">48 classes, three linked diagrams. The camera moves; the relationships keep their meaning.</p>
+</header>
+<main>
+  <div class="toolbar" aria-label="Diagram controls">
+    <div class="playback"><button id="prev" aria-label="Previous tour step">←</button><button id="play" class="primary">Start tour ▷</button><button id="next" aria-label="Next tour step">→</button></div>
+    <label class="view-picker">Diagram <select id="view" aria-label="Class diagram view"></select></label>
+    <div class="zoom" role="group" aria-label="Camera zoom"><button id="zoom-out" aria-label="Zoom out">−</button><output id="scale" aria-label="Zoom level"></output><button id="zoom-in" aria-label="Zoom in">+</button></div>
+    <button id="follow" aria-pressed="true">Focus</button><button id="map">View map</button>
+    <label class="input-picker"><span>Scroll</span><select id="wheel-mode" aria-label="Scroll gesture mode"><option value="zoom">Mouse: zoom</option><option value="pan">Trackpad: pan</option></select></label>
+    <button id="info" aria-label="Scope and gesture help">ⓘ</button>
+  </div>
+  <section id="stage" tabindex="0" aria-label="Interactive class diagram. Drag to pan, scroll to zoom. Arrow keys pan; plus and minus zoom; F focuses the current class; space toggles playback.">
+    <div class="stage-heading"><span id="mode"></span><span id="density"></span></div>
+    <svg id="diagram" role="group" aria-label="Classes and their relationships"><g id="world"></g></svg>
+    <div class="stage-foot"><span id="hint">Drag to pan · scroll or pinch to zoom</span><button id="resume" hidden>Resume tour →</button></div>
+    <svg id="minimap" role="button" tabindex="0" aria-label="Diagram mini-map. Click or drag to move the visible region; Enter shows the view map."></svg>
+  </section>
+  <section class="story" aria-labelledby="story-title"><div><p class="eyebrow" id="step-count"></p><h2 id="story-title"></h2><p id="story-body"></p></div><div class="related"><span id="relations"></span><button id="linked" hidden>Next linked diagram →</button></div></section>
+  <nav id="steps" aria-label="Tour steps"></nav>
+  <p class="scope">Synthetic teaching model. Temporary positions express reading focus, not changed architecture or object execution. A class with more than 20 relationships is split across linked diagram views; all relationships remain represented.</p>
+  <p class="scope">Desktop focus window: up to 5 × 5. Mobile: 3 × 5 portrait / 5 × 3 landscape. Direct neighbors stay visible; a denser neighborhood uses smaller cards. Selecting a class focuses it. Select a relationship for its UML meaning.</p>
+</main>
+<dialog id="details" aria-labelledby="details-title"><div class="dialog-heading"><span class="eyebrow">Class diagram / details</span><button id="close">Close ×</button></div><h2 id="details-title"></h2><p id="details-body"></p><ul id="details-list"></ul></dialog>
+<div class="sr-only" id="announcement" role="status" aria-live="polite"></div>
+<footer><a class="brand" href="https://contexttemplates.com/index.html"><img src="__LOGO__" alt="Ginylil — Brewing Brilliant Code"><span>contexttemplates.com ↗</span></a><span>One offline file · No external dependencies</span></footer>
+<noscript>This interactive prototype needs JavaScript; its code is embedded in this file.</noscript>
+<script>
+__MODEL__
+__LAYOUT__
+__ROUTING__
+__VIEW__
+__CAMERA__
+__INPUT__
+__TOUR__
+</script>
+</body>
+</html>
