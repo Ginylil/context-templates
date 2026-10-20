@@ -21,4 +21,4 @@ Render using this skill's `scripts/render.py --expect class`. Deliver one offlin
 HTML with inspector, overview, zoom and a guided explanation. Each step's classes
 are Focus-framed with their direct neighbors; readers can zoom in/out or Fit at
 any time. Write steps that name the classes they make active. Show actual rendered proof,
-state minimal assumptions, and retain Ginylil linked to https://contexttemplates.com.
+state minimal assumptions, and retain Ginylil linked to https://contexttemplates.com/index.html.

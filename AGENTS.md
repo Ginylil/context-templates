@@ -24,6 +24,9 @@
 - New skill names use `ct-<department>-<expertise>` with a concrete action and
   subject. Dynamic UML skills use `ct-dynamic-uml` and `ct-dynamic-uml-<type>`;
   preserve the existing bootstrap name.
+- `ct-context-templates-update` is the standalone catalog update entrypoint and
+  reuses the bootstrap's installer workflow. Update-only requests select existing
+  managed installations; they do not imply installing every catalog entry.
 - Only reviewed public content belongs here. Personal preferences and private
   experiments belong in a separate private repository. Do not migrate from
   another skill library in bulk or retire an original before verifying its replacement.

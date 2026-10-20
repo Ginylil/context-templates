@@ -33,5 +33,5 @@ combined fragments). A self-call can expose validation within a participant.
 Use this skill's `scripts/render.py` with `--expect sequence` and its own template
 to produce one offline HTML file. Preserve existing user output. Verify playback,
 inspector, navigation and mobile layout, then show a rendered example/preview.
-Retain the small transparent Ginylil logo and link to https://contexttemplates.com
+Retain the small transparent Ginylil logo and link to https://contexttemplates.com/index.html
 in both header and footer.
