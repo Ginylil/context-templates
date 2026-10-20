@@ -28,6 +28,14 @@ async function verifyFocus(label) {
   await settled();const result=await focusVisible();
   assert(result.centered,`${label}: focus is centered`);assert(result.inside,`${label}: every direct neighbor fits`);
   assert(result.textInside,`${label}: class text stays inside its card`);assert.equal(result.count,result.expected);
+  const cleanLabels=await page.evaluate(()=>{
+    const cards=[...document.querySelectorAll('.node:not(.offstage) rect')].map(n=>n.getBoundingClientRect());
+    return [...document.querySelectorAll('.edge:not(.offstage) text')].every(t=>{
+      const b=t.getBoundingClientRect();if(!b.width||!b.height)return true;
+      return cards.every(r=>b.right<=r.left||b.left>=r.right||b.bottom<=r.top||b.top>=r.bottom);
+    });
+  });
+  assert(cleanLabels,`${label}: relationship and cardinality labels stay outside class cards`);
 }
 async function stagePoint(x=.5,y=.5) {
   const box=await page.locator('#stage').boundingBox();return {x:box.x+box.width*x,y:box.y+box.height*y};

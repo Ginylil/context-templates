@@ -32,7 +32,8 @@ function drawView() {
     add(g,'text',{class:'label','text-anchor':'middle'},edge.label);
     for(const key of ['sourceMultiplicity','targetMultiplicity'])if(edge[key])add(g,'text',{class:`multiplicity ${key}`},edge[key]);
     const inspect=()=>showDetails(`${nodesById.get(edge.from).label} → ${nodesById.get(edge.to).label}`,edge.detail,
-      [`Relationship: ${edge.kind}`,`Diagram: ${CC.view.label}`]);
+      [`Relationship: ${edge.kind}`,`Diagram: ${CC.view.label}`,
+        ...(edge.sourceMultiplicity?[`${nodesById.get(edge.from).label}: ${edge.sourceMultiplicity}; ${nodesById.get(edge.to).label}: ${edge.targetMultiplicity}`]:[])]);
     g.addEventListener('click',()=>{if(!CC.suppressClick)inspect();});
     g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();inspect();}});
     CC.edgeEls.set(edge.id,g);
@@ -68,6 +69,9 @@ function paint() {
     g.classList.toggle('offstage',CC.mode==='focus'&&!visible.has(id));
   }
   const labels=[];
+  const touchesClass=(x,y,w)=>Object.values(CC.positions).some(p=>
+    x+w/2>p.x-CC.metrics.w/2-2&&x-w/2<p.x+CC.metrics.w/2+2&&
+    y+3>p.y-CC.metrics.h/2-2&&y-11<p.y+CC.metrics.h/2+2);
   for(const edge of localEdges()) {
     const g=CC.edgeEls.get(edge.id),active=edge.from===CC.focus||edge.to===CC.focus;
     g.classList.toggle('active',active);g.classList.toggle('context',!active);
@@ -80,13 +84,22 @@ function paint() {
     candidates.sort((a,b)=>b.length-a.length);
     const text=g.querySelector('.label');let placed=false;
     for(const segment of candidates.filter(s=>s.a.y===s.b.y&&s.length>edge.label.length*7+12)) {
-      const x=(segment.a.x+segment.b.x)/2,y=segment.a.y-8,w=edge.label.length*7;
+      const x=(segment.a.x+segment.b.x)/2,y=segment.a.y+4,w=edge.label.length*7;
       if(labels.some(b=>Math.abs(b.x-x)<(b.w+w)/2+8&&Math.abs(b.y-y)<19))continue;
+      if(touchesClass(x,y,w))continue;
       text.setAttribute('x',x);text.setAttribute('y',y);labels.push({x,y,w});placed=true;break;
     }
     text.style.display=placed?'':'none';
-    for(const [key,p]of [['sourceMultiplicity',points[0]],['targetMultiplicity',points.at(-1)]]) {
-      const t=g.querySelector(`.${key}`);if(t){t.setAttribute('x',p.x+8);t.setAttribute('y',p.y-8);}
+    for(const [key,p,q]of [['sourceMultiplicity',points[0],points[1]],['targetMultiplicity',points.at(-1),points.at(-2)]]) {
+      const t=g.querySelector(`.${key}`);
+      if(t){
+        const dx=Math.sign(q.x-p.x),dy=Math.sign(q.y-p.y),w=edge[key].length*7;
+        const x=p.x+(dx?dx*8:10),y=p.y+(dy>0?18:dy<0?-10:-8),left=dx<0?x-w:x;
+        t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor',dx<0?'end':'start');
+        // Keep cardinalities out of class interiors. The inspector retains their
+        // full values when a narrow endpoint gap cannot hold a visible label.
+        t.style.display=touchesClass(left+w/2,y,w)?'none':'';
+      }
     }
   }
   stage.classList.toggle('moving',CC.animating);

@@ -10,6 +10,10 @@ relationships apiece. The complete edge union is preserved. Twenty relationships
 per class per diagram is the prototype's decomposition limit, not a UML standard
 or a claim that a production architecture was refactored.
 
+Relationship labels avoid class interiors. Cardinality labels appear when an
+endpoint gap has room; the relationship inspector always retains their full
+values. Composition diamonds and inheritance triangles preserve their direction.
+
 In Focus, a class is centered and its direct neighbors move closer. Background
 classes occupy other free positions and appear during manual exploration. The
 normal focus window is at most 5 × 5 on desktop, 3 × 5 on portrait mobile and

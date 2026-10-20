@@ -39,6 +39,8 @@ jobs:
         run: node scripts/check_class_camera_demo.cjs
       - name: Convert walkthrough for inline playback
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends ffmpeg
           ffmpeg -y -i dist/class-camera-proof/camera-walkthrough.webm -c:v libx264 -pix_fmt yuv420p -movflags +faststart -an dist/class-camera-proof/camera-walkthrough.mp4
       - name: Save reviewable demo and proof
         if: always()
