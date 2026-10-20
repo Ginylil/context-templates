@@ -9,6 +9,9 @@
   publish only reviewed journal prose. Domain, DNS, and hosting settings need their
   own authorization. `make website-check` is optional rendered browser proof;
   it requires an existing Playwright/browser and a running local preview server.
+- Home navigation uses an explicit `index.html` path to bypass an old cached
+  bare-domain redirect. Preserve canonical/sitemap URLs; this link workaround
+  does not purge browser caches or repair existing bare-domain bookmarks.
 - Generate `catalog/` pages and `sitemap.xml` with `make website-catalog` from
   canonical skill metadata and `website/templates/`; do not edit those outputs.
   Keep installation guidance on the site, including agent-specific previews and

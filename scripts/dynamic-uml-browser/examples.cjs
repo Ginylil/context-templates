@@ -8,8 +8,8 @@ module.exports = async function checkExamples({page, root, output, kinds}) {
     const model = await page.locator('#diagram-data').textContent().then(JSON.parse);
     assert.equal(await page.title(), model.title);
     assert(await page.locator('#canvas-scroll').evaluate(el=>el.scrollHeight<=el.clientHeight+1&&el.scrollTop===0),`${kind}: diagram must use document vertical scrolling`);
-    assert.equal(await page.locator('.brand').getAttribute('href'), 'https://contexttemplates.com');
-    assert.equal(await page.locator('footer a').getAttribute('href'),'https://contexttemplates.com');
+    assert.equal(await page.locator('.brand').getAttribute('href'), 'https://contexttemplates.com/index.html');
+    assert.equal(await page.locator('footer a').getAttribute('href'),'https://contexttemplates.com/index.html');
     assert.equal(await page.locator('footer .brand-logo').getAttribute('src'),await page.locator('header .brand-logo').getAttribute('src'));
     assert.equal(await page.locator('footer .brand-logo').evaluate(el=>el.complete&&el.naturalWidth>0),true);
     assert.equal(await page.locator('#counter').textContent(), `01 / ${String(model.scenarios[0].steps.length).padStart(2,'0')}`);

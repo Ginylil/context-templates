@@ -20,7 +20,8 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
 - Titles use system Georgia/serif; UI uses system sans; labels/code use system
   monospace. No font download, CDN, icon library, telemetry or network dependency.
 - Use the supplied Ginylil coffee-and-sun logo, linked to
-  `https://contexttemplates.com` in both masthead and footer. The footer uses a
+  `https://contexttemplates.com/index.html` in both masthead and footer to bypass
+  a previously cached redirect at the bare domain. The footer uses a
   32px transparent mark at the same 80% opacity beside the visible destination.
 - Scenario menus belong to the page theme and open below their trigger on desktop
   and mobile. Support keyboard selection, typeahead, Escape/Tab dismissal and

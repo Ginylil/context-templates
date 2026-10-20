@@ -37,6 +37,13 @@ account screens and registration receipts out of the public journal. After deplo
 submit the live sitemap and read back its status. Verification, sitemap processing,
 URL indexing and Search Performance are separate observations.
 
+Human-facing home links use `/index.html` (relative within the website, absolute
+for downloadable diagrams and the README). This existing page bypasses a stale
+browser redirect previously observed at the bare-domain URL without requiring
+cache clearing. Canonical metadata and sitemap URLs retain their existing values.
+This does not invalidate redirects already stored in visitors' browsers: old
+bookmarks or a manually entered bare domain can still use that cached response.
+
 Run `make website-serve` and open [the local preview](http://127.0.0.1:8766/).
 The server binds to loopback and serves the checkout; keep it local. For browser
 proof, run `make website-check` in another terminal. It uses an existing Node.js,

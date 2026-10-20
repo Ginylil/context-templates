@@ -1,7 +1,7 @@
 # Context Templates
 
 Public agent skills for **Codex, Cursor, and Claude Code**. Visit
-[contexttemplates.com](https://contexttemplates.com) for the website; GitHub is
+[contexttemplates.com](https://contexttemplates.com/index.html) for the website; GitHub is
 the source of truth.
 
 Browse [all skills on the website](https://contexttemplates.com/catalog/) for short
@@ -212,7 +212,7 @@ Each produces a standalone HTML page with an interactive
 walkthrough. Each skill investigates the supplied context, makes minimal explicit
 assumptions, and asks **at most five questions** for material unknowns. Pages include
 playback, step navigation, an element inspector, overview, meaningful alternate
-scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com).
+scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com/index.html).
 Details open from the info icon in a modal: playback pauses while you read and
 resumes on close only if it was playing. The optional Sidebar trades canvas width
 for persistent details. All six types use the page for vertical scrolling, with
