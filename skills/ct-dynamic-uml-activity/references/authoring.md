@@ -49,7 +49,7 @@ Those are different subjects. Do not silently substitute one for the other.
    It opens through `file://`; no server, build system, CDN, network fetch, fonts,
    tracking or secret is needed. Branding must retain the supplied coffee-and-sun
    Ginylil PNG, embedded as a data URL with its transparent background, a small
-   subdued mark without a backing tile in the masthead and footer, and a visible link to **https://contexttemplates.com**. User-controlled model text
+   subdued mark without a backing tile in the masthead and footer, and a visible link to **https://contexttemplates.com/index.html**. This explicit path bypasses a cached redirect at the bare domain. User-controlled model text
    must remain data (`textContent`); never interpolate it as executable HTML/JS.
    Keep the diagram full-width and details hidden by default. An info icon opens
    step details in a modal, pauses playback and remembers whether it was playing
