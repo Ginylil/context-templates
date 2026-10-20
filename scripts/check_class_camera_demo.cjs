@@ -36,6 +36,18 @@ async function verifyFocus(label) {
     });
   });
   assert(cleanLabels,`${label}: relationship and cardinality labels stay outside class cards`);
+  const attached=await page.evaluate(()=>{
+    const onBorder=(point,rect)=>
+      ((Math.abs(point.x-rect.left)<2||Math.abs(point.x-rect.right)<2)&&point.y>=rect.top-2&&point.y<=rect.bottom+2)||
+      ((Math.abs(point.y-rect.top)<2||Math.abs(point.y-rect.bottom)<2)&&point.x>=rect.left-2&&point.x<=rect.right+2);
+    return localEdges().filter(edge=>edge.from===CC.focus||edge.to===CC.focus).every(edge=>{
+      const p=CC.edgeEls.get(edge.id).querySelector('.stroke'),matrix=p.getScreenCTM();
+      const a=p.getPointAtLength(0),b=p.getPointAtLength(p.getTotalLength());
+      return onBorder(new DOMPoint(a.x,a.y).matrixTransform(matrix),CC.nodeEls.get(edge.from).querySelector('rect').getBoundingClientRect())&&
+        onBorder(new DOMPoint(b.x,b.y).matrixTransform(matrix),CC.nodeEls.get(edge.to).querySelector('rect').getBoundingClientRect());
+    });
+  });
+  assert(attached,`${label}: relationship endpoints attach to actual rendered card borders`);
 }
 async function stagePoint(x=.5,y=.5) {
   const box=await page.locator('#stage').boundingBox();return {x:box.x+box.width*x,y:box.y+box.height*y};
@@ -116,7 +128,15 @@ async function run() {
     await page.screenshot({path:path.join(output,`${name}.png`),fullPage:true});
     proof.viewports.push({viewport:name,...(await state())});
   }
-  await page.setViewportSize({width:1440,height:900});await page.emulateMedia({reducedMotion:'reduce'});
+  await page.locator('#zoom-out').click();const beforeResize=await state();
+  await page.setViewportSize({width:1440,height:900});await page.waitForFunction(()=>!CC.metrics.mobile&&!CC.animating);
+  assert.deepEqual((await state()).camera,beforeResize.camera,'Responsive reflow preserves manual camera control');
+  const noOverlap=await page.locator('.node rect').evaluateAll(nodes=>{
+    const boxes=nodes.map(n=>n.getBoundingClientRect());
+    return boxes.every((a,i)=>boxes.slice(i+1).every(b=>a.right<=b.left||a.left>=b.right||a.bottom<=b.top||a.top>=b.bottom));
+  });
+  assert(noOverlap,'Changing device geometry during exploration keeps class cards separated');
+  await page.emulateMedia({reducedMotion:'reduce'});
   for(let i=0;i<8;i++) {
     await page.locator('#steps button').nth(i).click();assert.equal((await state()).animating,false,'Reduced motion jumps without animation');
     await verifyFocus(`Reduced-motion step ${i+1}`);

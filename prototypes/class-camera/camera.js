@@ -58,11 +58,11 @@ function zoomAt(factor,clientX,clientY) {
 function zoomCenter(factor) {
   takeControl();const r=stage.getBoundingClientRect();zoomAt(factor,r.left+r.width/2,r.top+r.height/2);
 }
-function showMap() {
+function showMap(animate=true) {
   pauseTour();CC.mode='map';CC.neighbors=[];CC.dense=false;
   const positions=Object.fromEntries(localNodes().map(n=>[n.id,{...n.home}]));
   const camera=DemoLayout.cameraFor(positions,CC.view.nodes,CC.focus,CC.metrics,stage.clientWidth,stage.clientHeight,false);
-  moveTo(positions,camera);updateStory();
+  moveTo(positions,camera,animate);updateStory();
 }
 function focusClass(id) {
   pauseTour();CC.focus=id;
@@ -73,9 +73,20 @@ function focusClass(id) {
 let resizeFrame=0;
 new ResizeObserver(()=>{
   cancelAnimationFrame(resizeFrame);resizeFrame=requestAnimationFrame(()=>{
-    const next=DemoLayout.metrics(innerWidth,innerHeight),changed=next.mobile!==CC.metrics.mobile;
+    const previous=CC.metrics,next=DemoLayout.metrics(innerWidth,innerHeight);
+    const changed=next.w!==previous.w||next.h!==previous.h;
+    if(changed&&CC.mode==='explore') {
+      const positions=CC.animating?CC.targetPositions:CC.positions;
+      stopMotion();
+      CC.positions=Object.fromEntries(Object.entries(positions).map(([id,p])=>[id,{
+        x:CC.camera.x+(p.x-CC.camera.x)*next.dx/previous.dx,
+        y:CC.camera.y+(p.y-CC.camera.y)*next.dy/previous.dy}]));
+      CC.targetPositions=structuredClone(CC.positions);
+    }
     CC.metrics=next;
     if(changed)drawView();
-    if(CC.mode==='focus')focusLayout(false);else{stopMotion();settleRoutes();paint();}
+    if(CC.mode==='focus')focusLayout(false);
+    else if(CC.mode==='map')showMap(false);
+    else{stopMotion();settleRoutes();paint();}
   });
 }).observe(stage);
