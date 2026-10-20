@@ -94,6 +94,10 @@
   remain under `skills/ct-dynamic-uml/`.
   Regenerate focused-skill resources and HTML review examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
+  The class viewer uses `assets/class-camera/` and `shared/dynamic-uml/class_camera.py`.
+  Linked class views must preserve all nodes/edges and cap each class at twenty
+  relationships per view. Source coordinates describe View map; focus positions
+  are temporary. Keep the remote class demo built from the assembled skill package.
 
 - Store release helpers are canonical under `shared/lifecycle/`, selected by the
   Apple/Android/manager manifests. Use `make resources` to refresh synthetic example

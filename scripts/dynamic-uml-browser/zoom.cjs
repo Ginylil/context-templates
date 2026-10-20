@@ -4,7 +4,7 @@ const {pathToFileURL} = require('node:url');
 
 module.exports = async function checkZoom({page, root, output}) {
   await page.setViewportSize({width:1440,height:900});
-  await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/class.html')).href);
+  await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/component.html')).href);
   const state=()=>page.evaluate(()=>{
     const frame=document.getElementById('canvas-scroll'),svg=document.getElementById('diagram');
     return {width:svg.getBoundingClientRect().width,frame:frame.clientWidth,label:document.getElementById('zoom-level').textContent,
@@ -16,10 +16,10 @@ module.exports = async function checkZoom({page, root, output}) {
   });
   const initial=await state();
   assert.equal(initial.focus,'true');
-  assert(initial.width>initial.frame,'Focus framing enlarges the active class and its neighbors');
-  assert(await activeVisible(),'Focused active class stays in view');
+  assert(initial.width>initial.frame,'Focus framing enlarges the active component and its neighbors');
+  assert(await activeVisible(),'Focused active component stays in view');
   assert.equal(initial.vertical,false,'Zoom must not add an inner vertical scrollport');
-  await page.screenshot({path:path.join(output,'class-zoom-focus.png')});
+  await page.screenshot({path:path.join(output,'component-zoom-focus.png')});
 
   for (let i=1;i<await page.locator('#step-track button').count();i++){
     await page.locator('#next').click();
@@ -44,7 +44,7 @@ module.exports = async function checkZoom({page, root, output}) {
   assert.equal((await state()).label,'125%','Keyboard shortcuts zoom');
   for (let i=0;i<12;i++) await page.keyboard.press('+');
   assert.equal((await state()).label,'300%');assert.equal(await page.locator('#zoom-in').isDisabled(),true);
-  await page.screenshot({path:path.join(output,'class-zoom-max.png')});
+  await page.screenshot({path:path.join(output,'component-zoom-max.png')});
 
   await page.locator('#zoom-focus').click();
   assert.equal((await state()).focus,'true');assert(await activeVisible(),'Re-enabling Focus re-frames the step');
@@ -55,9 +55,9 @@ module.exports = async function checkZoom({page, root, output}) {
   await page.setViewportSize({width:390,height:844});
   await page.locator('#reset').click();
   // Wider-than-canvas steps follow their destination, as without zoom.
-  assert(await page.locator('.node.active').last().evaluate(n=>{const b=n.getBoundingClientRect(),f=document.getElementById('canvas-scroll').getBoundingClientRect();return b.left>=f.left&&b.right<=f.right;}),'Mobile focus keeps the destination class in view');
+  assert(await page.locator('.node.active').last().evaluate(n=>{const b=n.getBoundingClientRect(),f=document.getElementById('canvas-scroll').getBoundingClientRect();return b.left>=f.left&&b.right<=f.right;}),'Mobile focus keeps the destination component in view');
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Mobile page stays within viewport width');
-  await page.screenshot({path:path.join(output,'class-zoom-mobile.png')});
+  await page.screenshot({path:path.join(output,'component-zoom-mobile.png')});
 
   await page.setViewportSize({width:1440,height:900});
   await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/sequence.html')).href);

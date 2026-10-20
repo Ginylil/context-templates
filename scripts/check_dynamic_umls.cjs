@@ -8,6 +8,7 @@ const checkExamples = require('./dynamic-uml-browser/examples.cjs');
 const checkState = require('./dynamic-uml-browser/state.cjs');
 const checkSubflows = require('./dynamic-uml-browser/subflows.cjs');
 const checkSequence = require('./dynamic-uml-browser/sequence.cjs');
+const checkClass = require('./dynamic-uml-browser/class.cjs');
 const checkZoom = require('./dynamic-uml-browser/zoom.cjs');
 const root = path.resolve(__dirname, '..');
 const kinds = ['sequence', 'class', 'flowchart', 'state', 'activity', 'component'];
@@ -29,6 +30,7 @@ const output = path.resolve(process.env.DYNAMIC_UMLS_PROOF || path.join(root, 'd
     await checkState({page, root, output});
     await checkSubflows({page, root, output});
     await checkSequence({page, root, output});
+    await checkClass({page, root, output});
     await checkZoom({page, root, output});
     await page.setViewportSize({width:1440,height:1000});
     await page.goto(pathToFileURL(path.join(root,'examples/dynamic-umls/index.html')).href);
