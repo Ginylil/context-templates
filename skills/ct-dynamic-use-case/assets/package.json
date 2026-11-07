@@ -1,0 +1,13 @@
+{
+  "schema_version": 2,
+  "scripts": [
+    {
+      "source": "shared/dynamic-uml/render_use_case.py",
+      "destination": "scripts/render_use_case.py"
+    },
+    {
+      "source": "shared/dynamic-uml/use_case_model.py",
+      "destination": "scripts/use_case_model.py"
+    }
+  ]
+}

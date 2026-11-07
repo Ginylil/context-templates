@@ -16,7 +16,7 @@ BUILD_FILES = frozenset({'Makefile', 'GNUmakefile', 'CMakeLists.txt'})
 GENERATED_HTML = frozenset(
     f'examples/dynamic-umls/{name}.html' for name in (
         'sequence', 'class', 'flowchart', 'state', 'activity', 'component',
-        'sequence-long', 'index',
+        'sequence-long', 'use-case', 'index',
     )
 )
 

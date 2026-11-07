@@ -1,6 +1,6 @@
 ---
 name: ct-dynamic-uml
-description: "Choose and create standalone offline HTML diagram walkthroughs for sequence, class, flowchart, state, activity and component views. Use when the user asks for dynamic UMLs, an interactive architecture/process explanation, or help choosing a diagram."
+description: "Choose and create standalone offline HTML diagram walkthroughs for use-case, sequence, class, flowchart, state, activity and component views. Use when the user asks for dynamic UMLs, an interactive architecture/process explanation, or help choosing a diagram."
 ---
 
 # Dynamic UMLs
@@ -16,10 +16,21 @@ walkthrough. This is the router for the family; individual skills also work alon
 | `/ct-dynamic-uml-state` | States, events and guards | Order lifecycle |
 | `/ct-dynamic-uml-activity` | Actions and concurrency | Stock and payment fork/join |
 | `/ct-dynamic-uml-component` | Boundaries and structural dependencies | One catalog, three agents |
+| `/ct-dynamic-use-case all` | Actor goals grouped by subject, with focused scenario flows | Administrator → User management → Invite user |
 
 Use the requested type. Otherwise select the smallest view that answers the user's
 question; explain the choice briefly. Flowcharts are general process notation.
 This renderer supports a focused UML subset, not every UML diagram/construct.
+
+For use cases, read `references/use-case-authoring.md` and
+`assets/examples/use-case.json`, and use this package's `scripts/render_use_case.py`
+with `validate`, `render` or `extract`. Its separate template is under
+`assets/use-case/`; the focused `ct-dynamic-use-case` skill works independently.
+Start with centered actor figures, reveal goals to the right of the selected actor,
+then focus one subject, goal and scenario. Keep errors inside scenario details;
+numbered actions belong to a labeled Scenario flow, not automatic include/extend
+relationships. This explorer uses explicit selections rather than playback.
+The following playback/layout instructions apply to the other six diagram types.
 
 Read `references/authoring.md` and the relevant `assets/examples/<type>.json`.
 Apply its evidence investigation, **maximum five material questions total**,
@@ -40,4 +51,4 @@ with `scripts/validate_state.py`; use expandable state detail views for complexi
 Retain the supplied embedded Ginylil coffee-and-sun logo
 linked to https://contexttemplates.com/index.html. Show the actual output and rendered proof
 when browser tools are available. Never confuse a visualization with execution of
-the modeled system. For a family review, show all six examples.
+the modeled system. For a family review, show all seven diagram types.

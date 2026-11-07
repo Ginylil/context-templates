@@ -88,6 +88,9 @@ def pages(root: Path = ROOT) -> dict[Path, str]:
             kind = item["name"].removeprefix("ct-dynamic-uml").lstrip("-") or "index"
             example = (f'<a class="text-link" href="../../examples/dynamic-umls/{kind}.html">'
                        'Try the interactive example <span aria-hidden="true">→</span></a>')
+        if item["name"] == "ct-dynamic-use-case":
+            example = ('<a class="text-link" href="../../examples/dynamic-umls/use-case.html">'
+                       'Try the actor-first explorer <span aria-hidden="true">→</span></a>')
         outputs[Path("catalog") / item["name"] / "index.html"] = render(
             "skill.html", **safe, installation=installation(item["name"]), example=example,
             clone=codebox("clone", "Repository setup",

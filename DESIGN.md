@@ -109,6 +109,25 @@ generated walkthroughs remain standalone offline HTML and are exempt.
 
 ## Proof path
 
+The actor-first `ct-dynamic-use-case` explorer is a separate interactive view:
+centered actor figures move left on selection; subject groups and goal ovals
+open to the right. A selected goal offers rectangular scenario choices, and a
+selected scenario shows numbered actor/system actions and an outcome. Error and
+recovery details stay inside scenarios. No automatic include/extend relationships
+are inferred from action order or errors. Progression is explicitly selected;
+the six existing diagram types retain their playback contract.
+
+Its canonical fragments are in `skills/ct-dynamic-uml/assets/use-case/`, with
+the guide and JSON example beside the other canonical resources. Shared Python
+helpers validate the model, emit offline HTML and recover embedded JSON without
+executing it. `make examples` synchronizes the focused package and the use-case
+review page. Tests cover recovery/evidence references, safe embedding, isolated
+all-agent packages, extraction and overwrite refusal. Rendered review must check
+actor/subject selection, error → recovery, overview, readable arrows, narrow
+layout and the preserved small transparent owner-supplied logo. The page includes
+scope, assumptions and source provenance; structural validation is not evidence
+that an inspected application behaves as modeled.
+
 Run `make check`. Optional `node scripts/check_dynamic_umls.cjs`
 uses an already available Playwright package/browser (no auto-install). Override
 module resolution with `DYNAMIC_UMLS_PLAYWRIGHT` and browser executable with

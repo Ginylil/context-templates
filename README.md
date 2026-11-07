@@ -241,6 +241,7 @@ Pages open locally and work offline, without a server or external dependencies.
 | [`ct-dynamic-uml-state`](skills/ct-dynamic-uml-state/SKILL.md) | [Order lifecycle](https://ginylil.github.io/context-templates/examples/dynamic-umls/state.html) |
 | [`ct-dynamic-uml-activity`](skills/ct-dynamic-uml-activity/SKILL.md) | [Parallel preparation](https://ginylil.github.io/context-templates/examples/dynamic-umls/activity.html) |
 | [`ct-dynamic-uml-component`](skills/ct-dynamic-uml-component/SKILL.md) | [One catalog, three agents](https://ginylil.github.io/context-templates/examples/dynamic-umls/component.html) |
+| [`ct-dynamic-use-case`](skills/ct-dynamic-use-case/SKILL.md) | [Actor goals and focused scenario flows](https://ginylil.github.io/context-templates/examples/dynamic-umls/use-case.html) |
 
 The UML skills now use the `ct-dynamic-uml` prefix. Install them by their new
 names. Existing installations with `dynamic-*` names remain untouched; the
@@ -249,7 +250,7 @@ therefore appear until you explicitly remove the old copies. Hosted example
 URLs remain under `examples/dynamic-umls/`.
 
 [Open the interactive example gallery](https://ginylil.github.io/context-templates/examples/dynamic-umls/index.html)
-to try all six views and the long sequence in your browser. The repository's
+to try all seven views and the long sequence in your browser. The repository's
 existing GitHub Pages hosting serves these static examples. You can also download
 the HTML or open it from your clone to use it offline; GitHub's file view displays
 the source. These are a focused UML subset; flowcharts are general process notation.
@@ -266,6 +267,7 @@ Then ask your agent:
 /ct-dynamic-uml-sequence for 3 way handshake login
 /ct-dynamic-uml-class for this project's billing model
 /ct-dynamic-uml-flowchart for the failed-payment recovery process
+/ct-dynamic-use-case all
 ```
 
 Use `$ct-dynamic-uml-sequence` or its name in prose if your agent does not expose

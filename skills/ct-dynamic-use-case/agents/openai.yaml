@@ -1,0 +1,4 @@
+interface:
+  display_name: "Dynamic Use Case Diagram"
+  short_description: "Explore actor goals, scenarios, errors and recovery"
+  default_prompt: "Use $ct-dynamic-use-case all to inspect this project and create an actor-first use-case explorer with left-to-right navigation, evidence and focused scenario flows."

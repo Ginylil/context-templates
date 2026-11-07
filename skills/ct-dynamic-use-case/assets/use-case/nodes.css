@@ -1,0 +1,166 @@
+#uc-diagram .d-node {
+  position: absolute;
+  z-index: 3;
+  transform: translate(-50%, -50%);
+  transition:
+    left 440ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    top 440ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    width 440ms,
+    height 440ms;
+}
+#uc-diagram .d-oval {
+  border: 1.4px solid var(--d-muted);
+  border-radius: 50%;
+  background: var(--d-paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 9px 14px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.3;
+}
+#uc-diagram .d-oval.cursor-interaction:hover {
+  border-color: var(--d-active);
+  background: var(--d-wash);
+}
+#uc-diagram .d-oval.d-selected {
+  border-color: var(--d-active);
+  background: var(--d-wash);
+  color: var(--d-active);
+}
+#uc-diagram .d-oval .d-node-note {
+  font-size: 11px;
+  margin-top: 4px;
+  color: var(--d-muted);
+}
+#uc-diagram .d-step {
+  border: 1px solid var(--d-line);
+  border-radius: 8px;
+  background: var(--d-paper);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+#uc-diagram button.d-step:hover {
+  border-color: var(--d-active);
+  background: var(--d-wash);
+}
+#uc-diagram .d-step .d-node-note {
+  font-size: 11px;
+  color: var(--d-muted);
+}
+#uc-diagram .d-step.d-outcome {
+  border-color: var(--d-active);
+  background: var(--d-wash);
+}
+#uc-diagram .d-recovery {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+}
+#uc-diagram .d-recovery-label {
+  font-size: 11px;
+  color: var(--d-muted);
+  margin-right: 4px;
+}
+#uc-diagram .d-actor {
+  width: 116px;
+  height: 106px;
+  border: 0;
+  background: transparent;
+  padding: 0 3px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  align-items: center;
+  justify-content: center;
+  transition:
+    left 540ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    top 540ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 200ms;
+}
+#uc-diagram .d-actor .d-person {
+  position: relative;
+  display: block;
+  width: 42px;
+  height: 63px;
+  color: var(--d-text);
+}
+#uc-diagram .d-person span {
+  display: block;
+  position: absolute;
+  border-color: currentColor;
+}
+#uc-diagram .d-person .d-headcircle {
+  width: 15px;
+  height: 15px;
+  border: 1.8px solid;
+  border-radius: 50%;
+  left: 13.5px;
+  top: 0;
+  background: var(--d-bg);
+}
+#uc-diagram .d-person .d-torso {
+  height: 27px;
+  width: 0;
+  border-left: 1.8px solid;
+  left: 21px;
+  top: 15px;
+}
+#uc-diagram .d-person .d-arms {
+  width: 38px;
+  border-top: 1.8px solid;
+  left: 2px;
+  top: 27px;
+}
+#uc-diagram .d-person .d-leg {
+  width: 25px;
+  border-top: 1.8px solid;
+  transform-origin: 0 0;
+  left: 21px;
+  top: 41px;
+}
+#uc-diagram .d-person .d-leg-left {
+  transform: rotate(125deg);
+}
+#uc-diagram .d-person .d-leg-right {
+  transform: rotate(55deg);
+}
+#uc-diagram .d-actor-name {
+  font-size: 12px;
+  font-weight: 500;
+}
+#uc-diagram .d-actor-type {
+  font-size: 11px;
+  color: var(--d-muted);
+}
+#uc-diagram .d-actor:hover .d-person,
+#uc-diagram .d-actor.d-selected .d-person {
+  color: var(--d-active);
+}
+#uc-diagram .d-actor.d-selected .d-actor-name {
+  color: var(--d-active);
+}
+#uc-diagram .d-enter {
+  animation: d-arrive 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes d-arrive {
+  from {
+    opacity: 0;
+    margin-left: 40px;
+  }
+  to {
+    opacity: 1;
+    margin-left: 0;
+  }
+}
