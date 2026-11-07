@@ -457,7 +457,16 @@ installed. `scripts/render.py` checks model identifiers, notation, bounds, activ
 edge endpoints, source link schemes and required scope text. It safely embeds
 JSON, renders model text through DOM textContent, and exclusively creates output
 files to preserve user artifacts. Coordinates and line routes are authored rather
-than automatically laid out. Flowchart validation enforces at most seven nodes
+than automatically laid out, except for temporary class focus arrangements.
+`class_camera.py` validates optional linked `views` and each step's `view`/`focus`.
+Omitting views retains a single complete diagram. Linked views must cover every
+class and relationship; no class may exceed twenty relationships within a view.
+The canonical `assets/class-camera/` fragments are copied into every focused
+package so class rendering remains independently available. The class example
+uses 48 synthetic classes and three linked views. Cards preview members; the
+Class details inspector retains all supplied fields and operations. Source
+coordinates remain available through View map. See the packaged class camera guide.
+Flowchart validation enforces at most seven nodes
 per view, downward forward routes, orthogonal explicit ports, outer side loops,
 node spacing, no connector overlaps/crossings and no routes through nodes. The
 standalone `scripts/validate_flowchart.py` accepts JSON or emitted HTML and checks
@@ -478,11 +487,20 @@ checks canonical copies. Optional browser proof uses an existing Playwright runt
 and verifies local offline interaction and responsive layouts. Neither lane proves
 that a real agent discovered the skill or followed the investigation/question policy.
 
-The viewer defaults to a full-width diagram with details disclosed through an info
+The class viewer has a bounded camera viewport. Its focus tour rearranges direct
+neighbors temporarily, with desktop 5 × 5 and mobile 3 × 5 / 5 × 3 windows. All
+neighbors remain visible with denser cards when needed. Manual pan/zoom takes
+control and pauses playback; explicit Resume tour restores following. The
+mini-map moves the visible region. Mouse/trackpad scroll behavior is selectable;
+pinch zoom works in either mode. Details remain paused on close. Native scenario
+and diagram selectors switch walkthroughs and linked views. Remote camera CI
+builds the demo through an assembled standalone class package and records gestures.
+
+The other five viewers default to a full-width diagram with details disclosed through an info
 modal. Opening it pauses the current timer and saves its remaining duration; close
 or Escape restores prior playback intent. A manually paused walkthrough stays
 paused. The optional sidebar uses the same details DOM, narrows the diagram and
-keeps its contents current. All six diagram canvases expand to their content height;
+keeps its contents current. These five diagram canvases expand to their content height;
 the document owns vertical scrolling. Narrow views pan horizontally without an
 inner vertical canvas scrollbar. Sequence headers sit outside the horizontal
 overflow container and stick below the playback controls; their width and pan

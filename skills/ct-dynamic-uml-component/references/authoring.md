@@ -51,12 +51,17 @@ Those are different subjects. Do not silently substitute one for the other.
    Ginylil PNG, embedded as a data URL with its transparent background, a small
    subdued mark without a backing tile in the masthead and footer, and a visible link to **https://contexttemplates.com/index.html**. This explicit path bypasses a cached redirect at the bare domain. User-controlled model text
    must remain data (`textContent`); never interpolate it as executable HTML/JS.
+   For class diagrams, read `references/class-camera.md`. The bundled renderer
+   uses its moving focus camera, linked views, manual gestures and explicit resume.
+   Class details retain every supplied member. Its bounded viewport owns diagram
+   pan/zoom; the document still scrolls around it. The remaining viewer rules in
+   this paragraph apply to the other five types.
    Keep the diagram full-width and details hidden by default. An info icon opens
    step details in a modal, pauses playback and remembers whether it was playing
    plus the remaining step duration. Closing by button or Escape resumes only a
    previously playing walkthrough from the same step; an already paused one stays
    paused. Offer a Sidebar toggle for users who trade diagram width for persistent
-   details. Use document scrolling vertically for every diagram type: canvas
+   details. Use document scrolling vertically: canvas
    height follows its content, with horizontal panning only where needed. Keep
    playback controls sticky. Place sequence participant labels outside the
    horizontal overflow container, sticky below controls, and synchronize their
@@ -78,7 +83,7 @@ Those are different subjects. Do not silently substitute one for the other.
    the parent document scroll, horizontal pan and zoom.
    Zoom controls (−, +, Fit, Focus; keys `+`, `-`, `0`; Ctrl/Cmd + wheel or pinch)
    scale the SVG width from 50% to 300% of Fit; the page still scrolls vertically.
-   Focus is on by default for every type except sequence: each step zooms (up to
+   Focus is on by default except sequence: each step zooms (up to
    200%) to frame its active elements plus directly connected nodes and
    relationships. Manual zoom turns Focus off and persists across steps; Fit shows
    the whole diagram; Reset restores Focus. Overview shows the whole diagram while
@@ -90,7 +95,10 @@ Those are different subjects. Do not silently substitute one for the other.
    preservation and optional sidebar. Check the active message is inside the
    actual browser viewport in a short window, not merely inside the canvas
    container. Check every type has no inner vertical canvas overflow, including
-   with the sidebar. For a long sequence, traverse every step at desktop and phone
+   with the sidebar, except the class viewer's bounded camera. For class proof,
+   check centered focus, every direct neighbor visible, complete linked views,
+   member details, pan/zoom takeover and explicit resume in both mobile orientations.
+   For a long sequence, traverse every step at desktop and phone
    widths: check whole arrow endpoints and participant headers fit without
    horizontal overflow, enough participants shown for the available space,
    previous/next messages when their endpoints fit, omission names/order, and

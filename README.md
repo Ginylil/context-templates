@@ -213,9 +213,19 @@ walkthrough. Each skill investigates the supplied context, makes minimal explici
 assumptions, and asks **at most five questions** for material unknowns. Pages include
 playback, step navigation, an element inspector, overview, meaningful alternate
 scenarios and Ginylil branding linked to [contexttemplates.com](https://contexttemplates.com/index.html).
-Details open from the info icon in a modal: playback pauses while you read and
+Class diagrams center the focused class and temporarily bring its direct neighbors
+closer. Their normal window is 5 × 5 on desktop, 3 × 5 on portrait mobile and
+5 × 3 on landscape mobile; all direct neighbors remain visible with smaller cards
+when needed. Split classes above twenty relationships into linked diagram views,
+preserving every class and relationship. Drag or use two fingers to pan; scroll or
+pinch to zoom. Manual camera input pauses playback until explicit resume.
+Class details retain every supplied member; View map restores original positions.
+See the [class camera guide](skills/ct-dynamic-uml/references/class-camera.md)
+and [remote demo proof workflow](prototypes/class-camera/README.md).
+
+For the other five types, details open from the info icon in a modal: playback pauses while you read and
 resumes on close only if it was playing. The optional Sidebar trades canvas width
-for persistent details. All six types use the page for vertical scrolling, with
+for persistent details. These five types use the page for vertical scrolling, with
 horizontal panning when needed. Sequence walkthroughs show as many participants
 as fit, prioritizing the active exchange and previous/next messages. Only groups
 that exceed the available width collapse into `…`. Select the dots or
@@ -229,7 +239,8 @@ verifier checks these rules before rendering. State diagrams share the node limi
 and routing checks, allow horizontal layouts and expandable state detail views,
 and place transition causes directly on their arrows. Pages use the supplied Ginylil
 coffee-and-sun logo as a small, subdued transparent mark in both header and footer.
-State diagrams fit the available width when readable. Diagram canvases have no inner vertical scrollbar.
+State diagrams fit the available width when readable. Class diagrams use a bounded
+camera viewport for two-dimensional exploration; the other canvases have no inner vertical scrollbar.
 Pages open locally and work offline, without a server or external dependencies.
 
 | Skill / command | View example in browser |

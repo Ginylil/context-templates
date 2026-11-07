@@ -16,9 +16,17 @@ Place whole/owner at a diamond's `from` end and parent at an inheritance edge's
 If unknown, omit unsupported members/cardinalities and state the limitation.
 
 The walkthrough explores structure; it does not claim to simulate object behavior.
-Use a small domain slice, concise members and orthogonal routes without collisions.
-Render using this skill's `scripts/render.py --expect class`. Deliver one offline
-HTML with inspector, overview, zoom and a guided explanation. Each step's classes
-are Focus-framed with their direct neighbors; readers can zoom in/out or Fit at
-any time. Write steps that name the classes they make active. Show actual rendered proof,
-state minimal assumptions, and retain Ginylil linked to https://contexttemplates.com/index.html.
+Read [the class camera guide](references/class-camera.md). Center each step on its
+explicit `focus` class and show every direct neighbor in that view. Use a normal
+5 × 5 desktop window, 3 × 5 portrait mobile or 5 × 3 landscape mobile; retain all
+neighbors with smaller cards if necessary. Above 20 relationships for one class
+within a diagram, divide it into coherent linked `views`, retaining every class
+and relationship. Keep shared IDs; do not imply an architectural refactoring.
+
+Render with `scripts/render.py --expect class` for one offline HTML with a moving
+camera, temporary neighbor arrangement, class/relationship inspectors and a mini-map.
+Manual drag, wheel or pinch pauses the tour; explicit resume restores following.
+View map restores source positions. Verify gestures, orientation, connector
+attachment and complete view coverage with rendered proof. State assumptions,
+preserve actual UML direction/cardinality and all supplied members in the inspector,
+and retain Ginylil linked to https://contexttemplates.com/index.html.

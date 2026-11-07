@@ -39,8 +39,12 @@ def rendered_outputs(package):
     for kind, name in NAMES.items():
         folder = ROOT / 'skills' / name
         for resource in ('assets/template.html', 'assets/styles.css', 'assets/diagram.js',
-                         'assets/controls.js', 'assets/ginylil.png', 'references/authoring.md'):
+                         'assets/controls.js', 'assets/ginylil.png', 'references/authoring.md',
+                         'references/class-camera.md'):
             result[folder / resource] = (CANONICAL / resource).read_bytes()
+        for resource in (CANONICAL / 'assets/class-camera').rglob('*'):
+            if resource.is_file():
+                result[folder / resource.relative_to(CANONICAL)] = resource.read_bytes()
         model = CANONICAL / f'assets/examples/{kind}.json'
         result[folder / 'assets/example.json'] = model.read_bytes()
         result[ROOT / f'examples/dynamic-umls/{kind}.html'] = renderer.render(
@@ -54,7 +58,7 @@ def rendered_outputs(package):
         'class': 'Ownership, cardinality and specialization.', 'flowchart': 'A vertical decision path, side retry rail and nested repair flow.',
         'state': 'Events, guards and an order lifecycle.', 'activity': 'Concurrent branches with a fork and join.',
         'component': 'Repository boundaries and dependencies.'}
-    titles = {'sequence':'The three-party sign-in','class':'An order, made explicit',
+    titles = {'sequence':'The three-party sign-in','class':'An order, across three diagrams',
         'flowchart':'Is this change ready?','state':'The life of an order',
         'activity':'Two checks, one dispatch','component':'One source, three agents'}
     # Simple inline thumbnails convey the shape of each diagram without fetching

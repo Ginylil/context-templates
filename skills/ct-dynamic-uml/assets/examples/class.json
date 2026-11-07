@@ -1,133 +1,1349 @@
 {
   "type": "class",
-  "title": "An order, made explicit",
-  "lede": "Explore ownership, cardinality, and specialization in a small commerce model.",
+  "title": "An order, across three diagrams",
+  "lede": "Explore 48 classes with a moving focus window and three linked views of an order.",
   "kicker": "Dynamic UMLs / class",
-  "width": 1000,
-  "height": 560,
+  "width": 2700,
+  "height": 1300,
   "nodes": [
-    {
-      "id": "customer",
-      "label": "Customer",
-      "kind": "class",
-      "x": 170,
-      "y": 115,
-      "detail": "A person who places orders. This model allows a customer with no orders.",
-      "w": 240,
-      "fields": [
-        "- id: UUID",
-        "- email: String"
-      ],
-      "methods": [
-        "+ placeOrder(): Order"
-      ]
-    },
     {
       "id": "order",
       "label": "Order",
-      "kind": "class",
-      "x": 500,
-      "y": 115,
-      "detail": "Owns its line items; payment is modeled separately.",
-      "w": 240,
+      "domain": "shared",
       "fields": [
-        "- id: UUID",
-        "- status: OrderStatus"
+        "\u2212 id: UUID",
+        "\u2212 status: Status"
       ],
       "methods": [
-        "+ total(): Money"
-      ]
+        "+ total()"
+      ],
+      "detail": "A shared order identity appears in three linked diagrams. Its 27 direct relationships are divided by subject; this is a reading aid, not an endorsement of a highly coupled domain model.",
+      "kind": "class",
+      "x": 140,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "customer",
+      "label": "Customer",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Customer in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 420,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "cart",
+      "label": "Cart",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Cart in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 700,
+      "y": 100,
+      "w": 208
     },
     {
       "id": "item",
       "label": "LineItem",
-      "kind": "class",
-      "x": 830,
-      "y": 115,
-      "detail": "A snapshot of a purchased item. Owned by exactly one order.",
-      "w": 240,
+      "domain": "purchase",
       "fields": [
-        "- quantity: Integer",
-        "- price: Money"
+        "\u2212 id: UUID"
       ],
       "methods": [
-        "+ subtotal(): Money"
-      ]
+        "+ inspect()"
+      ],
+      "detail": "LineItem in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 980,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "product",
+      "label": "Product",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Product in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1260,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "price",
+      "label": "Price",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Price in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1540,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "discount",
+      "label": "Discount",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Discount in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1820,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "tax",
+      "label": "Tax",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Tax in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 2100,
+      "y": 100,
+      "w": 208
+    },
+    {
+      "id": "invoice",
+      "label": "Invoice",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Invoice in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 140,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "subscription",
+      "label": "Subscription",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Subscription in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 420,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "customer-profile",
+      "label": "CustomerProfile",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "CustomerProfile in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 700,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "cart-item",
+      "label": "CartItem",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "CartItem in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 980,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "product-variant",
+      "label": "ProductVariant",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "ProductVariant in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1260,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "category",
+      "label": "Category",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Category in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1540,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "catalog",
+      "label": "Catalog",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Catalog in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1820,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "review",
+      "label": "Review",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Review in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 2100,
+      "y": 290,
+      "w": 208
+    },
+    {
+      "id": "coupon",
+      "label": "Coupon",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Coupon in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 140,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "money",
+      "label": "Money",
+      "domain": "purchase",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Money in the purchase & items diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 420,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "shipment",
+      "label": "Shipment",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Shipment in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 700,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "delivery",
+      "label": "Delivery",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Delivery in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 980,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "address",
+      "label": "Address",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Address in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1260,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "warehouse",
+      "label": "Warehouse",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Warehouse in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1540,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "inventory",
+      "label": "Inventory",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Inventory in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1820,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "reservation",
+      "label": "Reservation",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Reservation in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 2100,
+      "y": 480,
+      "w": 208
+    },
+    {
+      "id": "package",
+      "label": "Package",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Package in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 140,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "carrier",
+      "label": "Carrier",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Carrier in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 420,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "tracking-event",
+      "label": "TrackingEvent",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "TrackingEvent in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 700,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "stock-movement",
+      "label": "StockMovement",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "StockMovement in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 980,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "supplier",
+      "label": "Supplier",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Supplier in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1260,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "purchase-order",
+      "label": "PurchaseOrder",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "PurchaseOrder in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1540,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "location",
+      "label": "Location",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Location in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1820,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "stock-count",
+      "label": "StockCount",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "StockCount in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 2100,
+      "y": 670,
+      "w": 208
+    },
+    {
+      "id": "return-shipment",
+      "label": "ReturnShipment",
+      "domain": "fulfilment",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "ReturnShipment in the fulfilment & stock diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 140,
+      "y": 860,
+      "w": 208
     },
     {
       "id": "payment",
       "label": "Payment",
-      "kind": "class",
-      "x": 500,
-      "y": 420,
-      "detail": "Base payment record. Zero or one payment is associated with an order in this simplified model.",
-      "w": 240,
+      "domain": "settlement",
       "fields": [
-        "- amount: Money",
-        "- status: PaymentStatus"
+        "\u2212 id: UUID"
       ],
       "methods": [
-        "+ authorize(): Result"
-      ]
+        "+ inspect()"
+      ],
+      "detail": "Payment in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 420,
+      "y": 860,
+      "w": 208
     },
     {
       "id": "card",
       "label": "CardPayment",
-      "kind": "class",
-      "x": 830,
-      "y": 420,
-      "detail": "A specialized Payment handled through an external processor. No card secrets are modeled.",
-      "w": 240,
+      "domain": "settlement",
       "fields": [
-        "- processorRef: String"
+        "\u2212 id: UUID"
       ],
       "methods": [
-        "+ authorize(): Result"
-      ]
+        "+ inspect()"
+      ],
+      "detail": "CardPayment in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 700,
+      "y": 860,
+      "w": 208
+    },
+    {
+      "id": "wallet-payment",
+      "label": "WalletPayment",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "WalletPayment in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 980,
+      "y": 860,
+      "w": 208
+    },
+    {
+      "id": "refund",
+      "label": "Refund",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Refund in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1260,
+      "y": 860,
+      "w": 208
+    },
+    {
+      "id": "receipt",
+      "label": "Receipt",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Receipt in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1540,
+      "y": 860,
+      "w": 208
+    },
+    {
+      "id": "payment-attempt",
+      "label": "PaymentAttempt",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "PaymentAttempt in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1820,
+      "y": 860,
+      "w": 208
+    },
+    {
+      "id": "fraud-review",
+      "label": "FraudReview",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "FraudReview in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 2100,
+      "y": 860,
+      "w": 208
+    },
+    {
+      "id": "chargeback",
+      "label": "Chargeback",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Chargeback in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 140,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "settlement",
+      "label": "Settlement",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Settlement in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 420,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "payment-method",
+      "label": "PaymentMethod",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "PaymentMethod in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 700,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "transaction",
+      "label": "Transaction",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Transaction in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 980,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "ledger-entry",
+      "label": "LedgerEntry",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "LedgerEntry in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1260,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "account",
+      "label": "Account",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Account in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1540,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "payout",
+      "label": "Payout",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Payout in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 1820,
+      "y": 1050,
+      "w": 208
+    },
+    {
+      "id": "dispute",
+      "label": "Dispute",
+      "domain": "settlement",
+      "fields": [
+        "\u2212 id: UUID"
+      ],
+      "methods": [
+        "+ inspect()"
+      ],
+      "detail": "Dispute in the payment & settlement diagram. Its minimal members are illustrative, not extracted from production code.",
+      "kind": "class",
+      "x": 2100,
+      "y": 1050,
+      "w": 208
     }
   ],
   "edges": [
     {
-      "id": "places",
-      "from": "customer",
-      "to": "order",
+      "id": "order-customer",
+      "from": "order",
+      "to": "customer",
       "label": "places",
+      "view": "purchase",
       "kind": "association",
-      "detail": "One customer can place zero or more orders; an order belongs to one customer.",
-      "sourceMultiplicity": "1",
-      "targetMultiplicity": "0..*"
+      "detail": "order places customer. Association in a synthetic teaching model; cardinality is deliberately unspecified."
     },
     {
-      "id": "owns",
+      "id": "order-cart",
+      "from": "order",
+      "to": "cart",
+      "label": "starts from",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order starts from cart. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-item",
       "from": "order",
       "to": "item",
       "label": "contains",
+      "view": "purchase",
       "kind": "composition",
-      "detail": "The filled diamond at Order denotes ownership. Each order has one or more line items.",
+      "detail": "Composition: the filled diamond belongs at Order, the whole.",
       "sourceMultiplicity": "1",
       "targetMultiplicity": "1..*"
     },
     {
-      "id": "paid-by",
+      "id": "order-product",
+      "from": "order",
+      "to": "product",
+      "label": "references",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order references product. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-price",
+      "from": "order",
+      "to": "price",
+      "label": "uses",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order uses price. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-discount",
+      "from": "order",
+      "to": "discount",
+      "label": "applies",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order applies discount. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-tax",
+      "from": "order",
+      "to": "tax",
+      "label": "calculates",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order calculates tax. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-invoice",
+      "from": "order",
+      "to": "invoice",
+      "label": "documents",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order documents invoice. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-subscription",
+      "from": "order",
+      "to": "subscription",
+      "label": "renews",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "order renews subscription. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "customer-customer-profile",
+      "from": "customer",
+      "to": "customer-profile",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "customer relates to customer-profile. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "cart-cart-item",
+      "from": "cart",
+      "to": "cart-item",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "cart relates to cart-item. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "item-product-variant",
+      "from": "item",
+      "to": "product-variant",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "line-item relates to product-variant. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "product-category",
+      "from": "product",
+      "to": "category",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "product relates to category. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "price-catalog",
+      "from": "price",
+      "to": "catalog",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "price relates to catalog. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "discount-review",
+      "from": "discount",
+      "to": "review",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "discount relates to review. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "tax-coupon",
+      "from": "tax",
+      "to": "coupon",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "tax relates to coupon. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "invoice-money",
+      "from": "invoice",
+      "to": "money",
+      "label": "relates to",
+      "view": "purchase",
+      "kind": "association",
+      "detail": "invoice relates to money. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-shipment",
+      "from": "order",
+      "to": "shipment",
+      "label": "dispatches",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order dispatches shipment. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-delivery",
+      "from": "order",
+      "to": "delivery",
+      "label": "delivers to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order delivers to delivery. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-address",
+      "from": "order",
+      "to": "address",
+      "label": "ships to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order ships to address. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-warehouse",
+      "from": "order",
+      "to": "warehouse",
+      "label": "fulfilled by",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order fulfilled by warehouse. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-inventory",
+      "from": "order",
+      "to": "inventory",
+      "label": "checks",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order checks inventory. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-reservation",
+      "from": "order",
+      "to": "reservation",
+      "label": "reserves",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order reserves reservation. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-package",
+      "from": "order",
+      "to": "package",
+      "label": "packs",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order packs package. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-carrier",
+      "from": "order",
+      "to": "carrier",
+      "label": "carried by",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order carried by carrier. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-tracking-event",
+      "from": "order",
+      "to": "tracking-event",
+      "label": "tracks",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "order tracks tracking-event. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "shipment-stock-movement",
+      "from": "shipment",
+      "to": "stock-movement",
+      "label": "relates to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "shipment relates to stock-movement. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "delivery-supplier",
+      "from": "delivery",
+      "to": "supplier",
+      "label": "relates to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "delivery relates to supplier. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "address-purchase-order",
+      "from": "address",
+      "to": "purchase-order",
+      "label": "relates to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "address relates to purchase-order. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "warehouse-location",
+      "from": "warehouse",
+      "to": "location",
+      "label": "relates to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "warehouse relates to location. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "inventory-stock-count",
+      "from": "inventory",
+      "to": "stock-count",
+      "label": "relates to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "inventory relates to stock-count. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "reservation-return-shipment",
+      "from": "reservation",
+      "to": "return-shipment",
+      "label": "relates to",
+      "view": "fulfilment",
+      "kind": "association",
+      "detail": "reservation relates to return-shipment. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-payment",
       "from": "order",
       "to": "payment",
       "label": "paid by",
+      "view": "settlement",
       "kind": "association",
-      "detail": "An order can be unpaid. This example permits at most one payment record.",
-      "sourceMultiplicity": "1",
-      "targetMultiplicity": "0..1",
-      "labelAt": {
-        "x": 565,
-        "y": 280
-      }
+      "detail": "order paid by payment. Association in a synthetic teaching model; cardinality is deliberately unspecified."
     },
     {
-      "id": "specializes",
+      "id": "order-card",
+      "from": "order",
+      "to": "card",
+      "label": "uses card",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order uses card card-payment. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-wallet-payment",
+      "from": "order",
+      "to": "wallet-payment",
+      "label": "uses wallet",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order uses wallet wallet-payment. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-refund",
+      "from": "order",
+      "to": "refund",
+      "label": "refunded by",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order refunded by refund. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-receipt",
+      "from": "order",
+      "to": "receipt",
+      "label": "receipted by",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order receipted by receipt. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-payment-attempt",
+      "from": "order",
+      "to": "payment-attempt",
+      "label": "attempts",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order attempts payment-attempt. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-fraud-review",
+      "from": "order",
+      "to": "fraud-review",
+      "label": "reviewed by",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order reviewed by fraud-review. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-chargeback",
+      "from": "order",
+      "to": "chargeback",
+      "label": "disputed by",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order disputed by chargeback. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "order-settlement",
+      "from": "order",
+      "to": "settlement",
+      "label": "settled by",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "order settled by settlement. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "payment-payment-method",
+      "from": "payment",
+      "to": "payment-method",
+      "label": "relates to",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "payment relates to payment-method. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "card-transaction",
+      "from": "card",
+      "to": "transaction",
+      "label": "relates to",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "card-payment relates to transaction. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "wallet-payment-ledger-entry",
+      "from": "wallet-payment",
+      "to": "ledger-entry",
+      "label": "relates to",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "wallet-payment relates to ledger-entry. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "refund-account",
+      "from": "refund",
+      "to": "account",
+      "label": "relates to",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "refund relates to account. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "receipt-payout",
+      "from": "receipt",
+      "to": "payout",
+      "label": "relates to",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "receipt relates to payout. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "payment-attempt-dispute",
+      "from": "payment-attempt",
+      "to": "dispute",
+      "label": "relates to",
+      "view": "settlement",
+      "kind": "association",
+      "detail": "payment-attempt relates to dispute. Association in a synthetic teaching model; cardinality is deliberately unspecified."
+    },
+    {
+      "id": "card-payment",
       "from": "card",
       "to": "payment",
       "label": "specializes",
+      "view": "settlement",
       "kind": "inheritance",
-      "detail": "The hollow triangle points to Payment, the general type. CardPayment specializes that type."
+      "detail": "Generalization: the hollow triangle points to Payment, the parent."
+    },
+    {
+      "id": "wallet-payment-payment",
+      "from": "wallet-payment",
+      "to": "payment",
+      "label": "specializes",
+      "view": "settlement",
+      "kind": "inheritance",
+      "detail": "Generalization: the hollow triangle points to Payment, the parent."
+    }
+  ],
+  "views": [
+    {
+      "id": "purchase",
+      "label": "Purchase & items",
+      "nodes": [
+        "order",
+        "customer",
+        "cart",
+        "item",
+        "product",
+        "price",
+        "discount",
+        "tax",
+        "invoice",
+        "subscription",
+        "customer-profile",
+        "cart-item",
+        "product-variant",
+        "category",
+        "catalog",
+        "review",
+        "coupon",
+        "money"
+      ],
+      "edges": [
+        "order-customer",
+        "order-cart",
+        "order-item",
+        "order-product",
+        "order-price",
+        "order-discount",
+        "order-tax",
+        "order-invoice",
+        "order-subscription",
+        "customer-customer-profile",
+        "cart-cart-item",
+        "item-product-variant",
+        "product-category",
+        "price-catalog",
+        "discount-review",
+        "tax-coupon",
+        "invoice-money"
+      ]
+    },
+    {
+      "id": "fulfilment",
+      "label": "Fulfilment & stock",
+      "nodes": [
+        "order",
+        "shipment",
+        "delivery",
+        "address",
+        "warehouse",
+        "inventory",
+        "reservation",
+        "package",
+        "carrier",
+        "tracking-event",
+        "stock-movement",
+        "supplier",
+        "purchase-order",
+        "location",
+        "stock-count",
+        "return-shipment"
+      ],
+      "edges": [
+        "order-shipment",
+        "order-delivery",
+        "order-address",
+        "order-warehouse",
+        "order-inventory",
+        "order-reservation",
+        "order-package",
+        "order-carrier",
+        "order-tracking-event",
+        "shipment-stock-movement",
+        "delivery-supplier",
+        "address-purchase-order",
+        "warehouse-location",
+        "inventory-stock-count",
+        "reservation-return-shipment"
+      ]
+    },
+    {
+      "id": "settlement",
+      "label": "Payment & settlement",
+      "nodes": [
+        "order",
+        "payment",
+        "card",
+        "wallet-payment",
+        "refund",
+        "receipt",
+        "payment-attempt",
+        "fraud-review",
+        "chargeback",
+        "settlement",
+        "payment-method",
+        "transaction",
+        "ledger-entry",
+        "account",
+        "payout",
+        "dispute"
+      ],
+      "edges": [
+        "order-payment",
+        "order-card",
+        "order-wallet-payment",
+        "order-refund",
+        "order-receipt",
+        "order-payment-attempt",
+        "order-fraud-review",
+        "order-chargeback",
+        "order-settlement",
+        "payment-payment-method",
+        "card-transaction",
+        "wallet-payment-ledger-entry",
+        "refund-account",
+        "receipt-payout",
+        "payment-attempt-dispute",
+        "card-payment",
+        "wallet-payment-payment"
+      ]
     }
   ],
   "scenarios": [
@@ -136,56 +1352,179 @@
       "label": "Domain structure",
       "steps": [
         {
-          "title": "A customer places orders",
-          "body": "Read cardinality at each end: one customer for an order, and zero or more orders for a customer.",
+          "view": "purchase",
+          "focus": "order",
+          "title": "Order anchors the purchase.",
+          "body": "Its nine direct neighbors move closer. Every relationship in this neighborhood remains visible.",
+          "nodes": [
+            "order",
+            "customer",
+            "cart",
+            "item",
+            "product",
+            "price",
+            "discount",
+            "tax",
+            "invoice",
+            "subscription"
+          ],
+          "edges": [
+            "order-customer",
+            "order-cart",
+            "order-item",
+            "order-product",
+            "order-price",
+            "order-discount",
+            "order-tax",
+            "order-invoice",
+            "order-subscription"
+          ]
+        },
+        {
+          "view": "purchase",
+          "focus": "product",
+          "title": "Travel to Product.",
+          "body": "The camera follows the class. Product\u2019s direct neighbors gather around it; unrelated classes recede.",
+          "nodes": [
+            "product",
+            "order",
+            "category"
+          ],
+          "edges": [
+            "order-product",
+            "product-category"
+          ]
+        },
+        {
+          "view": "purchase",
+          "focus": "customer",
+          "title": "A smaller neighborhood, at reading size.",
+          "body": "The focus window adapts to the local relationships instead of shrinking the whole model to fit.",
           "nodes": [
             "customer",
-            "order"
+            "order",
+            "customer-profile"
           ],
           "edges": [
-            "places"
+            "order-customer",
+            "customer-customer-profile"
           ]
         },
         {
-          "title": "Line items belong to the order",
-          "body": "Composition expresses ownership. The filled diamond sits at the whole, Order.",
+          "view": "fulfilment",
+          "focus": "order",
+          "title": "The same Order, another diagram.",
+          "body": "Order has 27 direct relationships overall. They are split into three linked diagrams, each below the limit of 20.",
           "nodes": [
             "order",
-            "item"
+            "shipment",
+            "delivery",
+            "address",
+            "warehouse",
+            "inventory",
+            "reservation",
+            "package",
+            "carrier",
+            "tracking-event"
           ],
           "edges": [
-            "owns"
+            "order-shipment",
+            "order-delivery",
+            "order-address",
+            "order-warehouse",
+            "order-inventory",
+            "order-reservation",
+            "order-package",
+            "order-carrier",
+            "order-tracking-event"
           ]
         },
         {
-          "title": "Payment can be absent",
-          "body": "An order is associated with zero or one payment. The model does not pretend all orders are paid.",
+          "view": "fulfilment",
+          "focus": "warehouse",
+          "title": "Follow Warehouse into stock.",
+          "body": "Distance in the original map does not prevent a direct neighbor from joining the focused neighborhood.",
+          "nodes": [
+            "warehouse",
+            "order",
+            "location"
+          ],
+          "edges": [
+            "order-warehouse",
+            "warehouse-location"
+          ]
+        },
+        {
+          "view": "fulfilment",
+          "focus": "shipment",
+          "title": "Follow a relationship to Shipment.",
+          "body": "Zoom out or drag at any moment. That pauses the tour and leaves the camera under your control.",
+          "nodes": [
+            "shipment",
+            "order",
+            "stock-movement"
+          ],
+          "edges": [
+            "order-shipment",
+            "shipment-stock-movement"
+          ]
+        },
+        {
+          "view": "settlement",
+          "focus": "order",
+          "title": "Order enters the settlement view.",
+          "body": "The shared class keeps its identity. A linked view changes the reading scope, never the underlying relationships.",
           "nodes": [
             "order",
-            "payment"
-          ],
-          "edges": [
-            "paid-by"
-          ]
-        },
-        {
-          "title": "A card payment is a payment",
-          "body": "Generalization points from the specialized class to its parent. The walkthrough reveals structure; it is not object execution.",
-          "nodes": [
+            "payment",
             "card",
-            "payment"
+            "wallet-payment",
+            "refund",
+            "receipt",
+            "payment-attempt",
+            "fraud-review",
+            "chargeback",
+            "settlement"
           ],
           "edges": [
-            "specializes"
+            "order-payment",
+            "order-card",
+            "order-wallet-payment",
+            "order-refund",
+            "order-receipt",
+            "order-payment-attempt",
+            "order-fraud-review",
+            "order-chargeback",
+            "order-settlement"
+          ]
+        },
+        {
+          "view": "settlement",
+          "focus": "payment",
+          "title": "Payment has specializations.",
+          "body": "Hollow triangles still point to Payment. Repositioning preserves UML direction, ownership and relationship meaning.",
+          "nodes": [
+            "payment",
+            "order",
+            "payment-method",
+            "card",
+            "wallet-payment"
+          ],
+          "edges": [
+            "order-payment",
+            "payment-payment-method",
+            "card-payment",
+            "wallet-payment-payment"
           ]
         }
       ]
     }
   ],
   "assumptions": [
-    "Illustrative domain model; not generated from a production schema.",
-    "One payment per order and owned line-item snapshots are deliberate simplifications; retries, refunds and split payments require a richer model.",
-    "UML subset: class compartments, association, composition and generalization. \u201c+\u201d is public and \u201c\u2212\u201d is private visibility."
+    "Illustrative commerce model; not extracted from a production schema.",
+    "Order has 27 relationships across three subject-based views. Each view has at most 20 relationships per class. This is a readability policy, not a UML rule or an architectural refactoring.",
+    "Members and cardinalities are deliberately minimal; inspector details preserve every supplied member.",
+    "Moving positions express reading focus, not object execution or changed relationships."
   ],
   "legend": [
     {
@@ -204,5 +1543,5 @@
       "href": "https://www.omg.org/spec/UML/2.5.1"
     }
   ],
-  "evidence": "Evidence: illustrative example; no application repository was supplied."
+  "evidence": "Evidence: synthetic teaching model. No application repository was supplied."
 }

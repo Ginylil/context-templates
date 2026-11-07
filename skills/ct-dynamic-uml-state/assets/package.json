@@ -12,6 +12,10 @@
     {
       "source": "shared/dynamic-uml/validate_state.py",
       "destination": "scripts/validate_state.py"
+    },
+    {
+      "source": "shared/dynamic-uml/class_camera.py",
+      "destination": "scripts/class_camera.py"
     }
   ]
 }

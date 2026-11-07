@@ -45,26 +45,28 @@ unchanged as a data URL. Its transparent background remains visible; use a quiet
   See the authoring guide for the numeric geometry policy.
 - Play is opt-in. Previous/next, reset, speed, overview, scenario selection and
   direct step navigation share one model. Stop at the end and when the page is
-  hidden. Opening details saves the playing/paused state and remaining step
-  duration, then pauses. Closing (button or Escape) resumes only a previously
+  hidden. In the five non-class viewers, opening details saves the playing/paused
+  state and remaining step duration, then pauses. Closing (button or Escape) resumes only a previously
   playing walkthrough from the same step. Reading a modal in another tab must
-  not erase the saved intent; timers never run in a hidden page.
+  not erase the saved intent; timers never run in a hidden page. Class details
+  keep playback paused until the reader explicitly resumes.
   Structural diagram playback explains relationships, not runtime events.
 - Make nodes and relationships keyboard-selectable with meaningful labels and
   a text inspector. Announce step changes. Keep keyboard focus on direct step
   buttons when their active state changes. Ignore global shortcuts in controls.
-- Readers can always zoom: −/+ buttons, `+`/`-`/`0` keys and Ctrl/Cmd + wheel
+- In the five non-class viewers, readers can always zoom: −/+ buttons, `+`/`-`/`0` keys and Ctrl/Cmd + wheel
   (pinch) scale the SVG's pixel width from 50% to 300% of Fit, anchored at the
   pointer or canvas center. Height follows the viewBox, so zoom never adds an
-  inner vertical scrollport. Focus (default, all types except sequence) zooms each
+  inner vertical scrollport. Focus (default, except sequence) zooms each
   step up to 200% to frame its active elements plus directly connected nodes and
   relationships, then centers them; steps wider than the canvas still follow their
   destination. Manual zoom disables Focus and persists across steps; Fit shows the
   whole diagram; Reset and nested views restore the default. Sequence keeps its
   density layout and offers manual zoom only; headers scale with the lifelines.
-- Honor reduced motion and avoid animated layout/scrolling. On mobile, keep the
-  page within the viewport width. The document owns vertical scrolling for all
-  six types; diagram canvases expand to their content height and only pan
+- Honor reduced motion: class cameras and cards change immediately; other viewers
+  avoid animated layout/scrolling. On mobile, keep the page within the viewport
+  width. Outside the class viewer, the document owns vertical scrolling;
+  diagram canvases expand to their content height and only pan
   horizontally when needed. Do not add a height-limited inner vertical scrollport.
   Follow active messages through document scrolling, accounting for sticky
   controls and participant headers. Keep the sequence header strip outside the
@@ -109,6 +111,21 @@ generated walkthroughs remain standalone offline HTML and are exempt.
 
 ## Proof path
 
+The canonical class camera lives under `skills/ct-dynamic-uml/assets/class-camera/`.
+Its focus window is 5 × 5 on desktop,
+3 × 5 on portrait mobile and 5 × 3 on landscape mobile, with every direct neighbor
+retained. It decomposes classes above twenty relationships into linked diagram
+views, preserving the union of every class and relationship. The camera uses a
+bounded two-dimensional viewport with drag/two-finger pan and wheel/pinch zoom.
+Its explicit scroll mode selects mouse zoom or trackpad pan. Manual pan/zoom
+pauses following; explicit resume restores it. View map restores source positions.
+Cards preview one attribute and operation; Class details retains all members.
+Read `references/class-camera.md` for the schema and controls. The PR's
+`Class camera demo` workflow produces the offline HTML and rendered gesture proof
+remotely using the same assembled package as the canonical class example.
+The downloadable CI artifact is review proof; production publication and
+physical-device acceptance remain separate.
+
 Run `make check`. Optional `node scripts/check_dynamic_umls.cjs`
 uses an already available Playwright package/browser (no auto-install). Override
 module resolution with `DYNAMIC_UMLS_PLAYWRIGHT` and browser executable with
@@ -132,10 +149,11 @@ Participant strips follow the native
 [CSS sticky positioning rules](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/position);
 an overflowing ancestor would make them stick to that container instead of the page.
 The scenario menu keyboard/below-trigger checks and subprocess drill-down/return
-checks supplement these regressions. The zoom check uses the class example to
-verify Focus framing on every step, manual zoom steps and limits, keyboard
-shortcuts, Fit, Overview, mobile destination follow without page overflow, and
-sequence header/lifeline width sync while zoomed. State label checks compare label centers
+checks supplement these regressions. The class camera checks verify centered
+focus and visible neighbors, rendered label/card separation and attached endpoints,
+linked-view coverage, manual takeover, mouse/touch gestures, responsive geometry,
+keyboard controls, reduced motion and old single-view JSON compatibility.
+The zoom check verifies sequence header/lifeline width sync while zoomed. State label checks compare label centers
 against the actual SVG connector path and verify readable mobile sizing;
 matched state before/after captures use 1440×960. Short-window state checks at
 1250×673 verify width fit, the absence of inner vertical scrolling, page auto-follow,

@@ -29,8 +29,12 @@ answered by supplied context. Use this skill's `scripts/render.py` and
 
 Deliver an offline HTML page with playback, step navigation, clickable element
 inspector, overview and scenarios when meaningful. Show details in an info modal
-by default; opening pauses and closing restores the prior playback state. Offer
-an optional sidebar that uses diagram width. Follow active messages in the visible
+by default. Class views keep playback paused until explicit resume; other views
+restore prior playback on close and offer an optional sidebar. For class diagrams,
+read `references/class-camera.md`: center the focused class, bring all direct
+neighbors closer, and split above twenty relationships into complete linked views.
+Manual drag/two-finger pan and wheel/pinch zoom pause the tour.
+Follow active messages in the visible
 viewport and keep sequence participant headers visible. For flowcharts, limit each view to seven nodes, use vertical forward paths and
 outer side loops, and compose larger flows with clickable subprocesses. Run the
 bundled `scripts/validate_flowchart.py`; rendering also enforces its checks.
