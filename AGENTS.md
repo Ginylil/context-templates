@@ -23,7 +23,8 @@
   scripts. Agent-specific UI metadata belongs in `agents/`.
 - New skill names use `ct-<department>-<expertise>` with a concrete action and
   subject. Dynamic UML skills use `ct-dynamic-uml` and `ct-dynamic-uml-<type>`;
-  preserve the existing bootstrap name.
+  the actor-first explorer retains the requested `ct-dynamic-use-case` name.
+  Preserve the existing bootstrap name.
 - `ct-context-templates-update` is the standalone catalog update entrypoint and
   reuses the bootstrap's installer workflow. Update-only requests select existing
   managed installations; they do not imply installing every catalog entry.
@@ -41,7 +42,7 @@
   replacement or automatic pruning.
 - Keep every maintained coding file and packaged script at most 300 physical
   lines, including tests, comments and blanks. Split by responsibility; do not
-  compress code to satisfy the limit. Only the eight generated standalone HTML
+  compress code to satisfy the limit. Only the nine generated standalone HTML
   examples are exempt; their maintained template, CSS and JavaScript are checked.
   `scripts/check_code_size.py` enforces source limits in `make check` and CI;
   payload assembly independently rejects oversized packaged code.
@@ -94,6 +95,9 @@
   remain under `skills/ct-dynamic-uml/`.
   Regenerate focused-skill resources and HTML review examples with `make examples`; never edit their generated copies manually.
   New diagram types must have a concrete interactive example for template review.
+  The use-case explorer owns separate canonical static fragments under
+  `skills/ct-dynamic-uml/assets/use-case/` and helpers under `shared/dynamic-uml/`.
+  Generate its standalone package resources and example with `make examples`.
 
 - Store release helpers are canonical under `shared/lifecycle/`, selected by the
   Apple/Android/manager manifests. Use `make resources` to refresh synthetic example

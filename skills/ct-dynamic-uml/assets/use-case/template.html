@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>__TITLE__</title>
+    <style>
+      __STYLES__
+    </style>
+  </head>
+  <body>
+    <div id="uc-diagram" aria-label="Interactive actor and use case diagram">
+      <header class="d-head">
+        <a class="d-brand" href="https://contexttemplates.com/index.html"
+          ><img src="__LOGO__" alt="Ginylil — Brewing Brilliant Code"
+        /></a>
+        <div>
+          <div class="d-title">__TITLE__</div>
+          <div class="d-sub">__SCOPE__</div>
+        </div>
+        <div class="d-controls">
+          <button
+            class="d-control cursor-interaction"
+            type="button"
+            data-back
+            disabled
+          >
+            ← Back
+          </button>
+          <button
+            class="d-control cursor-interaction"
+            type="button"
+            data-overview
+            aria-pressed="false"
+          >
+            Overview
+          </button>
+        </div>
+      </header>
+      <nav class="d-trace" aria-label="Selected use case trace"></nav>
+      <div class="d-context">
+        <h2>Choose an actor</h2>
+        <small>Actors → subjects → use cases → scenarios</small>
+      </div>
+      <div
+        class="d-canvas"
+        aria-label="Actors, use cases, and their relationships"
+      >
+        <div class="d-boundaries"></div>
+        <svg class="d-edges" aria-hidden="true">
+          <defs>
+            <marker
+              id="d-arrow"
+              viewBox="0 0 8 8"
+              refX="7"
+              refY="4"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto"
+            >
+              <path class="d-arrow" d="M0 0 L8 4 L0 8 Z"></path>
+            </marker>
+            <marker
+              id="d-arrow-muted"
+              viewBox="0 0 8 8"
+              refX="7"
+              refY="4"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto"
+            >
+              <path class="d-arrow-muted" d="M0 0 L8 4 L0 8 Z"></path>
+            </marker>
+          </defs>
+          <g class="d-links"></g>
+        </svg>
+        <div class="d-nodes"></div>
+      </div>
+      <div class="d-detail" hidden></div>
+      <footer class="d-foot">
+        <div class="d-legend">Actor → goal · Grouped by subject</div>
+        <a class="d-brand" href="https://contexttemplates.com/index.html"
+          ><img src="__LOGO__" alt="Ginylil" /><span
+            >contexttemplates.com ↗</span
+          ></a
+        >
+      </footer>
+      <div class="d-live" aria-live="polite"></div>
+      <section class="d-support" aria-label="Scope and provenance">
+        __PROVENANCE__
+      </section>
+    </div>
+    <script id="use-case-model" type="application/json">
+      __MODEL__
+    </script>
+    <script>
+      (() => {
+        __RUNTIME__;
+      })();
+    </script>
+  </body>
+</html>

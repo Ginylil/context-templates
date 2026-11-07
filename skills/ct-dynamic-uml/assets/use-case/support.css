@@ -1,0 +1,162 @@
+#uc-diagram .d-detail {
+  padding: 14px 22px 18px;
+  border-top: 1px solid var(--d-soft);
+  background: var(--d-paper);
+}
+#uc-diagram .d-detail-title {
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+#uc-diagram .d-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 22px;
+  font-size: 12px;
+}
+#uc-diagram .d-facts div {
+  min-width: 0;
+}
+#uc-diagram .d-facts span {
+  color: var(--d-muted);
+  display: block;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+#uc-diagram .d-foot {
+  border-top: 1px solid var(--d-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 22px;
+  color: var(--d-muted);
+  font-size: 11px;
+}
+#uc-diagram .d-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+#uc-diagram .d-linekey {
+  display: inline-block;
+  width: 23px;
+  border-top: 1px solid var(--d-muted);
+  vertical-align: middle;
+  margin-right: 5px;
+}
+#uc-diagram .d-dashkey {
+  border-top-style: dashed;
+}
+#uc-diagram .d-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (max-width: 520px) {
+  #uc-diagram .d-head {
+    padding: 14px 16px;
+    padding-right: 90px;
+  }
+  #uc-diagram .d-controls {
+    margin-left: 0;
+  }
+  #uc-diagram .d-context {
+    padding: 15px 14px 5px;
+  }
+  #uc-diagram .d-trace {
+    padding: 8px 10px;
+  }
+  #uc-diagram .d-actor {
+    width: 92px;
+  }
+  #uc-diagram .d-actor-name {
+    font-size: 11px;
+  }
+  #uc-diagram .d-facts {
+    grid-template-columns: 1fr;
+  }
+  #uc-diagram .d-detail {
+    padding: 14px;
+  }
+  #uc-diagram .d-foot {
+    padding: 12px 14px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #uc-diagram * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+@media (pointer: coarse) {
+  #uc-diagram .d-control,
+  #uc-diagram .d-trace button,
+  #uc-diagram .d-boundary-label {
+    min-height: 44px;
+  }
+}
+
+body {
+  margin: 0;
+  background: #191b19;
+  color: #eeeade;
+  font-family: system-ui, sans-serif;
+}
+#uc-diagram {
+  border: 0;
+  border-radius: 0;
+  max-width: 1400px;
+  margin: auto;
+}
+#uc-diagram .d-brand img {
+  width: 40px;
+  height: 40px;
+  opacity: 0.8;
+  object-fit: contain;
+}
+#uc-diagram .d-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+#uc-diagram .d-foot .d-brand img {
+  width: 32px;
+  height: 32px;
+}
+#uc-diagram .d-title,
+#uc-diagram h2 {
+  font-family: Georgia, serif;
+}
+#uc-diagram .d-support {
+  padding: 20px 22px;
+  border-top: 1px solid var(--d-soft);
+  font-size: 12px;
+}
+#uc-diagram .d-support h3 {
+  font-size: 14px;
+  font-weight: 500;
+}
+#uc-diagram .d-support a {
+  color: var(--d-active);
+}
+@media (max-width: 520px) {
+  #uc-diagram .d-brand img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+#uc-diagram .d-detail {
+  --d-text: #28352d;
+  --d-muted: #657169;
+  --d-paper: #f2eee5;
+  --d-line: #cbd3cc;
+  background: var(--d-paper);
+  color: var(--d-text);
+}

@@ -1,0 +1,1139 @@
+{
+  "schema_version": 1,
+  "title": "Teamspace use cases",
+  "scope": "Synthetic workspace: administrator, member, and visitor goals.",
+  "assumptions": [
+    "Illustrative model; no application repository was analyzed.",
+    "Actor arrows show triggering goals; numbered scenario flows show ordered behavior.",
+    "Error handling stays inside scenarios and does not imply UML extend relationships."
+  ],
+  "sources": [],
+  "actors": {
+    "admin": {
+      "name": "Administrator",
+      "subjects": [
+        "users",
+        "workspace",
+        "security"
+      ]
+    },
+    "member": {
+      "name": "Member",
+      "subjects": [
+        "projects",
+        "personal",
+        "security"
+      ]
+    },
+    "visitor": {
+      "name": "Visitor",
+      "subjects": [
+        "discover",
+        "authentication"
+      ]
+    }
+  },
+  "subjects": {
+    "users": {
+      "name": "User management",
+      "cases": [
+        "invite",
+        "roles",
+        "suspend"
+      ]
+    },
+    "workspace": {
+      "name": "Workspace settings",
+      "cases": [
+        "rename",
+        "transfer"
+      ]
+    },
+    "security": {
+      "name": "Account & security",
+      "cases": [
+        "login",
+        "password"
+      ]
+    },
+    "projects": {
+      "name": "Projects",
+      "cases": [
+        "create",
+        "open"
+      ]
+    },
+    "personal": {
+      "name": "Personal settings",
+      "cases": [
+        "profile",
+        "notifications"
+      ]
+    },
+    "discover": {
+      "name": "Landing page",
+      "cases": [
+        "pricing",
+        "signup"
+      ]
+    },
+    "authentication": {
+      "name": "Authentication",
+      "cases": [
+        "login",
+        "recover"
+      ]
+    }
+  },
+  "use_cases": {
+    "invite": {
+      "id": "invite",
+      "name": "Invite a user",
+      "trigger": "Choose “Invite user” and submit an email and role.",
+      "pre": "Signed in; permission to manage users.",
+      "success": "A pending invitation is sent; access starts after acceptance.",
+      "parts": [
+        "Validate invitation",
+        "Create pending invitation",
+        "Deliver invitation email"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "New team member",
+          "condition": "Valid email; person has no workspace membership.",
+          "result": "A pending invitation is sent; access starts after acceptance.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "existing",
+          "name": "Already a member",
+          "condition": "The email belongs to a current member.",
+          "result": "Show existing membership; do not create a duplicate invitation.",
+          "category": "alternative",
+          "steps": [
+            "Detect existing membership",
+            "Show existing member"
+          ],
+          "recovery": []
+        },
+        {
+          "id": "invalid",
+          "name": "Invalid email",
+          "condition": "The submitted address fails email validation.",
+          "result": "Show a validation message; keep the invitation form available for correction.",
+          "category": "error",
+          "steps": [
+            "Validate email address",
+            "Show invalid email message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct email and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "delivery",
+          "name": "Email delivery fails",
+          "condition": "The invitation is stored but the email service fails.",
+          "result": "Keep the invitation pending; show that delivery failed.",
+          "category": "error",
+          "steps": [
+            "Create pending invitation",
+            "Detect email delivery failure",
+            "Show delivery status"
+          ],
+          "recovery": [
+            {
+              "label": "Retry email delivery",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry invitation delivery",
+          "condition": "A pending invitation exists; email delivery is available again.",
+          "result": "The invitation email is delivered; membership still requires acceptance.",
+          "category": "recovery",
+          "steps": [
+            "Load pending invitation",
+            "Retry invitation email",
+            "Record successful delivery"
+          ],
+          "recovery": [],
+          "trigger": "Choose Resend for the pending invitation."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "roles": {
+      "id": "roles",
+      "name": "Change a role",
+      "trigger": "Select a member and confirm their new role.",
+      "pre": "Permission to manage users; an eligible member exists.",
+      "success": "The member receives the permissions of the new role.",
+      "parts": [
+        "Validate role change",
+        "Apply permissions",
+        "Record access change"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Eligible member",
+          "condition": "The selected member can receive the target role.",
+          "result": "The member receives the permissions of the new role.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "last-admin",
+          "name": "Last administrator",
+          "condition": "The role change would remove the last administrator.",
+          "result": "Block the change; keep the existing role and explain the restriction.",
+          "category": "error",
+          "steps": [
+            "Validate role change",
+            "Protect last administrator",
+            "Show role restriction"
+          ],
+          "recovery": [
+            {
+              "label": "Choose an eligible member",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "cancel",
+          "name": "Cancel role change",
+          "condition": "The administrator cancels before confirmation.",
+          "result": "Keep the current role.",
+          "category": "alternative",
+          "steps": [
+            "Cancel pending change",
+            "Preserve current permissions"
+          ],
+          "recovery": []
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "suspend": {
+      "id": "suspend",
+      "name": "Suspend access",
+      "trigger": "Select a member and confirm suspension.",
+      "pre": "Permission to manage users; the member can be suspended.",
+      "success": "The selected member’s workspace access is suspended.",
+      "parts": [
+        "Validate suspension",
+        "Suspend membership",
+        "Revoke workspace sessions"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Suspend a member",
+          "condition": "The selected account is eligible for suspension.",
+          "result": "The selected member’s workspace access is suspended.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "protected",
+          "name": "Protected administrator",
+          "condition": "The selected account is the last administrator.",
+          "result": "Block suspension; keep the account active.",
+          "category": "error",
+          "steps": [
+            "Check administrator coverage",
+            "Block suspension",
+            "Explain administrator requirement"
+          ],
+          "recovery": [
+            {
+              "label": "Choose an eligible member",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "cancel",
+          "name": "Cancel suspension",
+          "condition": "The administrator cancels before confirmation.",
+          "result": "Keep the member’s existing access.",
+          "category": "alternative",
+          "steps": [
+            "Cancel suspension",
+            "Preserve membership access"
+          ],
+          "recovery": []
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "rename": {
+      "id": "rename",
+      "name": "Rename workspace",
+      "trigger": "Enter a new workspace name and save.",
+      "pre": "Permission to edit workspace settings.",
+      "success": "The new workspace name is visible to members.",
+      "parts": [
+        "Validate workspace name",
+        "Save workspace name",
+        "Refresh workspace identity"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "The new workspace name is visible to members.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "The new workspace name is visible to members.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Validate workspace name",
+            "Save workspace name",
+            "Refresh workspace identity"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "transfer": {
+      "id": "transfer",
+      "name": "Transfer ownership",
+      "trigger": "Select another administrator and confirm transfer.",
+      "pre": "Current owner; another eligible administrator exists.",
+      "success": "Ownership is transferred to the selected administrator.",
+      "parts": [
+        "Verify current owner",
+        "Validate new owner",
+        "Transfer ownership"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "Ownership is transferred to the selected administrator.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "Ownership is transferred to the selected administrator.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Verify current owner",
+            "Validate new owner",
+            "Transfer ownership"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "login": {
+      "id": "login",
+      "name": "Sign in",
+      "trigger": "Submit account email and password.",
+      "pre": "An existing account.",
+      "success": "An authenticated session opens the appropriate workspace.",
+      "parts": [
+        "Validate credentials",
+        "Create session",
+        "Open workspace"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Password sign-in",
+          "condition": "Valid credentials; two-factor authentication is not required.",
+          "result": "An authenticated session opens the appropriate workspace.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "two-factor",
+          "name": "Two-factor sign-in",
+          "condition": "Valid credentials; two-factor authentication is enabled.",
+          "result": "An authenticated session opens the appropriate workspace.",
+          "category": "alternative",
+          "steps": [
+            "Validate credentials",
+            {
+              "label": "Enter a verification code",
+              "owner": "actor"
+            },
+            "Verify the second factor",
+            "Create workspace session"
+          ],
+          "recovery": []
+        },
+        {
+          "id": "invalid",
+          "name": "Invalid credentials",
+          "condition": "The submitted credentials are incorrect.",
+          "result": "Show a sign-in error; keep the account signed out.",
+          "category": "error",
+          "steps": [
+            "Validate credentials",
+            "Show sign-in error"
+          ],
+          "recovery": [
+            {
+              "label": "Try credentials again",
+              "to": "standard"
+            },
+            {
+              "label": "Recover account",
+              "to": "recovery"
+            }
+          ]
+        },
+        {
+          "id": "recovery",
+          "name": "Forgotten password",
+          "condition": "The person cannot provide their password.",
+          "result": "Show a neutral confirmation; an eligible account receives a recovery link.",
+          "category": "recovery",
+          "steps": [
+            "Accept recovery request",
+            "Show neutral confirmation",
+            "Send recovery link when eligible"
+          ],
+          "recovery": [],
+          "trigger": "Choose Forgot password and submit the account email."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "password": {
+      "id": "password",
+      "name": "Change password",
+      "trigger": "Submit the current password and a new password.",
+      "pre": "Signed in; current password known.",
+      "success": "The account password is changed.",
+      "parts": [
+        "Verify current password",
+        "Validate new password",
+        "Update account password"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "The account password is changed.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "The account password is changed.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Verify current password",
+            "Validate new password",
+            "Update account password"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "create": {
+      "id": "create",
+      "name": "Create a project",
+      "trigger": "Choose “New project” and submit its details.",
+      "pre": "Permission to create projects.",
+      "success": "A new project is available in the workspace.",
+      "parts": [
+        "Validate project details",
+        "Create project",
+        "Assign initial access"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "A new project is available in the workspace.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "A new project is available in the workspace.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Validate project details",
+            "Create project",
+            "Assign initial access"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "open": {
+      "id": "open",
+      "name": "Open a project",
+      "trigger": "Select a project from the project list.",
+      "pre": "The project exists and is visible to the account.",
+      "success": "The project opens with the permitted actions.",
+      "parts": [
+        "Check project access",
+        "Load project",
+        "Show available actions"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "The project opens with the permitted actions.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "The project opens with the permitted actions.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Check project access",
+            "Load project",
+            "Show available actions"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "profile": {
+      "id": "profile",
+      "name": "Edit profile",
+      "trigger": "Change personal details and save.",
+      "pre": "Signed in.",
+      "success": "The profile displays the saved personal details.",
+      "parts": [
+        "Validate profile details",
+        "Save profile",
+        "Refresh profile display"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "The profile displays the saved personal details.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "The profile displays the saved personal details.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Validate profile details",
+            "Save profile",
+            "Refresh profile display"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "notifications": {
+      "id": "notifications",
+      "name": "Set notifications",
+      "trigger": "Choose notification channels and save.",
+      "pre": "Signed in.",
+      "success": "Notification preferences are applied.",
+      "parts": [
+        "Validate preferences",
+        "Save preferences",
+        "Apply delivery settings"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "Notification preferences are applied.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "Notification preferences are applied.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Validate preferences",
+            "Save preferences",
+            "Apply delivery settings"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "pricing": {
+      "id": "pricing",
+      "name": "Compare plans",
+      "trigger": "Open pricing and choose a plan.",
+      "pre": "None.",
+      "success": "A plan is selected for the sign-up process.",
+      "parts": [
+        "Show available plans",
+        "Compare plan features",
+        "Select a plan"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "A plan is selected for the sign-up process.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "A plan is selected for the sign-up process.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Show available plans",
+            "Compare plan features",
+            "Select a plan"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "signup": {
+      "id": "signup",
+      "name": "Create an account",
+      "trigger": "Submit an email address and password.",
+      "pre": "The email address is not already registered.",
+      "success": "The new account is created and its email is verified.",
+      "parts": [
+        "Validate registration",
+        "Create pending account",
+        "Verify email address"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "The new account is created and its email is verified.",
+          "category": "main",
+          "steps": [
+            "Validate registration",
+            "Create pending account",
+            {
+              "label": "Follow the email verification link",
+              "owner": "actor"
+            },
+            "Activate the verified account"
+          ],
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "The new account is created and its email is verified.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Validate registration",
+            "Create pending account",
+            "Verify email address"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    },
+    "recover": {
+      "id": "recover",
+      "name": "Recover account",
+      "trigger": "Request a password recovery link.",
+      "pre": "Access to the account email inbox.",
+      "success": "A valid recovery link allows the account password to be reset.",
+      "parts": [
+        "Accept recovery request",
+        "Deliver recovery link",
+        "Reset password"
+      ],
+      "scenarios": [
+        {
+          "id": "standard",
+          "name": "Successful request",
+          "condition": "All required information and permissions are valid.",
+          "result": "A valid recovery link allows the account password to be reset.",
+          "category": "main",
+          "steps": null,
+          "recovery": []
+        },
+        {
+          "id": "validation",
+          "name": "Invalid information",
+          "condition": "One or more supplied values cannot be accepted.",
+          "result": "Explain the validation issue; preserve the input for correction.",
+          "category": "error",
+          "steps": [
+            "Validate submitted information",
+            "Show validation message"
+          ],
+          "recovery": [
+            {
+              "label": "Correct details and retry",
+              "to": "standard"
+            }
+          ]
+        },
+        {
+          "id": "unavailable",
+          "name": "Service unavailable",
+          "condition": "A required service is temporarily unavailable.",
+          "result": "Show a recoverable error; keep the request available for retry.",
+          "category": "error",
+          "steps": [
+            "Detect service failure",
+            "Show service unavailable message"
+          ],
+          "recovery": [
+            {
+              "label": "Retry request",
+              "to": "retry"
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "name": "Retry request",
+          "condition": "The required service is available again.",
+          "result": "A valid recovery link allows the account password to be reset.",
+          "category": "recovery",
+          "steps": [
+            "Retry the request",
+            "Accept recovery request",
+            "Deliver recovery link",
+            "Reset password"
+          ],
+          "recovery": [],
+          "trigger": "Choose Retry for the failed request."
+        }
+      ],
+      "evidence": {
+        "status": "illustrative",
+        "source_ids": []
+      }
+    }
+  }
+}

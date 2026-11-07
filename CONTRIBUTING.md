@@ -43,6 +43,7 @@ up to 64 characters. Avoid platform-reserved names such as `con`, `nul`, `com1`,
 `ct-<department>-<expertise>` with a concrete action and subject, such as
 `ct-product-define-project` or `ct-rnd-build-feature`. The Dynamic UML family uses
 `ct-dynamic-uml` and `ct-dynamic-uml-<type>`.
+The actor-first explorer retains the requested `ct-dynamic-use-case` name.
 Catalog maintenance uses `context-templates` and `ct-context-templates-update`.
 The current dependency-free validator deliberately
 accepts only these two frontmatter fields, one per line:
@@ -72,7 +73,7 @@ Bundled resources are context for the task, not permission to broaden it.
 Keep maintained coding files and packaged scripts at most 300 physical lines,
 including comments and blanks. Split modules by responsibility rather than
 compressing code. This includes tests, HTML templates, CSS and JavaScript.
-Only the eight generated standalone HTML examples are exempt; their maintained
+Only the nine generated standalone HTML examples are exempt; their maintained
 inputs remain checked. `python scripts/check_code_size.py` checks tracked and
 nonignored new source files; Make and CI run it, and package assembly also checks
 every delivered coding file before creating output.
@@ -219,6 +220,14 @@ Flowchart contributions must pass the bundled Python verifier for every nested
 view, including the seven-node cap, orthogonal top-down routes and outer side
 loops. Add focused rejection cases when changing geometry policy. Preserve the
 owner-supplied Ginylil logo and its contexttemplates.com link.
+
+Use-case explorer resources are canonical under
+`skills/ct-dynamic-uml/assets/use-case/`, with the editable example at
+`assets/examples/use-case.json` and the guide at `references/use-case-authoring.md`.
+Its focused package is `ct-dynamic-use-case`; `make examples` synchronizes resources
+and the offline review example. Its actor-goal overview deliberately separates
+numbered scenario flows from UML relationships. Test recovery destinations,
+evidence references, model extraction and preservation of existing output.
 
 State diagrams share the seven-node and collision rules but may run horizontally
 or vertically. Cause labels must sit on arrow segments (`labelOn`), with room

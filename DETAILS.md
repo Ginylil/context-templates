@@ -442,6 +442,18 @@ protection are administrator-managed controls, independent of these local files.
 
 ## Dynamic UMLs
 
+`ct-dynamic-use-case` adds an actor-first explorer with subject-grouped goal
+ovals and left-to-right drill-down. Its separate Scenario flow view uses
+numbered actions, an outcome and explicit recovery links; errors do not generate
+UML extend relationships. The canonical JSON source remains editable, while
+`render_use_case.py extract` recovers it from generated HTML. Rendering/extraction
+refuse existing output and never execute the modeled system. Validation checks
+reachability, evidence and recovery references, but does not prove source truth
+or runtime coverage. `make examples` synchronizes its canonical fragments and
+guide into the independent package and creates `examples/dynamic-umls/use-case.html`.
+The helper is also bundled in the router. The remaining six diagram types keep
+their existing renderer/playback contract below.
+
 The `ct-dynamic-uml` router owns the HTML template, authoring guide, supplied
 Ginylil PNG, six diagram-type examples and an additional long sequence model
 (32 messages, six participants). Shared renderer/verifier scripts live in

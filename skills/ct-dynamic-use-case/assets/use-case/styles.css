@@ -1,0 +1,191 @@
+#uc-diagram {
+  --d-bg: #191b19;
+  --d-paper: #202420;
+  --d-text: #eeeade;
+  --d-muted: #afbaad;
+  --d-line: #59675c;
+  --d-soft: #364239;
+  --d-active: #efa86d;
+  --d-wash: #3b352d;
+  --d-dot: #344038;
+  font:
+    14px/1.45 -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  background: var(--d-bg);
+  color: var(--d-text);
+  border: 1px solid var(--d-line);
+  border-radius: 14px;
+  overflow: clip;
+}
+#uc-diagram * {
+  box-sizing: border-box;
+}
+#uc-diagram [hidden] {
+  display: none !important;
+}
+#uc-diagram button {
+  font: inherit;
+  color: inherit;
+}
+#uc-diagram button:focus-visible {
+  outline: 3px solid var(--d-active);
+  outline-offset: 4px;
+}
+#uc-diagram .d-head {
+  padding: 17px 22px;
+  padding-right: 94px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid var(--d-soft);
+}
+#uc-diagram .d-title {
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.3px;
+}
+#uc-diagram .d-sub {
+  font-size: 11px;
+  color: var(--d-muted);
+}
+#uc-diagram .d-controls {
+  margin-left: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+#uc-diagram .d-control {
+  border: 1px solid var(--d-line);
+  border-radius: 7px;
+  background: var(--d-paper);
+  padding: 6px 10px;
+  font-size: 12px;
+}
+#uc-diagram .d-control[aria-pressed="true"] {
+  background: var(--d-wash);
+  color: var(--d-active);
+  border-color: var(--d-active);
+}
+#uc-diagram .d-control:disabled {
+  opacity: 0.4;
+}
+#uc-diagram .d-trace {
+  min-height: 44px;
+  padding: 8px 17px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px;
+  border-bottom: 1px solid var(--d-soft);
+}
+#uc-diagram .d-trace button {
+  border: 0;
+  background: transparent;
+  font-size: 11px;
+  padding: 3px 5px;
+  border-radius: 4px;
+  color: var(--d-muted);
+}
+#uc-diagram .d-trace button:hover {
+  background: var(--d-soft);
+  color: var(--d-text);
+}
+#uc-diagram .d-trace button[aria-current] {
+  background: var(--d-wash);
+  color: var(--d-active);
+}
+#uc-diagram .d-chevron {
+  font-size: 11px;
+  color: var(--d-muted);
+}
+#uc-diagram .d-context {
+  padding: 18px 22px 6px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px 12px;
+}
+#uc-diagram h2 {
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  margin: 0;
+}
+#uc-diagram .d-context small {
+  color: var(--d-muted);
+  font-size: 12px;
+}
+#uc-diagram .d-canvas {
+  position: relative;
+  width: 100%;
+  background-image: radial-gradient(var(--d-dot) 0.7px, transparent 0.7px);
+  background-size: 18px 18px;
+  isolation: isolate;
+}
+#uc-diagram .d-edges {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  overflow: visible;
+  pointer-events: none;
+}
+#uc-diagram .d-edges path {
+  fill: none;
+  stroke: var(--d-line);
+  stroke-width: 1.3;
+}
+#uc-diagram .d-edges .d-emphasis {
+  stroke: var(--d-active);
+  stroke-width: 1.5;
+}
+#uc-diagram .d-edges .d-arrow {
+  fill: var(--d-active);
+  stroke: none;
+}
+#uc-diagram .d-edges .d-arrow-muted {
+  fill: var(--d-muted);
+  stroke: none;
+}
+#uc-diagram .d-edge-label {
+  font-size: 11px;
+  fill: var(--d-muted);
+  paint-order: stroke;
+  stroke: var(--d-bg);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+#uc-diagram .d-boundary {
+  position: absolute;
+  z-index: 1;
+  border: 1px solid var(--d-line);
+  border-radius: 3px;
+  background: var(--d-bg);
+}
+#uc-diagram .d-boundary.d-subject {
+  background: color-mix(in srgb, var(--d-paper) 75%, transparent);
+}
+#uc-diagram .d-boundary-label {
+  position: absolute;
+  left: 12px;
+  top: 8px;
+  font-size: 11px;
+  color: var(--d-muted);
+  border: 0;
+  background: transparent;
+  padding: 3px 4px;
+  text-align: left;
+}
+#uc-diagram button.d-boundary-label:hover {
+  color: var(--d-active);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+#uc-diagram .d-boundary.d-selected {
+  border-color: var(--d-active);
+}

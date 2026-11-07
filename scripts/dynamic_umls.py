@@ -49,6 +49,21 @@ def rendered_outputs(package):
     result[ROOT / 'skills/ct-dynamic-uml-sequence/assets/long-example.json'] = long_model.read_bytes()
     result[ROOT / 'examples/dynamic-umls/sequence-long.html'] = renderer.render(
         json.loads(long_model.read_text(encoding='utf-8')), expected='sequence').encode('utf-8')
+    use_case_folder = ROOT / 'skills/ct-dynamic-use-case'
+    for resource in (CANONICAL / 'assets/use-case').iterdir():
+        result[use_case_folder / 'assets/use-case' / resource.name] = resource.read_bytes()
+    result[use_case_folder / 'assets/ginylil.png'] = (CANONICAL / 'assets/ginylil.png').read_bytes()
+    guide = CANONICAL / 'references/use-case-authoring.md'
+    result[use_case_folder / 'references/authoring.md'] = guide.read_bytes()
+    use_case_model = CANONICAL / 'assets/examples/use-case.json'
+    result[use_case_folder / 'assets/example.json'] = use_case_model.read_bytes()
+    sys.path.insert(0, str(package / 'scripts'))
+    try:
+        from render_use_case import render as render_use_case
+        result[ROOT / 'examples/dynamic-umls/use-case.html'] = render_use_case(
+            json.loads(use_case_model.read_text(encoding='utf-8')), package).encode('utf-8')
+    finally:
+        sys.path.pop(0)
     cards = []
     descriptions = {'sequence': 'Messages between participants, in time order.',
         'class': 'Ownership, cardinality and specialization.', 'flowchart': 'A vertical decision path, side retry rail and nested repair flow.',
@@ -69,8 +84,16 @@ def rendered_outputs(package):
     }
     for number,(kind,name) in enumerate(NAMES.items(),1):
         cards.append(f'<a class="card" href="{kind}.html"><span class="meta">0{number} / {kind.upper()}</span><svg viewBox="0 0 240 140" aria-hidden="true" fill="none" stroke="#a5cdb3" stroke-width="2">{thumbnails[kind]}</svg><h2>{html.escape(titles[kind])} <span>↗</span></h2><p>{descriptions[kind]}</p><code>/{name}</code></a>')
+    cards.append('<a class="card" href="use-case.html"><span class="meta">07 / USE CASE</span>'
+        '<svg viewBox="0 0 240 140" aria-hidden="true" fill="none" stroke="#a5cdb3" '
+        'stroke-width="2"><circle cx="35" cy="44" r="8"/><path d="M35 52v30m-17-17h34'
+        'M35 82l-14 24m14-24 14 24M58 65h62m-62 0 62-33m-62 33 62 33"/>'
+        '<ellipse cx="165" cy="32" rx="45" ry="18"/><ellipse cx="165" cy="98" '
+        'rx="45" ry="18"/><ellipse cx="165" cy="65" rx="45" ry="18"/></svg>'
+        '<h2>Every actor, one goal at a time ↗</h2><p>Actor-first discovery, subject groups '
+        'and focused error/recovery flows.</p><code>/ct-dynamic-use-case all</code></a>')
     gallery = '''<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Dynamic UMLs — Ginylil</title><style>
-*{box-sizing:border-box}body{margin:0;background:#191b19;color:#eeeade;font:16px/1.5 system-ui,-apple-system,sans-serif}main{max-width:1180px;margin:auto;padding:28px 40px 48px}header{display:flex;justify-content:space-between;border-bottom:1px solid #465046;padding-bottom:20px;font-size:13px}a{color:inherit}.brand{display:flex;align-items:center;gap:9px;font-weight:650;font-size:19px;text-decoration:none}.brand img{width:40px;height:40px;object-fit:contain;opacity:.8}.eyebrow,.meta,code{font:11px ui-monospace,Consolas,monospace;letter-spacing:1px;color:#a5cdb3}.eyebrow{margin-top:45px}h1{font:400 clamp(36px,5vw,64px)/1.1 Georgia,serif;letter-spacing:-2px;margin:12px 0 18px}.lede{max-width:730px;color:#afbaad;margin:0 0 35px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{display:block;border:1px solid #465046;text-decoration:none;padding:22px;background:#202420}.card:hover{border-color:#efa86d}.card:focus-visible{outline:3px solid #efa86d;outline-offset:4px}.card svg{display:block;width:100%;height:125px;margin:14px 0}.card h2{font:400 23px/1.2 Georgia,serif;margin:14px 0}.card h2 span{color:#efa86d}.card p{font-size:13px;color:#afbaad;min-height:40px}.card code{font-size:10px;letter-spacing:0;overflow-wrap:anywhere}.note{font-size:12px;color:#afbaad;border-top:1px solid #465046;margin-top:30px;padding-top:20px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){main{padding:20px}.grid{grid-template-columns:1fr}header{align-items:center;gap:12px}h1{letter-spacing:-1px}.eyebrow{margin-top:32px}}</style></head><body><main><header><a class="brand" href="https://contexttemplates.com/index.html"><img src="__GINYLIL_LOGO__" alt="Ginylil — Brewing Brilliant Code"></a><span>Context Templates / Example collection</span></header><p class="eyebrow">DYNAMIC UMLs / SIX WAYS TO SEE A SYSTEM</p><h1>Understand it.<br>One step at a time.</h1><p class="lede">Choose a diagram to explore. Each example is a standalone HTML file with playback, an element inspector, and visible assumptions. Open it locally — everything works offline.</p><div class="grid">''' + ''.join(cards) + '''</div><p class="note"><a href="sequence-long.html">Long sequence: 32 messages across six participants ↗</a></p><p class="note">Examples for template review. The sequence, class, flowchart, state and activity examples are illustrative; the component view follows the local repository. Flowcharts are general process notation rather than a formal UML diagram type. These pages explain systems; they do not execute them.</p></main></body></html>
+*{box-sizing:border-box}body{margin:0;background:#191b19;color:#eeeade;font:16px/1.5 system-ui,-apple-system,sans-serif}main{max-width:1180px;margin:auto;padding:28px 40px 48px}header{display:flex;justify-content:space-between;border-bottom:1px solid #465046;padding-bottom:20px;font-size:13px}a{color:inherit}.brand{display:flex;align-items:center;gap:9px;font-weight:650;font-size:19px;text-decoration:none}.brand img{width:40px;height:40px;object-fit:contain;opacity:.8}.eyebrow,.meta,code{font:11px ui-monospace,Consolas,monospace;letter-spacing:1px;color:#a5cdb3}.eyebrow{margin-top:45px}h1{font:400 clamp(36px,5vw,64px)/1.1 Georgia,serif;letter-spacing:-2px;margin:12px 0 18px}.lede{max-width:730px;color:#afbaad;margin:0 0 35px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.card{display:block;border:1px solid #465046;text-decoration:none;padding:22px;background:#202420}.card:hover{border-color:#efa86d}.card:focus-visible{outline:3px solid #efa86d;outline-offset:4px}.card svg{display:block;width:100%;height:125px;margin:14px 0}.card h2{font:400 23px/1.2 Georgia,serif;margin:14px 0}.card h2 span{color:#efa86d}.card p{font-size:13px;color:#afbaad;min-height:40px}.card code{font-size:10px;letter-spacing:0;overflow-wrap:anywhere}.note{font-size:12px;color:#afbaad;border-top:1px solid #465046;margin-top:30px;padding-top:20px}@media(max-width:850px){.grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:560px){main{padding:20px}.grid{grid-template-columns:1fr}header{align-items:center;gap:12px}h1{letter-spacing:-1px}.eyebrow{margin-top:32px}}</style></head><body><main><header><a class="brand" href="https://contexttemplates.com/index.html"><img src="__GINYLIL_LOGO__" alt="Ginylil — Brewing Brilliant Code"></a><span>Context Templates / Example collection</span></header><p class="eyebrow">DYNAMIC UMLs / SEVEN WAYS TO SEE A SYSTEM</p><h1>Understand it.<br>One step at a time.</h1><p class="lede">Choose a diagram to explore. Each example is a standalone HTML file with focused navigation and visible assumptions. Open it locally — everything works offline.</p><div class="grid">''' + ''.join(cards) + '''</div><p class="note"><a href="sequence-long.html">Long sequence: 32 messages across six participants ↗</a></p><p class="note">Examples for template review. The sequence, class, flowchart, state and activity examples are illustrative; the component view follows the local repository. Flowcharts are general process notation rather than a formal UML diagram type. These pages explain systems; they do not execute them.</p></main></body></html>
 '''
     gallery = gallery.replace('__GINYLIL_LOGO__', 'data:image/png;base64,' + base64.b64encode((CANONICAL / 'assets/ginylil.png').read_bytes()).decode('ascii'))
     result[ROOT / 'examples/dynamic-umls/index.html'] = gallery.encode('utf-8')
@@ -92,7 +115,7 @@ def main():
             path.write_bytes(content)
     if stale:
         parser.exit(1, 'Generated resources drifted; run python scripts/dynamic_umls.py:\n' + '\n'.join(stale) + '\n')
-    print('Dynamic UML resources and seven examples are current.' if args.check else 'Updated Dynamic UML resources and seven examples.')
+    print('Dynamic UML resources and eight examples are current.' if args.check else 'Updated Dynamic UML resources and eight examples.')
 
 
 if __name__ == '__main__':
