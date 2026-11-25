@@ -1,0 +1,4 @@
+interface:
+  display_name: "ct-rnd-review-conversation · Takeaways"
+  short_description: "Choose conversation lessons to improve CT skills"
+  default_prompt: "Use $ct-rnd-review-conversation to review this chat for CT skill improvements, ask me about each takeaway, and plan only the ones I accept."

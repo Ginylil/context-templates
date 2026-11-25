@@ -113,3 +113,8 @@
   synthetic fixtures in its skill folder, and generated hashes in `make resources`.
   Repository and handoff secret checks share `shared/lifecycle/public_content.py`;
   preserve scanner CLI/index/history behavior when changing that pure module.
+
+- Review Conversation is also outside the lifecycle manager graph. Keep its
+  approval questions and synthetic walkthrough portable; runtime conversations,
+  accepted-item plans and decision records stay private. One selected batch uses
+  one contribution PR; selection, publication and merge authority remain distinct.

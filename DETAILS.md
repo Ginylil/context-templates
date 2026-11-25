@@ -233,6 +233,25 @@ from authorized posting, and requires readback before claiming verified delivery
 Ambiguous write results require inspection before retrying. Implementing a change
 still uses the bootstrap's contribution workflow and a PR.
 
+## Conversation takeaways
+
+`ct-rnd-review-conversation` is a standalone instruction-only utility outside the
+twenty-one-skill lifecycle graph, with an empty v2 script manifest. It compares
+conversation evidence with current canonical CT skills, proposes each justified
+change as an independent question, preserves partial answers, and puts only
+explicitly accepted items in one durable private Markdown plan before edits.
+Rejected, deferred and unanswered items stay in a separate private decision record.
+Neither artifact is a public catalog resource. No validator authenticates approval
+or proves semantic privacy; the agent must review the evidence and public diff.
+
+One accepted batch uses one branch and one PR across affected skills. Selection,
+publication authorization and merge authorization remain distinct; an explicit
+instruction can authorize them together. The bootstrap owns the contribution
+procedure and `ct-devops-release-project` owns an authorized merge and publication
+readback. Reruns reuse an open PR or verify an already merged batch without
+creating duplicates. The bundled synthetic walkthrough covers partial decisions,
+scope changes, privacy, failed checks and retries without live writes.
+
 ## Next-session handoffs
 
 `ct-rnd-prepare-next-session` is a standalone utility outside the twenty-one-skill

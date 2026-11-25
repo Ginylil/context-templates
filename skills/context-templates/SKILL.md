@@ -23,6 +23,12 @@ workflow below. Its canonical instructions are at
 The bootstrap also handles requests such as "update my installed CT skills";
 neither mode needs a website API or a paid service.
 
+For reviewing a conversation's takeaways to improve current CT skills, use
+[`ct-rnd-review-conversation`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-rnd-review-conversation/SKILL.md).
+It asks about each proposal, records accepted items in one private plan, and
+combines the selected batch in one PR with scoped publication/merge authorization.
+Read it directly without installing another skill; keep raw conversations private.
+
 For requests for new skills, changes to existing CT skills, or catalog features,
 read [`ct-product-request-skill-change`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-product-request-skill-change/SKILL.md).
 It supports drafts, duplicate discovery, authorized issue submission and follow-up
