@@ -5,6 +5,9 @@ description: "Create or complete a runnable repository with reproducible setup, 
 
 # Set up a project
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A reproducible project foundation with captured setup, test, and build evidence.
 
 ## Method

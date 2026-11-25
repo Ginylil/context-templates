@@ -5,6 +5,9 @@ description: "Discover configuration, set up or wrap an existing web app, and re
 
 # Release an Android app
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Advance the actual Play lane through `discover` or `configure`, then `prepare`, `upload`, `play-internal`, `play-closed`,
 `play-open`, or `production`. Existing apps do not need a new product definition.
 Read repository instructions and [the platform guide](references/platform.md).

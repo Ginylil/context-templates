@@ -5,6 +5,9 @@ description: "Exercise real user journeys against a defined project and record p
 
 # Test User Flows
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Start from the project's success criteria and the requested environment. Map every criterion to a journey and include the relevant actor, starting state, expected result, and cleanup. Prefer the existing browser or integration harness; inventing a second harness usually weakens the evidence.
 
 Confirm which deployed build is being exercised before testing. Use synthetic accounts and data within the authorized side effects. Include the successful route plus consequential permission, validation, recovery, and persistence failures. A UI assertion alone cannot prove tenant isolation; inspect the denied API operation when that boundary matters.

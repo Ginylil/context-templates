@@ -5,6 +5,9 @@ description: "Use an observed development failure to improve repository agent in
 
 # Improve agent setup
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A small agent-workflow repair with demonstrated benefit.
 
 ## Method

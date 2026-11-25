@@ -5,6 +5,9 @@ description: "Prepare product launch assets and measurement, then publish only e
 
 # Launch Product
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read the agreed positioning, target audience, product availability and supported claims before drafting. Confirm that the product revision and destination can deliver the promise. Distinguish launch preparation, scheduling, publication and public availability in every status report.
 
 Adapt each asset to its channel and audience while preserving the approved claim evidence. Include the intended action and destination. Define baseline, target, measurement window and attribution limits; an unmeasured baseline stays unknown. Do not invent testimonials, user counts, revenue, endorsements or performance improvements.

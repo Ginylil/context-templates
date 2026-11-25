@@ -5,6 +5,9 @@ description: "Assess product value, onboarding and outcomes from observed usage 
 
 # Review Product
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Frame the review around a concrete customer job and product decision. Inspect the actual flow and available usage, support, feedback or research evidence. Establish the population, period, denominator and instrumentation limitations before interpreting a conversion or retention metric.
 
 Keep observations, interpretations and recommendations separate. Small samples, internal demonstrations and imagined personas do not establish demand. Look for the earliest point at which users obtain meaningful value; compare intended activation with observed behavior and consequential failures, accessibility barriers, pricing confusion or recovery friction.

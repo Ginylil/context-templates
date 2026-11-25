@@ -5,6 +5,9 @@ description: "Implement a complete agreed feature in an existing project, includ
 
 # Build a feature
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A complete engineering candidate traceable to agreed outcomes.
 
 ## Method

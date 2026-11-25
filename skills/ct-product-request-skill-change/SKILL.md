@@ -5,6 +5,9 @@ description: "Request a new Context Templates skill, an update to an existing CT
 
 # Request a Context Templates skill change
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Turn a request for a new skill, an improvement to an existing CT skill, or a
 catalog feature into a useful GitHub issue in
 [`Ginylil/context-templates`](https://github.com/Ginylil/context-templates/issues).

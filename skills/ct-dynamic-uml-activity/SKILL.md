@@ -5,6 +5,9 @@ description: "Create a standalone interactive HTML UML activity diagram for a wo
 
 # Dynamic activity diagram
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read `references/authoring.md` and `assets/example.json`. Inspect action ordering,
 branch guards and concurrency evidence. Ask at most five questions total only for
 material unknowns, such as whether work is parallel or which results a join requires.

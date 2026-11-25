@@ -5,6 +5,9 @@ description: "Design a project architecture from agreed requirements, including 
 
 # Design architecture
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A reviewable technical design traceable to project outcomes.
 
 ## Method

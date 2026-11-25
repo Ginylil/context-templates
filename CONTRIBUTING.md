@@ -35,6 +35,12 @@ contains browsing and installation guidance; it is not a downloadable skill pack
 
 ## Public suitability and canonical source
 
+Ignite (`ct-product-configure-project`) is a project-context utility, not a provider
+migration. Keep its helper under `shared/lifecycle/` and fixtures synthetic. Real
+project profiles, interview answers and private provider locations do not belong
+in its public package. New profile consumers/provider adapters need separate
+behavior checks; declaring a provider must never imply verified integration.
+
 Keep one canonical source per skill. A new skill needs a clear user task and a
 precise description of when it should apply. Private preferences, experiments,
 credentials, personal paths, and customer material belong outside this public
@@ -165,7 +171,11 @@ in `make check`.
 The twenty-one lifecycle entry points select portable helpers from `shared/lifecycle/`
 through source-only `assets/package.json` manifests. Each source skill requires a
 v2 manifest, including an empty `scripts` list when no shared helper is needed.
-Each entry has exactly `source` and `destination`: source paths start at the
+An optional `references` list selects shared Markdown with the same explicit
+source/destination contract: `shared/<family>/<name>.md` to `references/<name>.md`.
+The shared optional-addons policy is maintained in `shared/instructions/`; skill
+entry points link to its packaged reference rather than duplicating policy.
+Each entry has exactly `source` and `destination`: script source paths start at the
 repository root (`shared/<family>/<script>.py`); destination paths start at the
 skill root (`scripts/<script>.py`). Destinations must be unique. Legacy implicit
 filename maps are rejected; installed ownership receipts remain v1.

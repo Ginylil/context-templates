@@ -5,6 +5,9 @@ description: "Update already installed Context Templates skills for the current 
 
 # Update installed Context Templates skills
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 This is the update-only entrypoint to the
 [`context-templates` bootstrap](https://github.com/Ginylil/context-templates/blob/main/skills/context-templates/SKILL.md).
 Reuse its **Discover, install, or update** workflow and supported installer. Read

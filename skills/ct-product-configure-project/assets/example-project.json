@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "project": {"name": "Example project", "summary": "Synthetic project context; not a live integration."},
+  "source_control": {"provider": "github", "location": "https://github.com/example/example-project"},
+  "work_tracking": [
+    {"provider": "jira", "location": "https://example.atlassian.net/browse/APP", "purpose": "Implementation tasks", "primary": true}
+  ],
+  "documentation": [
+    {"provider": "repository", "location": "docs/", "purpose": "Technical documentation", "primary": true},
+    {"provider": "confluence", "location": "https://example.atlassian.net/wiki/spaces/APP", "purpose": "Requirements", "primary": false},
+    {"provider": "obsidian", "location": "notes/", "purpose": "Decision notes", "primary": false}
+  ],
+  "validation": {"provider": "github-actions", "location": ".github/workflows/", "execution": "remote-ci", "checks": ["make check"]},
+  "release": {"staging": null, "production": null, "notes": "No release environment selected."},
+  "notes": ["Provider access and adapter support require verification by the consuming skill."]
+}

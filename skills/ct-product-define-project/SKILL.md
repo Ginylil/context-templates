@@ -5,6 +5,9 @@ description: "Turn a project idea into an evidence-backed definition of its user
 
 # Define a project
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Produce a concise project definition and a checked JSON handoff. Investigate
 discoverable facts yourself. Ask the user only for consequential choices that
 remain unknown. This skill defines the project; it does not build it or publish

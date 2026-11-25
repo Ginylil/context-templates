@@ -5,6 +5,9 @@ description: "Design and implement an interface with clear hierarchy, platform-a
 
 # Build an interface
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A rendered, interactive engineering candidate with requirement and viewport coverage.
 
 For an existing reported defect that must be corrected across related screens,

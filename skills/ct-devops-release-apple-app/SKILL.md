@@ -5,6 +5,9 @@ description: "Discover configuration, set up or wrap an existing web app, and re
 
 # Release an Apple app
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Advance the actual Apple lane through `discover` or `configure`, then `prepare`, `upload`,
 `testflight-internal`, `testflight-external`, `submit-review`, or `production`.
 Existing apps do not need a new product definition to release a known candidate.

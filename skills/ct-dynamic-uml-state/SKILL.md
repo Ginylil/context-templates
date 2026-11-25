@@ -5,6 +5,9 @@ description: "Create a standalone interactive HTML state diagram for an entity l
 
 # Dynamic state diagram
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read `references/authoring.md` and `assets/example.json`. Inspect state definitions,
 event handlers, guards and effects. Distinguish stable states from actions. Ask
 at most five questions total for substantial unresolved transition semantics.

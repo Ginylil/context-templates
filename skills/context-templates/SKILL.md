@@ -5,10 +5,18 @@ description: "Find, install, and update skills from Ginylil/context-templates, r
 
 # Context Templates
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Use the public repository at https://github.com/Ginylil/context-templates as the
 source of truth. Help the user choose useful skills, install them for their local
 agent, and contribute improvements. This file is self-contained so it can be
 downloaded and given to an agent before anything is installed.
+
+When only this bootstrap file was downloaded, its installation/contribution flow
+remains self-contained. The optional project guidance can be read from
+[`shared/instructions/optional-addons.md`](https://github.com/Ginylil/context-templates/blob/main/shared/instructions/optional-addons.md)
+when needed; missing optional resources do not prevent catalog operations.
 
 ## Establish the task
 
@@ -22,6 +30,12 @@ workflow below. Its canonical instructions are at
 [`ct-context-templates-update`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-context-templates-update/SKILL.md).
 The bootstrap also handles requests such as "update my installed CT skills";
 neither mode needs a website API or a paid service.
+
+For project tool/context setup or "ignite this project", use
+[`ct-product-configure-project`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-product-configure-project/SKILL.md).
+It discovers source control, task tracking and docs, asks missing choices, and
+previews a secret-free profile before its final storage question. This utility
+records provider choices; it does not migrate the other skills' integrations.
 
 For reviewing a conversation's takeaways to improve current CT skills, use
 [`ct-rnd-review-conversation`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-rnd-review-conversation/SKILL.md).

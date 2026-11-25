@@ -5,6 +5,9 @@ description: "Create a standalone interactive HTML flowchart for a process, deci
 
 # Dynamic flowchart
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read `references/authoring.md` and `assets/example.json`. Inspect the process and
 its decision evidence first. Ask at most five questions total only when unknowns
 materially change the path, boundaries or outcomes.

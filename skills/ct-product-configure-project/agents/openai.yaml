@@ -1,0 +1,4 @@
+interface:
+  display_name: "Ignite project · Configure project context / environment"
+  short_description: "Discover tools and preview secret-free project context"
+  default_prompt: "Use $ct-product-configure-project to ignite the selected project: discover its tools, ask me one question at a time, and preview the context before the final saving question."

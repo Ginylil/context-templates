@@ -20,6 +20,28 @@
     {
       "source": "shared/lifecycle/workflow_rules.py",
       "destination": "scripts/workflow_rules.py"
+    },
+    {
+      "source": "shared/lifecycle/project_context.py",
+      "destination": "scripts/project_context.py"
+    },
+    {
+      "source": "shared/lifecycle/project_context_discovery.py",
+      "destination": "scripts/project_context_discovery.py"
+    },
+    {
+      "source": "shared/lifecycle/public_content.py",
+      "destination": "scripts/public_content.py"
+    }
+  ],
+  "references": [
+    {
+      "source": "shared/instructions/optional-addons.md",
+      "destination": "references/optional-addons.md"
+    },
+    {
+      "source": "shared/instructions/project-context.md",
+      "destination": "references/project-context.md"
     }
   ]
 }

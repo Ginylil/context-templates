@@ -5,6 +5,9 @@ description: "Reproduce a reported software defect, identify its cause, make a f
 
 # Fix a bug
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A focused repair with comparable before and after regression evidence.
 
 ## Method
