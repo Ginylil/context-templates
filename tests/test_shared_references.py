@@ -93,7 +93,7 @@ class SharedReferenceTests(unittest.TestCase):
             with self.subTest(skill=name):
                 payload = installer.package_payload(ROOT, folder)
                 self.assertIn('references/optional-addons.md',
-                              (folder / 'SKILL.md').read_text())
+                              (folder / 'SKILL.md').read_text(encoding='utf-8'))
                 for filename in ('optional-addons.md', 'project-context.md'):
                     content, executable = payload['references/' + filename]
                     self.assertEqual(content, (ROOT / 'shared/instructions' / filename).read_bytes())
