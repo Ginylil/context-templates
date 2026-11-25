@@ -10,6 +10,11 @@ to request a new skill, an update to an existing CT skill, or a catalog feature.
 It checks for duplicates and supports authorized follow-up comments. Issues and
 comments are public; submitting a request does not promise implementation.
 Maintainers review PRs before merging.
+For conversation-derived improvements, use
+[`ct-rnd-review-conversation`](skills/ct-rnd-review-conversation/SKILL.md) to ask
+about each takeaway, plan accepted changes privately, and combine the selected
+batch in one PR. Keep raw transcripts and decision records out of public files;
+selection alone does not authorize publication or merge.
 For an explicitly authorized merge or release, use `ct-devops-release-project`
 and the repository's actual publication procedure. Contribution submission alone
 does not authorize that next step or local skill installation.

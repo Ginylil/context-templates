@@ -35,7 +35,8 @@ The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 request changes through GitHub issues or contribute implementations through a
 pull request. The catalog includes the bootstrap, an update-only entrypoint,
-a skill-request utility, a next-session handoff utility, twenty-one project lifecycle skills,
+a skill-request utility, conversation review and next-session handoff utilities,
+twenty-one project lifecycle skills,
 and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
 
@@ -80,6 +81,25 @@ Read the skill directly or install it through the normal preview/install workflo
 Requests work without a local clone when GitHub tools are available. This utility
 is separate from the twenty-one-skill lifecycle graph. Asking to implement a change
 uses the bootstrap's contribution PR workflow instead.
+
+## Review conversation takeaways
+
+Use [`ct-rnd-review-conversation`](skills/ct-rnd-review-conversation/SKILL.md) to
+find evidence-backed improvements to current CT skills from a chat. It presents
+each takeaway as a question with Accept, Reject, Revise and Defer choices, then
+records only accepted changes in one private plan before implementing them.
+
+```text
+Use ct-rnd-review-conversation to review this chat for CT skill improvements.
+Ask me about each takeaway and plan only the ones I accept.
+```
+
+The accepted batch uses one contribution PR, including changes across several
+skills. Publication and merge need authorization for that batch; an explicit
+combined instruction is honored. Raw conversations and decision records stay
+private; public changes use generalized guidance and synthetic examples. This
+instruction-only utility works outside the lifecycle manager graph. See its
+[synthetic decision example](skills/ct-rnd-review-conversation/references/review-example.md).
 
 ## Next-session handoffs
 
