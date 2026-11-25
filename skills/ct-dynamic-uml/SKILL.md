@@ -5,6 +5,9 @@ description: "Choose and create standalone offline HTML diagram walkthroughs for
 
 # Dynamic UMLs
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Choose a useful view, investigate its subject, then create one standalone HTML
 walkthrough. This is the router for the family; individual skills also work alone.
 

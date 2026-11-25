@@ -5,6 +5,9 @@ description: "Review a conversation for evidence-backed takeaways and improvemen
 
 # Review conversation takeaways
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Turn lessons from a conversation into small, reusable improvements to the public
 `Ginylil/context-templates` catalog. The user chooses every takeaway. Reviewing
 a chat authorizes investigation and proposals, not automatic skill changes or

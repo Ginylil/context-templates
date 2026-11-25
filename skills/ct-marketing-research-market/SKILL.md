@@ -5,6 +5,9 @@ description: "Research audiences, competitors, alternatives, positioning and cha
 
 # Research Market
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Begin with the decision the research should inform, intended audience and geography. Separate customer jobs and current alternatives from product categories; a spreadsheet or manual process may be the most relevant competitor. Include evidence that could contradict the proposed positioning.
 
 Use current primary sources for prices, product capabilities and platform rules, preserving URLs, observed dates and source snapshots. Customer statements support their own context, not an entire segment. Treat vendor promises, sponsored reports and estimated traffic according to their limitations. Cross-check consequential claims before recommending substantial spend or effort.

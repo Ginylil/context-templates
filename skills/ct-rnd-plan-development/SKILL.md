@@ -5,6 +5,9 @@ description: "Turn a ready project definition into small executable development 
 
 # Plan development
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Produce a dependency graph that another engineer or agent can execute without
 rediscovering the scope. Planning is complete only when every task has exactly
 one verified GitHub issue and one item in the selected Project's Backlog.

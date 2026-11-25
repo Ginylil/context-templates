@@ -5,6 +5,9 @@ description: "Guide a project from its current evidence to the next useful defin
 
 # Manage a project
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Guide the user's project, not a prescribed tour of every skill. Inspect the
 requested outcome, existing repository, task tracker, definition and evidence.
 Select the smallest useful next step. Each specialist remains directly usable;

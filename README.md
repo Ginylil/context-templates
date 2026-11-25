@@ -98,9 +98,12 @@ Discover existing tools, ask me one question at a time, and preview before savin
 
 The profile validator accepts distinct providers such as GitHub code with Jira
 tasks and repository/Notion/Confluence/Obsidian docs. These are declarations, not
-live integrations. This initial utility does not make the other CT skills consume
-the profile or remove their existing GitHub tracking requirements. It neither
-connects accounts nor stages, commits or publishes a project's profile.
+live integrations. Each packaged skill has a short pointer to one shared
+[optional-addons reference](shared/instructions/optional-addons.md), which detects
+an existing profile and loads its focused guide only when applicable. Without a
+profile, normal discovery continues. Invalid context and unsupported providers
+are explicit; existing checked tracking requirements are not bypassed. Ignite
+neither connects accounts nor stages, commits or publishes a project's profile.
 See the [profile contract](skills/ct-product-configure-project/references/profile.md).
 
 ## Review conversation takeaways

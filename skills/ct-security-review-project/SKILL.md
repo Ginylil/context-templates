@@ -5,6 +5,9 @@ description: "Review application and delivery security within an agreed scope, p
 
 # Review Project Security
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Identify protected assets, actors, entry points and trust boundaries before listing vulnerabilities. Ground the review in the exact repository revision and actual deployment/configuration evidence available. Distinguish a dangerous pattern from a reachable, consequential defect.
 
 Inspect the applicable boundaries: identity and sessions; object- and tenant-level authorization; input and output handling; secrets and sensitive data; dependencies and build trust; infrastructure permissions; and abuse of agent/tool capabilities when present. Choose depth according to the application rather than assigning the same checklist to every project.

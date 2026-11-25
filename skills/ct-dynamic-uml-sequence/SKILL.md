@@ -5,6 +5,9 @@ description: "Create a standalone interactive HTML sequence diagram for a protoc
 
 # Dynamic sequence diagram
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read `references/authoring.md` and `assets/example.json`, then investigate the
 requested interaction before modeling it. For a longer exchange or more
 participants, `assets/long-example.json` demonstrates 32 messages across six

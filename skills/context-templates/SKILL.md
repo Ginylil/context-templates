@@ -5,10 +5,18 @@ description: "Find, install, and update skills from Ginylil/context-templates, r
 
 # Context Templates
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Use the public repository at https://github.com/Ginylil/context-templates as the
 source of truth. Help the user choose useful skills, install them for their local
 agent, and contribute improvements. This file is self-contained so it can be
 downloaded and given to an agent before anything is installed.
+
+When only this bootstrap file was downloaded, its installation/contribution flow
+remains self-contained. The optional project guidance can be read from
+[`shared/instructions/optional-addons.md`](https://github.com/Ginylil/context-templates/blob/main/shared/instructions/optional-addons.md)
+when needed; missing optional resources do not prevent catalog operations.
 
 ## Establish the task
 

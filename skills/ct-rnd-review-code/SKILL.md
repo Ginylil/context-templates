@@ -5,6 +5,9 @@ description: "Review a concrete code change against intended behavior and reposi
 
 # Review code
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 An evidence-bound review tied to the inspected candidate revision.
 
 ## Method

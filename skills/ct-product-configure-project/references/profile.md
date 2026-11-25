@@ -2,9 +2,10 @@
 
 Use `context-templates/project.json` for the reviewed repository profile. Local-only
 profiles stay in a private user-owned location outside the project; supply their
-path explicitly when another agent needs them. This version does not install a
-global loader, change AGENTS instructions, or adapt the other CT skills. Profiles
-can record Jira/Notion/etc.; provider API support must be implemented separately.
+path explicitly when another agent needs them. Skills use their packaged shared
+optional-addons reference and read-only discovery helper; no global agent file is
+changed. Profiles can record Jira/Notion/etc.; checked provider API support still
+must exist in the consuming skill before dependent actions can proceed.
 
 Use UTF-8 JSON up to 64 KiB. Required top-level fields are `schema_version`,
 `project`, `source_control`, `work_tracking` and `documentation`. Optional fields
@@ -49,10 +50,13 @@ or authorization and must never be sourced or executed by a loader.
 ```text
 python3 <skill>/scripts/project_context.py validate <profile.json>
 python3 <skill>/scripts/project_context.py render <profile.json>
+python3 <skill>/scripts/project_context.py discover --root <project>
 ```
 
 Validation prints a status and undecided fields; render prints the validated JSON.
-Neither command saves a profile. Inputs must be regular non-linked files; error
+Discovery returns absent or the validated profile for the selected root; an
+explicit private path uses `--profile <path>`. None of these commands saves a
+profile. Inputs must be regular non-linked files; error
 output excludes raw profile values. The agent owns preview, the final storage
 question, and only the authorized write. Existing different content is preserved
 unless its exact update was reviewed and selected. No command grants commit or

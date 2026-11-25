@@ -5,6 +5,9 @@ description: "Assess service health, spend, changes, security, failures and reco
 
 # Maintain Project
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Establish the service inventory, providers, account/environment identities and exact observation window. Use existing telemetry and billing sources before adding instrumentation or running cost-incurring queries. Describe visibility gaps before drawing health conclusions.
 
 Keep separate coverage for spend/waste, changes, security, health, failed jobs/errors, incidents, and recovery. A quiet alert feed does not establish health if collection or the operator machine was offline. Name metric periods, units, retention limits and delayed cost data. Validate suspected waste against resource ownership and activity before proposing removal.

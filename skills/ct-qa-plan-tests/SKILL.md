@@ -5,6 +5,9 @@ description: "Turn agreed requirements and risks into a traceable acceptance tes
 
 # Plan tests
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 A risk-informed test plan covering each agreed project outcome.
 
 ## Method

@@ -5,6 +5,9 @@ description: "Prepare or execute a scoped release with build proof, rollback inf
 
 # Release Project
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 For Apple App Store/TestFlight or Google Play work, prefer the installed
 `ct-devops-release-apple-app` or `ct-devops-release-android-app` specialist when
 available. Those own store-specific testing, review and publication milestones;

@@ -7,6 +7,7 @@ import re
 from pathlib import Path
 from .common import PACKAGE_MANIFEST, is_link, valid_name, metadata, snapshot, selected_names
 from .limits import check_code_length
+from .shared_resources import safe_reference, shared_file
 
 # Import repository scanning code, never a selected packaged helper.
 _scan_spec = importlib.util.spec_from_file_location(
@@ -30,20 +31,7 @@ def safe_script(value: str) -> bool:
 
 
 def shared_script(root: Path, value: str) -> Path:
-    # Only literal shared/<family>/<script>.py sources, no arbitrary repo paths.
-    if not isinstance(value, str) or value.count("/") != 2 or not value.startswith("shared/"):
-        raise ValueError("Expected shared/<family>/<script>.py source")
-    _, family, filename = value.split("/")
-    if not valid_name(family) or not safe_script(filename):
-        raise ValueError("Invalid shared script source")
-    path = root / "shared"
-    for part in (family, filename):
-        if is_link(path) or not path.is_dir():
-            raise ValueError("Shared script ancestors must be real directories")
-        path /= part
-    if is_link(path) or not path.is_file():
-        raise ValueError(f"Missing or linked shared script: {value}")
-    return path
+    return shared_file(root, value, safe_script)
 
 
 def package_payload(root: Path, folder: Path) -> dict:
@@ -57,23 +45,28 @@ def package_payload(root: Path, folder: Path) -> dict:
     manifest = folder / PACKAGE_MANIFEST
     if manifest.is_file():
         config = json.loads(manifest.read_text(encoding="utf-8"), object_pairs_hook=unique_object)
-        if (not isinstance(config, dict) or set(config) != {"schema_version", "scripts"}
+        if (not isinstance(config, dict) or not {"schema_version", "scripts"} <= set(config)
+                or not set(config) <= {"schema_version", "scripts", "references"}
                 or type(config["schema_version"]) is not int or config["schema_version"] != 2
-                or not isinstance(config["scripts"], list)):
+                or not isinstance(config["scripts"], list)
+                or not isinstance(config.get("references", []), list)):
             raise ValueError(f"{folder.name}: invalid package manifest")
         destinations = set()
-        for entry in config["scripts"]:
-            if not isinstance(entry, dict) or set(entry) != {"source", "destination"}:
-                raise ValueError(f"{folder.name}: expected source and destination fields")
-            name = entry["destination"]
-            if (not isinstance(name, str) or not name.startswith("scripts/")
-                    or not safe_script(name[len("scripts/"):])):
-                raise ValueError(f"{folder.name}: invalid script destination")
-            if name in source or name in destinations:
-                raise ValueError(f"{folder.name}: script destination collision: {name}")
-            destinations.add(name)
-            path = shared_script(root, entry["source"])
-            payload[name] = (path.read_bytes(), bool(path.stat().st_mode & 0o111))
+        for group, check in (("scripts", safe_script), ("references", safe_reference)):
+            prefix = group + "/"
+            for entry in config.get(group, []):
+                if not isinstance(entry, dict) or set(entry) != {"source", "destination"}:
+                    raise ValueError(f"{folder.name}: expected source and destination fields")
+                name = entry["destination"]
+                if (not isinstance(name, str) or not name.startswith(prefix)
+                        or not check(name[len(prefix):])):
+                    raise ValueError(f"{folder.name}: invalid {group} destination")
+                if name in source or name in destinations:
+                    raise ValueError(f"{folder.name}: shared destination collision: {name}")
+                destinations.add(name)
+                path = shared_file(root, entry["source"], check)
+                executable = group == "scripts" and bool(path.stat().st_mode & 0o111)
+                payload[name] = (path.read_bytes(), executable)
     # Retain truly empty source directories; omit a manifest-only assets folder.
     for name, fingerprint in source.items():
         if fingerprint == "directory" and not any((folder / name).iterdir()):

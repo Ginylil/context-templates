@@ -5,12 +5,15 @@ description: "Ignite a project by discovering and recording its source control, 
 
 # Ignite project context
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Configure a project's tool choices without redefining its product or building an
 application. This standalone utility is outside the lifecycle manager graph. It
 produces informational context, not credentials, integrations or permission to
-publish. Other CT skills do not automatically consume this new profile yet; their
-existing provider restrictions remain in force. Recording Jira does not make a
-GitHub-only validator support Jira.
+publish. CT skills consult the shared optional-addons reference for an existing
+profile; their checked provider restrictions remain in force. Recording Jira does
+not make a GitHub-only validator support Jira.
 
 ## Discover before asking
 
@@ -101,6 +104,6 @@ is a no-op. Keep unresolved drafts explicitly marked as drafts. Declining to sav
 is a successful preview outcome, not an incomplete setup requiring more persuasion.
 
 Return the chosen storage outcome, exact saved path when applicable, what was
-discovered versus selected, remaining undecided fields and the profile-consumption
-limitation. Do not claim a tool connection, project migration, automatic skill
+discovered versus selected, remaining undecided fields and any unsupported-provider
+limitation. Do not claim a tool connection, project migration, automatic provider
 adaptation or successful runtime discovery merely because the profile is valid.

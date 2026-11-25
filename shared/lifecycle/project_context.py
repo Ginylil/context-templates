@@ -11,6 +11,7 @@ from urllib.parse import parse_qsl, unquote, urlsplit
 
 sys.dont_write_bytecode = True
 from public_content import findings
+from project_context_discovery import DiscoveryError, discover
 
 MAX_BYTES = 65536
 SECRET_KEY = re.compile(r'(?i)(password|passwd|secret|token|api[_-]?key|credential|signature)')
@@ -156,10 +157,18 @@ def load(path):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=('validate', 'render'))
-    parser.add_argument('profile', type=Path)
+    sub = parser.add_subparsers(dest='command', required=True)
+    for name in ('validate', 'render'):
+        child = sub.add_parser(name)
+        child.add_argument('profile', type=Path)
+    child = sub.add_parser('discover')
+    child.add_argument('--root', type=Path, required=True)
+    child.add_argument('--profile', type=Path)
     args = parser.parse_args()
     try:
+        if args.command == 'discover':
+            print(json.dumps(discover(args.root, args.profile, load, validate), ensure_ascii=False, indent=2))
+            return 0
         profile = load(args.profile)
         pending = validate(profile)
         if args.command == 'render':
@@ -169,7 +178,7 @@ def main():
                               'undecided': pending, 'provider_access_verified': False}))
         return 0
     except (OSError, ValueError, RecursionError, TypeError) as error:
-        message = str(error) if isinstance(error, ProfileError) else type(error).__name__
+        message = str(error) if isinstance(error, (ProfileError, DiscoveryError)) else type(error).__name__
         print('Project context check failed: ' + message, file=sys.stderr)
         return 1
 

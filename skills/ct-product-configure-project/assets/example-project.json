@@ -12,5 +12,5 @@
   ],
   "validation": {"provider": "github-actions", "location": ".github/workflows/", "execution": "remote-ci", "checks": ["make check"]},
   "release": {"staging": null, "production": null, "notes": "No release environment selected."},
-  "notes": ["Providers are declarations. Their access and skill adapters are not verified."]
+  "notes": ["Provider access and adapter support require verification by the consuming skill."]
 }

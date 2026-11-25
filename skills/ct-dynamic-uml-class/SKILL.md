@@ -5,6 +5,9 @@ description: "Create a standalone interactive HTML class diagram from inspected 
 
 # Dynamic class diagram
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read `references/authoring.md` and `assets/example.json`. Inspect relevant types,
 schemas and invariants. Separate actual code structure from a proposed conceptual
 model. Ask at most five questions total only for substantial unresolved choices.

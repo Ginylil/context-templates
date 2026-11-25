@@ -5,6 +5,9 @@ description: "Create a standalone interactive HTML component diagram from inspec
 
 # Dynamic component diagram
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Read `references/authoring.md` and `assets/example.json`. Inspect actual module,
 package and service boundaries and their dependencies. Identify whether this is
 current architecture or a proposal. Ask at most five questions total only when

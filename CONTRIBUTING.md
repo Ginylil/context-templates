@@ -171,7 +171,11 @@ in `make check`.
 The twenty-one lifecycle entry points select portable helpers from `shared/lifecycle/`
 through source-only `assets/package.json` manifests. Each source skill requires a
 v2 manifest, including an empty `scripts` list when no shared helper is needed.
-Each entry has exactly `source` and `destination`: source paths start at the
+An optional `references` list selects shared Markdown with the same explicit
+source/destination contract: `shared/<family>/<name>.md` to `references/<name>.md`.
+The shared optional-addons policy is maintained in `shared/instructions/`; skill
+entry points link to its packaged reference rather than duplicating policy.
+Each entry has exactly `source` and `destination`: script source paths start at the
 repository root (`shared/<family>/<script>.py`); destination paths start at the
 skill root (`scripts/<script>.py`). Destinations must be unique. Legacy implicit
 filename maps are rejected; installed ownership receipts remain v1.

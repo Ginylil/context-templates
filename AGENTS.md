@@ -63,6 +63,9 @@
   of explicit `source` (repository-relative `shared/...`) and `destination`
   (skill-relative `scripts/...`) paths. Include required sibling modules;
   implicit filename maps and duplicate destinations are rejected.
+  V2 manifests may also select explicit shared Markdown `references` entries from
+  `shared/<family>/<name>.md` into `references/<name>.md`; do not commit assembled
+  reference copies or make installed skills depend on another installed package.
   `assets/contract.json` remains behavioral policy. Never commit assembled script
   copies. `scripts/skills.py` is the CLI; `scripts/skill_tools/` owns the common
   payload, installation and size-limit logic. Never execute selected helpers. Use
@@ -125,3 +128,10 @@
   profile declarations do not enable adapters, authorize commands or alter the
   other skills' tracking requirements. Runtime project profiles stay out of the
   public skill package.
+
+- Shared optional add-on instructions live once in `shared/instructions/` and
+  are selected explicitly by each package manifest. Every skill keeps a short
+  entry-point pointer; focused guides are read only for detected add-ons. Profile
+  discovery is read-only and optional: absence preserves existing intake, invalid
+  context cannot silently fall back, and unsupported providers never bypass the
+  existing checked contracts. No global user instruction file is modified.

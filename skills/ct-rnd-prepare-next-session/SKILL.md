@@ -5,6 +5,9 @@ description: "Prepare a copy-paste next-session prompt or conversation handoff f
 
 # Prepare next session
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Turn the relevant conversation into an execution handoff that a fresh agent can
 use without hidden chat history. Return one ready-to-paste prompt, or state that
 no follow-up is needed when the work is complete. This request authorizes a

@@ -5,6 +5,9 @@ description: "Fix UI, UX and frontend (FE) defects across an existing project. R
 
 # Fix an interface across the project
 
+Before project-specific work, read the shared optional add-on entry point at
+`references/optional-addons.md` (source checkouts: `shared/instructions/optional-addons.md`).
+
 Turn “this looks wrong” into a clear correction, apply it wherever the same
 problem exists, and show rendered proof. Existing projects enter directly;
 a new product definition or redesign is not a prerequisite.
