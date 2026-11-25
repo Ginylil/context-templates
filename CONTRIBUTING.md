@@ -35,6 +35,12 @@ contains browsing and installation guidance; it is not a downloadable skill pack
 
 ## Public suitability and canonical source
 
+Ignite (`ct-product-configure-project`) is a project-context utility, not a provider
+migration. Keep its helper under `shared/lifecycle/` and fixtures synthetic. Real
+project profiles, interview answers and private provider locations do not belong
+in its public package. New profile consumers/provider adapters need separate
+behavior checks; declaring a provider must never imply verified integration.
+
 Keep one canonical source per skill. A new skill needs a clear user task and a
 precise description of when it should apply. Private preferences, experiments,
 credentials, personal paths, and customer material belong outside this public

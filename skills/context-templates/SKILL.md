@@ -23,6 +23,12 @@ workflow below. Its canonical instructions are at
 The bootstrap also handles requests such as "update my installed CT skills";
 neither mode needs a website API or a paid service.
 
+For project tool/context setup or "ignite this project", use
+[`ct-product-configure-project`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-product-configure-project/SKILL.md).
+It discovers source control, task tracking and docs, asks missing choices, and
+previews a secret-free profile before its final storage question. This utility
+records provider choices; it does not migrate the other skills' integrations.
+
 For reviewing a conversation's takeaways to improve current CT skills, use
 [`ct-rnd-review-conversation`](https://github.com/Ginylil/context-templates/blob/main/skills/ct-rnd-review-conversation/SKILL.md).
 It asks about each proposal, records accepted items in one private plan, and

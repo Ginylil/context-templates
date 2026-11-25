@@ -233,6 +233,26 @@ from authorized posting, and requires readback before claiming verified delivery
 Ambiguous write results require inspection before retrying. Implementing a change
 still uses the bootstrap's contribution workflow and a PR.
 
+## Project context setup
+
+`ct-product-configure-project` (Ignite) is a standalone utility outside the
+twenty-one-skill lifecycle graph. It discovers project tools, preserves existing
+answers, asks only missing configuration choices and presents one JSON preview
+before the final storage question. A project may choose separate source-control
+and task-management providers plus multiple documentation locations and purposes.
+Explicit none/undecided choices are supported; no access or integration is inferred.
+
+Its v2 manifest selects `project_context.py` and `public_content.py` from
+`shared/lifecycle/`. The helper validates required fields, canonical location
+choices, explicit deferrals and known credential hazards. Render writes only to
+stdout; neither CLI command writes profiles, contacts providers or runs listed
+checks. The agent owns disclosure review and the final saving decision. Existing
+different files require reviewed changes; preview/local-only storage leaves the
+project and Git metadata unchanged. The intended repository location is
+`context-templates/project.json`; no profile is generated for this catalog merely
+by installing the skill. Other lifecycle validators retain their GitHub-only
+contracts until separate profile consumption and provider adapters are implemented.
+
 ## Conversation takeaways
 
 `ct-rnd-review-conversation` is a standalone instruction-only utility outside the

@@ -35,7 +35,7 @@ The bootstrap file is self-contained. Your agent can read it before installing
 anything. It explains discovery, safe local installation, updates, and how to
 request changes through GitHub issues or contribute implementations through a
 pull request. The catalog includes the bootstrap, an update-only entrypoint,
-a skill-request utility, conversation review and next-session handoff utilities,
+a skill-request utility, project context setup, conversation review and next-session handoff utilities,
 twenty-one project lifecycle skills,
 and the Dynamic UMLs family below;
 additional skills are reviewed and added individually.
@@ -81,6 +81,27 @@ Read the skill directly or install it through the normal preview/install workflo
 Requests work without a local clone when GitHub tools are available. This utility
 is separate from the twenty-one-skill lifecycle graph. Asking to implement a change
 uses the bootstrap's contribution PR workflow instead.
+
+## Ignite project context
+
+Use [`ct-product-configure-project`](skills/ct-product-configure-project/SKILL.md)
+to discover a project's source control, task trackers, multiple documentation
+locations and optional validation/release details. Its display name includes
+**Ignite** for picker discovery. It asks only about missing choices, shows a
+secret-free JSON preview, and makes repository versus local-only storage the
+final question. Simulation and preview modes do not modify the project.
+
+```text
+Use ct-product-configure-project to ignite this project's context.
+Discover existing tools, ask me one question at a time, and preview before saving.
+```
+
+The profile validator accepts distinct providers such as GitHub code with Jira
+tasks and repository/Notion/Confluence/Obsidian docs. These are declarations, not
+live integrations. This initial utility does not make the other CT skills consume
+the profile or remove their existing GitHub tracking requirements. It neither
+connects accounts nor stages, commits or publishes a project's profile.
+See the [profile contract](skills/ct-product-configure-project/references/profile.md).
 
 ## Review conversation takeaways
 

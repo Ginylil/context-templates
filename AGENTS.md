@@ -118,3 +118,10 @@
   approval questions and synthetic walkthrough portable; runtime conversations,
   accepted-item plans and decision records stay private. One selected batch uses
   one contribution PR; selection, publication and merge authority remain distinct.
+
+- Ignite (`ct-product-configure-project`) is a standalone project-context utility,
+  outside the lifecycle graph. Keep its validator under `shared/lifecycle/` and
+  examples synthetic. The final question chooses profile storage after preview;
+  profile declarations do not enable adapters, authorize commands or alter the
+  other skills' tracking requirements. Runtime project profiles stay out of the
+  public skill package.
